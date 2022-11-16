@@ -60,6 +60,7 @@ public class GameObjectGenerator : IIncrementalGenerator
 		context.RegisterPostInitializationOutput(ctx => ctx.AddSource(_gameObjectAttributeTypeName.Type, SourceBuilderUtils.GenerateAttribute(AttributeTargets.Class, _gameObjectAttributeTypeName.Type)));
 		context.RegisterPostInitializationOutput(ctx => ctx.AddSource(_childAttributeTypeName.Type, SourceBuilderUtils.GenerateAttribute(AttributeTargets.Property | AttributeTargets.Field, _childAttributeTypeName.Type)));
 
+		// ! LINQ query filters out null values.
 		IncrementalValuesProvider<ClassDeclarationSyntax> gameObjectTypeDeclarations = context.SyntaxProvider
 			.CreateSyntaxProvider(
 				predicate: static (sn, _) => sn is ClassDeclarationSyntax { AttributeLists.Count: > 0 },

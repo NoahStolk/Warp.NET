@@ -66,24 +66,28 @@ public class GameGenerator : IIncrementalGenerator
 		context.RegisterPostInitializationOutput(ctx => ctx.AddSource(_generateGameObjectListAttributeTypeName.Type, SourceBuilderUtils.GenerateAttribute(AttributeTargets.Class | AttributeTargets.Interface, _generateGameObjectListAttributeTypeName.Type)));
 		context.RegisterPostInitializationOutput(ctx => ctx.AddSource(_generateGameAttributeTypeName.Type, SourceBuilderUtils.GenerateAttribute(AttributeTargets.Class, _generateGameAttributeTypeName.Type)));
 
+		// ! LINQ query filters out null values.
 		IncrementalValuesProvider<ClassDeclarationSyntax> singletonTypeDeclarations = context.SyntaxProvider
 			.CreateSyntaxProvider(
 				predicate: static (sn, _) => sn is ClassDeclarationSyntax { AttributeLists.Count: > 0 },
 				transform: static (ctx, _) => ctx.GetTypeWithAttribute<ClassDeclarationSyntax>(_generateSingletonAttributeTypeName.FullName))
 			.Where(static m => m is not null)!;
 
+		// ! LINQ query filters out null values.
 		IncrementalValuesProvider<ClassDeclarationSyntax> menuTypeDeclarations = context.SyntaxProvider
 			.CreateSyntaxProvider(
 				predicate: static (sn, _) => sn is ClassDeclarationSyntax { AttributeLists.Count: > 0 },
 				transform: static (ctx, _) => ctx.GetTypeWithAttribute<ClassDeclarationSyntax>(_generateMenuAttributeTypeName.FullName))
 			.Where(static m => m is not null)!;
 
+		// ! LINQ query filters out null values.
 		IncrementalValuesProvider<TypeDeclarationSyntax> gameObjectListTypeDeclarations = context.SyntaxProvider
 			.CreateSyntaxProvider(
 				predicate: static (sn, _) => sn is ClassDeclarationSyntax { AttributeLists.Count: > 0 } or InterfaceDeclarationSyntax { AttributeLists.Count: > 0 },
 				transform: static (ctx, _) => ctx.GetTypeWithAttribute<TypeDeclarationSyntax>(_generateGameObjectListAttributeTypeName.FullName))
 			.Where(static m => m is not null)!;
 
+		// ! LINQ query filters out null values.
 		IncrementalValuesProvider<ClassDeclarationSyntax> gameTypeDeclarations = context.SyntaxProvider
 			.CreateSyntaxProvider(
 				predicate: static (sn, _) => sn is ClassDeclarationSyntax { AttributeLists.Count: > 0 },

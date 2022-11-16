@@ -88,6 +88,7 @@ public class ShaderUniformGenerator : ISourceGenerator
 		if (!File.Exists(filePath))
 			return new();
 
+		// ! LINQ query filters out null values.
 		return File.ReadAllLines(filePath).Select(GlslUtils.GetFromGlslLine).Where(su => su != null).ToList()!;
 	}
 
