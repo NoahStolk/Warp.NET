@@ -15,13 +15,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Build
-      run: dotnet build src/Warp.NET.sln -c Release
+      run: dotnet build Warp.NET.sln -c Release
     - name: Test
-      run: dotnet test src/Warp.NET.sln -c Release --no-build
+      run: dotnet test Warp.NET.sln -c Release --no-build
     - name: Pack
       run: |
-        dotnet pack src/Warp.NET -c Release --no-build -o .
-        dotnet pack src/Warp.NET.SourceGen -c Release --no-build -o .
+        dotnet pack Warp.NET -c Release --no-build -o .
+        dotnet pack Warp.NET.SourceGen -c Release --no-build -o .
     - name: Push
       run: dotnet nuget push *.nupkg -s github -k ${NUGET_SECRET} -n --skip-duplicate
       env:
