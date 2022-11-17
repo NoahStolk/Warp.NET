@@ -1,34 +1,25 @@
 namespace Warp.NET.Content.Binaries.Types;
 
-public class ShaderBinary : IBinary
+public record ShaderBinary(ContentType ContentType, byte[] Contents) : IBinary<ShaderBinary>
 {
-	private string? _code;
+	private static readonly Encoding _encoding = Encoding.UTF8;
 
-	public ContentType ReadFromPath(string path)
+	public static ShaderBinary Construct(string inputPath)
 	{
-		_code = File.ReadAllText(path);
+		string code = File.ReadAllText(inputPath, _encoding);
 
-		string extension = Path.GetExtension(path);
-		return extension switch
+		string extension = Path.GetExtension(inputPath);
+		ContentType contentType = extension switch
 		{
 			".vert" => ContentType.VertexShader,
 			".geom" => ContentType.GeometryShader,
 			".frag" => ContentType.FragmentShader,
 			_ => throw new NotSupportedException($"Extension {extension} for shaders is not supported."),
 		};
-	}
-
-	public byte[] ToBytes(ContentType contentType)
-	{
-		if (contentType is not (ContentType.VertexShader or ContentType.GeometryShader or ContentType.FragmentShader))
-			throw new NotSupportedException($"Calling {nameof(ShaderBinary)}.{nameof(ToBytes)} with {nameof(ContentType)} '{contentType}' is not supported.");
-
-		if (_code == null)
-			throw new InvalidOperationException("Binary is not initialized.");
 
 		using MemoryStream ms = new();
 		using BinaryWriter bw = new(ms);
-		bw.Write(Encoding.UTF8.GetBytes(_code));
-		return ms.ToArray();
+		bw.Write(_encoding.GetBytes(code));
+		return new(contentType, ms.ToArray());
 	}
 }

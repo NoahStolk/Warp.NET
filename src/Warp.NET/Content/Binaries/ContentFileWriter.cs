@@ -46,15 +46,13 @@ public static class ContentFileWriter
 	}
 
 	private static void Write<TBinary>(string path, List<TocEntry> toc, BinaryWriter dataWriter)
-		where TBinary : IBinary, new()
+		where TBinary : IBinary<TBinary>
 	{
 		if (!FileNameUtils.PathIsValid(path))
 			return;
 
-		TBinary binary = new();
-		ContentType contentType = binary.ReadFromPath(path);
-		byte[] bytes = binary.ToBytes(contentType);
-		dataWriter.Write(bytes);
-		toc.Add(new(contentType, Path.GetFileNameWithoutExtension(path), (uint)bytes.Length));
+		TBinary binary = TBinary.Construct(path);
+		dataWriter.Write(binary.Contents);
+		toc.Add(new(binary.ContentType, Path.GetFileNameWithoutExtension(path), (uint)binary.Contents.Length));
 	}
 }

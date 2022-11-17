@@ -1,14 +1,20 @@
 namespace Warp.NET.Content.Binaries.Types;
 
-public interface IBinary
+public interface IBinary<out TSelf>
+	where TSelf : IBinary<TSelf>
 {
 	/// <summary>
-	/// Used for creating an object from the content file.
+	/// The content type determined from the input file.
 	/// </summary>
-	ContentType ReadFromPath(string path);
+	ContentType ContentType { get; }
 
 	/// <summary>
-	/// Used for writing the object to the binary.
+	/// The binary contents which will be written to the content file.
 	/// </summary>
-	byte[] ToBytes(ContentType contentType);
+	byte[] Contents { get; }
+
+	/// <summary>
+	/// Constructs the binary from the file located at <paramref name="inputPath"/>.
+	/// </summary>
+	static abstract TSelf Construct(string inputPath);
 }

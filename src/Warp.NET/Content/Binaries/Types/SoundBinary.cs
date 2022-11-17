@@ -3,31 +3,20 @@ using Warp.NET.Content.Binaries.Parsers;
 
 namespace Warp.NET.Content.Binaries.Types;
 
-public class SoundBinary : IBinary
+public record SoundBinary(ContentType ContentType, byte[] Contents) : IBinary<SoundBinary>
 {
-	private WaveData? _waveData;
-
-	public ContentType ReadFromPath(string path)
+	public static SoundBinary Construct(string inputPath)
 	{
-		_waveData = WaveParser.Parse(File.ReadAllBytes(path));
-		return ContentType.Sound;
-	}
-
-	public byte[] ToBytes(ContentType contentType)
-	{
-		if (contentType != ContentType.Sound)
-			throw new NotSupportedException($"Calling {nameof(SoundBinary)}.{nameof(ToBytes)} with {nameof(ContentType)} '{contentType}' is not supported.");
-
-		if (_waveData == null)
-			throw new InvalidOperationException("Binary is not initialized.");
+		WaveData waveData = WaveParser.Parse(File.ReadAllBytes(inputPath));
 
 		using MemoryStream ms = new();
 		using BinaryWriter bw = new(ms);
-		bw.Write(_waveData.Channels);
-		bw.Write(_waveData.SampleRate);
-		bw.Write(_waveData.BitsPerSample);
-		bw.Write(_waveData.Data.Length);
-		bw.Write(_waveData.Data);
-		return ms.ToArray();
+		bw.Write(waveData.Channels);
+		bw.Write(waveData.SampleRate);
+		bw.Write(waveData.BitsPerSample);
+		bw.Write(waveData.Data.Length);
+		bw.Write(waveData.Data);
+
+		return new(ContentType.Sound, ms.ToArray());
 	}
 }
