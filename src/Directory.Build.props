@@ -1,6 +1,6 @@
 <Project>
 
-	<PropertyGroup>
+	<PropertyGroup Label="Build properties">
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>nullable</WarningsAsErrors>

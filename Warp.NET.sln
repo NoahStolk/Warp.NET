@@ -1,12 +1,12 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET", "src\Warp.NET\Warp.NET.csproj", "{78C76A17-A6DF-4E4A-AC26-C91062CD6EA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET", "src\lib\Warp.NET\Warp.NET.csproj", "{78C76A17-A6DF-4E4A-AC26-C91062CD6EA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.SourceGen", "src\Warp.NET.SourceGen\Warp.NET.SourceGen.csproj", "{2D32D846-4380-4900-A08C-EA7E8BFFC24D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.SourceGen", "src\lib\Warp.NET.SourceGen\Warp.NET.SourceGen.csproj", "{2D32D846-4380-4900-A08C-EA7E8BFFC24D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.SourceGen.Tests", "src\Warp.NET.SourceGen.Tests\Warp.NET.SourceGen.Tests.csproj", "{7FE7F937-6474-4085-9D74-7FE6748BA57E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Tests", "src\tests\Warp.NET.Tests\Warp.NET.Tests.csproj", "{A938C22A-2D4D-47AF-8EB7-87DE85F7B9D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.Tests", "src\Warp.NET.Tests\Warp.NET.Tests.csproj", "{A938C22A-2D4D-47AF-8EB7-87DE85F7B9D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warp.NET.SourceGen.Tests", "src\tests\Warp.NET.SourceGen.Tests\Warp.NET.SourceGen.Tests.csproj", "{7FE7F937-6474-4085-9D74-7FE6748BA57E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
