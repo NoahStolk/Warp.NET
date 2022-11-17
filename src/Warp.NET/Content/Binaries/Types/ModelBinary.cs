@@ -4,28 +4,16 @@ using Warp.NET.Extensions;
 
 namespace Warp.NET.Content.Binaries.Types;
 
-public class ModelBinary : IBinary
+public record ModelBinary(ContentType ContentType, byte[] Contents) : IBinary<ModelBinary>
 {
-	private ModelData? _modelData;
-
-	public ContentType ReadFromPath(string path)
+	public static ModelBinary Construct(string inputPath)
 	{
-		_modelData = ObjParser.Parse(File.ReadAllBytes(path));
+		ModelData modelData = ObjParser.Parse(File.ReadAllBytes(inputPath));
 
-		return _modelData.Materials.Count > 1 ? ContentType.Model : ContentType.Mesh;
-	}
+		if (modelData.Materials.Count > 1)
+			return new(ContentType.Model, ModelToBytes(modelData));
 
-	public byte[] ToBytes(ContentType contentType)
-	{
-		if (_modelData == null)
-			throw new InvalidOperationException("Binary is not initialized.");
-
-		return contentType switch
-		{
-			ContentType.Model => ModelToBytes(_modelData),
-			ContentType.Mesh => MeshToBytes(_modelData, _modelData.Materials.SelectMany(kvp => kvp.Value).ToList()),
-			_ => throw new NotSupportedException($"Calling {nameof(ModelBinary)}.{nameof(ToBytes)} with {nameof(ContentType)} '{contentType}' is not supported."),
-		};
+		return new(ContentType.Mesh, MeshToBytes(modelData, modelData.Materials.SelectMany(kvp => kvp.Value).ToList()));
 	}
 
 	private static byte[] ModelToBytes(ModelData modelData)
