@@ -20,8 +20,8 @@ jobs:
         run: dotnet test Warp.NET.sln -c Release --no-build
       - name: Pack
         run: |
-          dotnet pack src/Warp.NET -c Release --no-build -o .
-          dotnet pack src/Warp.NET.SourceGen -c Release --no-build -o .
+          dotnet pack src/lib/Warp.NET -c Release --no-build -o .
+          dotnet pack src/lib/Warp.NET.SourceGen -c Release --no-build -o .
       - name: Push
         run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${NUGET_SECRET} -n --skip-duplicate
         env:

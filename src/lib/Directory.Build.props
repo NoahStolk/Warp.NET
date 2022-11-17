@@ -1,0 +1,15 @@
+<Project>
+
+	<ImportGroup Label="Directory.Build.props inheritance">
+		<Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)..\'))" />
+	</ImportGroup>
+
+	<PropertyGroup Label="Package information">
+		<Authors>Noah Stolk</Authors>
+		<Copyright>Copyright © Noah Stolk</Copyright>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/NoahStolk/Warp.NET</RepositoryUrl>
+		<Version>0.1.1-alpha.2</Version>
+	</PropertyGroup>
+
+</Project>
