@@ -37,14 +37,14 @@ public class GameGenerator : IIncrementalGenerator
 
 			{{_singletonProperties}}
 
-			protected override void HandleAdds(Warp.GameObjects.IGameObject gameObject)
+			protected override void HandleAdds({{Constants.RootNamespace}}.GameObjects.IGameObject gameObject)
 			{
 				base.HandleAdds(gameObject);
 
 				{{_gameObjectListAdds}}
 			}
 
-			protected override void HandleRemoves(Warp.GameObjects.IGameObject gameObject)
+			protected override void HandleRemoves({{Constants.RootNamespace}}.GameObjects.IGameObject gameObject)
 			{
 				base.HandleRemoves(gameObject);
 
@@ -53,10 +53,10 @@ public class GameGenerator : IIncrementalGenerator
 		}
 		""";
 
-	private static readonly TypeName _generateSingletonAttributeTypeName = new("GenerateSingletonAttribute", "Warp");
-	private static readonly TypeName _generateMenuAttributeTypeName = new("GenerateMenuAttribute", "Warp");
-	private static readonly TypeName _generateGameObjectListAttributeTypeName = new("GenerateGameObjectListAttribute", "Warp");
-	private static readonly TypeName _generateGameAttributeTypeName = new("GenerateGameAttribute", "Warp");
+	private static readonly TypeName _generateSingletonAttributeTypeName = new("GenerateSingletonAttribute");
+	private static readonly TypeName _generateMenuAttributeTypeName = new("GenerateMenuAttribute");
+	private static readonly TypeName _generateGameObjectListAttributeTypeName = new("GenerateGameObjectListAttribute");
+	private static readonly TypeName _generateGameAttributeTypeName = new("GenerateGameAttribute");
 
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
