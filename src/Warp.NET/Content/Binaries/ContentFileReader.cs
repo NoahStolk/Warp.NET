@@ -1,4 +1,4 @@
-using Warp.NET.Content.Binaries.Types;
+using Warp.NET.Content.Binaries.ContentConverters;
 
 namespace Warp.NET.Content.Binaries;
 
@@ -39,10 +39,10 @@ public static class ContentFileReader
 
 			switch (tocEntry.ContentType)
 			{
-				case ContentType.Model: models[tocEntry.Name] = ModelBinary.Deconstruct(br); break;
+				case ContentType.Model: models[tocEntry.Name] = ModelContentConverter.Deconstruct(br); break;
 				case ContentType.Shader: SetShaderSource(shaderSourceCollections, br, tocEntry.Name); break;
-				case ContentType.Sound: sounds[tocEntry.Name] = SoundBinary.Deconstruct(br); break;
-				case ContentType.Texture: textures[tocEntry.Name] = TextureBinary.Deconstruct(br); break;
+				case ContentType.Sound: sounds[tocEntry.Name] = SoundContentConverter.Deconstruct(br); break;
+				case ContentType.Texture: textures[tocEntry.Name] = TextureContentConverter.Deconstruct(br); break;
 
 				default: throw new NotSupportedException($"Reading {nameof(ContentType)} '{tocEntry.ContentType}' is not supported.");
 			}
@@ -72,7 +72,7 @@ public static class ContentFileReader
 			shaderSources.Add(shaderName, value);
 		}
 
-		ShaderSource shaderSource = ShaderBinary.Deconstruct(br);
+		ShaderSource shaderSource = ShaderContentConverter.Deconstruct(br);
 		string code = Encoding.UTF8.GetString(shaderSource.SourceContents);
 		switch (shaderSource.Type)
 		{

@@ -2,13 +2,13 @@ using Warp.NET.Content.Binaries.Data;
 using Warp.NET.Content.Binaries.Parsers;
 using Warp.NET.Extensions;
 
-namespace Warp.NET.Content.Binaries.Types;
+namespace Warp.NET.Content.Binaries.ContentConverters;
 
-public record ModelBinary(byte[] Contents) : IBinary<ModelBinary>
+public record ModelContentConverter(byte[] Contents) : IContentConverter<ModelContentConverter>
 {
 	public ContentType ContentType => ContentType.Model;
 
-	public static ModelBinary Construct(string inputPath)
+	public static ModelContentConverter Construct(string inputPath)
 	{
 		ModelData modelData = ObjParser.Parse(File.ReadAllBytes(inputPath));
 

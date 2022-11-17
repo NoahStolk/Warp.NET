@@ -1,7 +1,7 @@
-namespace Warp.NET.Content.Binaries.Types;
+namespace Warp.NET.Content.Binaries.ContentConverters;
 
-public interface IBinary<out TSelf>
-	where TSelf : IBinary<TSelf>
+public interface IContentConverter<out TSelf>
+	where TSelf : IContentConverter<TSelf>
 {
 	/// <summary>
 	/// The content type determined from the input file.

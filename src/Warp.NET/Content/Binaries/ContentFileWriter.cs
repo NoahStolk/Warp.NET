@@ -1,4 +1,4 @@
-using Warp.NET.Content.Binaries.Types;
+using Warp.NET.Content.Binaries.ContentConverters;
 using Warp.NET.Utils;
 
 namespace Warp.NET.Content.Binaries;
@@ -17,16 +17,16 @@ public static class ContentFileWriter
 		using BinaryWriter dataWriter = new(dataMemory);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".tga"))
-			Write<TextureBinary>(path, tocEntries, dataWriter);
+			Write<TextureContentConverter>(path, tocEntries, dataWriter);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) is ".vert" or ".geom" or ".frag"))
-			Write<ShaderBinary>(path, tocEntries, dataWriter);
+			Write<ShaderContentConverter>(path, tocEntries, dataWriter);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".wav"))
-			Write<SoundBinary>(path, tocEntries, dataWriter);
+			Write<SoundContentConverter>(path, tocEntries, dataWriter);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".obj"))
-			Write<ModelBinary>(path, tocEntries, dataWriter);
+			Write<ModelContentConverter>(path, tocEntries, dataWriter);
 
 		using MemoryStream contentFile = new();
 		using BinaryWriter contentFileWriter = new(contentFile);
@@ -45,7 +45,7 @@ public static class ContentFileWriter
 	}
 
 	private static void Write<TBinary>(string path, List<TocEntry> toc, BinaryWriter dataWriter)
-		where TBinary : IBinary<TBinary>
+		where TBinary : IContentConverter<TBinary>
 	{
 		if (!FileNameUtils.PathIsValid(path))
 			return;

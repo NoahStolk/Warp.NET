@@ -1,10 +1,10 @@
-namespace Warp.NET.Content.Binaries.Types;
+namespace Warp.NET.Content.Binaries.ContentConverters;
 
-public record ShaderBinary(byte[] Contents) : IBinary<ShaderBinary>
+public record ShaderContentConverter(byte[] Contents) : IContentConverter<ShaderContentConverter>
 {
 	public ContentType ContentType => ContentType.Shader;
 
-	public static ShaderBinary Construct(string inputPath)
+	public static ShaderContentConverter Construct(string inputPath)
 	{
 		byte[] code = File.ReadAllBytes(inputPath);
 		string extension = Path.GetExtension(inputPath);

@@ -1,13 +1,13 @@
 using Warp.NET.Content.Binaries.Data;
 using Warp.NET.Content.Binaries.Parsers;
 
-namespace Warp.NET.Content.Binaries.Types;
+namespace Warp.NET.Content.Binaries.ContentConverters;
 
-public record SoundBinary(byte[] Contents) : IBinary<SoundBinary>
+public record SoundContentConverter(byte[] Contents) : IContentConverter<SoundContentConverter>
 {
 	public ContentType ContentType => ContentType.Sound;
 
-	public static SoundBinary Construct(string inputPath)
+	public static SoundContentConverter Construct(string inputPath)
 	{
 		SoundData soundData = WaveParser.Parse(File.ReadAllBytes(inputPath));
 

@@ -2,13 +2,13 @@ using Warp.NET.Content.Binaries.Data;
 using Warp.NET.Content.Binaries.Parsers;
 using Warp.NET.Extensions;
 
-namespace Warp.NET.Content.Binaries.Types;
+namespace Warp.NET.Content.Binaries.ContentConverters;
 
-public record TextureBinary(byte[] Contents) : IBinary<TextureBinary>
+public record TextureContentConverter(byte[] Contents) : IContentConverter<TextureContentConverter>
 {
 	public ContentType ContentType => ContentType.Texture;
 
-	public static TextureBinary Construct(string inputPath)
+	public static TextureContentConverter Construct(string inputPath)
 	{
 		TextureData textureData = TgaParser.Parse(File.ReadAllBytes(inputPath));
 		TextureContentType textureContentType = DetermineTextureContentType(textureData.ColorData);
