@@ -30,7 +30,7 @@ public class ShaderUniformGenerator : ISourceGenerator
 	private const string _uniformCollectionInitializationPlaceholder = "%uniformCollectionInitialization%";
 
 	private const string _initializationTemplate = $$"""
-		using Warp;
+		using {{Constants.RootNamespace}};
 
 		namespace {{_namespacePlaceholder}};
 
@@ -99,7 +99,7 @@ public class ShaderUniformGenerator : ISourceGenerator
 			.Replace(_namespacePlaceholder, gameNamespace)
 			.Replace(_classNamePlaceholder, className)
 			.Replace(_uniformPropertiesPlaceholder, string.Join(Constants.NewLine, uniformNames.ConvertAll(u => $"public static int {u.PropertyName} {{ get; private set; }}")).IndentCode(1))
-			.Replace(_uniformInitializationPlaceholder, string.Join(Constants.NewLine, uniformNames.ConvertAll(u => $"{u.PropertyName} = Warp.Content.Shader.GetUniformLocation(Shaders.{shaderName}.Id, \"{u.Name}\");")).IndentCode(2));
+			.Replace(_uniformInitializationPlaceholder, string.Join(Constants.NewLine, uniformNames.ConvertAll(u => $"{u.PropertyName} = {Constants.RootNamespace}.Content.Shader.GetUniformLocation(Shaders.{shaderName}.Id, \"{u.Name}\");")).IndentCode(2));
 
 		context.AddSource(className, SourceBuilderUtils.Build(sourceBuilder));
 	}

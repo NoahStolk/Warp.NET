@@ -59,7 +59,7 @@ public static class SourceBuilderUtils
 		string attributeTargetsString = string.Join(" | ", targets.Select(s => $"System.AttributeTargets.{s}"));
 
 		return Build($$"""
-			namespace Warp;
+			namespace {{Constants.RootNamespace}};
 
 			[System.AttributeUsage({{attributeTargetsString}})]
 			public class {{attributeName}} : System.Attribute

@@ -46,11 +46,11 @@ public class ContentGenerator : ISourceGenerator
 		List<string> modelPaths = GetFiles(contentRootDirectory, "Models", "*.obj");
 		List<string> soundPaths = GetFiles(contentRootDirectory, "Sounds", "*.wav");
 
-		CreateFile(context, gameNamespace, "Shaders", "Warp.Content.Shader", shaderPaths);
-		CreateFile(context, gameNamespace, "Textures", "Warp.Content.Texture", tgaTexturePaths);
-		CreateFile(context, gameNamespace, "Meshes", "Warp.Content.Mesh", meshPaths);
-		CreateFile(context, gameNamespace, "Models", "Warp.Content.Model", modelPaths);
-		CreateFile(context, gameNamespace, "Sounds", "Warp.Content.Sound", soundPaths);
+		CreateFile(context, gameNamespace, "Shaders", $"{Constants.RootNamespace}.Content.Shader", shaderPaths);
+		CreateFile(context, gameNamespace, "Textures", $"{Constants.RootNamespace}.Content.Texture", tgaTexturePaths);
+		CreateFile(context, gameNamespace, "Meshes", $"{Constants.RootNamespace}.Content.Mesh", meshPaths);
+		CreateFile(context, gameNamespace, "Models", $"{Constants.RootNamespace}.Content.Model", modelPaths);
+		CreateFile(context, gameNamespace, "Sounds", $"{Constants.RootNamespace}.Content.Sound", soundPaths);
 	}
 
 	private static List<string> GetFiles(string basePath, string folderName, string searchPattern)

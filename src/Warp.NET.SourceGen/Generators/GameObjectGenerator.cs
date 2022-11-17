@@ -52,8 +52,8 @@ public class GameObjectGenerator : IIncrementalGenerator
 		}
 		""";
 
-	private static readonly TypeName _gameObjectAttributeTypeName = new("GenerateGameObjectAttribute", "Warp");
-	private static readonly TypeName _childAttributeTypeName = new("GenerateChildAttribute", "Warp");
+	private static readonly TypeName _gameObjectAttributeTypeName = new("GenerateGameObjectAttribute");
+	private static readonly TypeName _childAttributeTypeName = new("GenerateChildAttribute");
 
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
