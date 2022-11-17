@@ -17,7 +17,7 @@ public static class ContentFileWriter
 		using BinaryWriter dataWriter = new(dataMemory);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".tga"))
-			Write<TgaTextureBinary>(path, tocEntries, dataWriter);
+			Write<TextureBinary>(path, tocEntries, dataWriter);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) is ".vert" or ".geom" or ".frag"))
 			Write<ShaderBinary>(path, tocEntries, dataWriter);
