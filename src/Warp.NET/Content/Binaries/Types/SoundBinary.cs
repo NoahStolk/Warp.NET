@@ -9,15 +9,15 @@ public record SoundBinary(byte[] Contents) : IBinary<SoundBinary>
 
 	public static SoundBinary Construct(string inputPath)
 	{
-		WaveData waveData = WaveParser.Parse(File.ReadAllBytes(inputPath));
+		SoundData soundData = WaveParser.Parse(File.ReadAllBytes(inputPath));
 
 		using MemoryStream ms = new();
 		using BinaryWriter bw = new(ms);
-		bw.Write(waveData.Channels);
-		bw.Write(waveData.SampleRate);
-		bw.Write(waveData.BitsPerSample);
-		bw.Write(waveData.Data.Length);
-		bw.Write(waveData.Data);
+		bw.Write(soundData.Channels);
+		bw.Write(soundData.SampleRate);
+		bw.Write(soundData.BitsPerSample);
+		bw.Write(soundData.Data.Length);
+		bw.Write(soundData.Data);
 
 		return new(ms.ToArray());
 	}

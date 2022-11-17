@@ -13,16 +13,16 @@ public class WaveParseTests
 	public void ParseWaveBytes(string fileName, short expectedChannels, int expectedSampleRate, int expectedByteRate, short expectedBlockAlign, short expectedBitsPerSample, int expectedDataSize, int expectedSampleCount, double expectedLengthInSeconds)
 	{
 		byte[] bytes = File.ReadAllBytes(ResourceUtils.GetResourcePath(fileName));
-		WaveData wave = WaveParser.Parse(bytes);
+		SoundData sound = WaveParser.Parse(bytes);
 
-		Assert.AreEqual(expectedChannels, wave.Channels);
-		Assert.AreEqual(expectedSampleRate, wave.SampleRate);
-		Assert.AreEqual(expectedByteRate, wave.ByteRate);
-		Assert.AreEqual(expectedBlockAlign, wave.BlockAlign);
-		Assert.AreEqual(expectedBitsPerSample, wave.BitsPerSample);
-		Assert.AreEqual(expectedDataSize, wave.Data.Length);
+		Assert.AreEqual(expectedChannels, sound.Channels);
+		Assert.AreEqual(expectedSampleRate, sound.SampleRate);
+		Assert.AreEqual(expectedByteRate, sound.ByteRate);
+		Assert.AreEqual(expectedBlockAlign, sound.BlockAlign);
+		Assert.AreEqual(expectedBitsPerSample, sound.BitsPerSample);
+		Assert.AreEqual(expectedDataSize, sound.Data.Length);
 
-		Assert.AreEqual(expectedSampleCount, wave.SampleCount);
-		Assert.AreEqual(expectedLengthInSeconds, wave.LengthInSeconds, 0.01);
+		Assert.AreEqual(expectedSampleCount, sound.SampleCount);
+		Assert.AreEqual(expectedLengthInSeconds, sound.LengthInSeconds, 0.01);
 	}
 }

@@ -12,7 +12,7 @@ public static class WaveParser
 	private const int _fmtMinimumSize = 16;
 	private const int _audioFormat = 1;
 
-	public static WaveData Parse(byte[] fileContents)
+	public static SoundData Parse(byte[] fileContents)
 	{
 		using MemoryStream ms = new(fileContents);
 		using BinaryReader br = new(ms);

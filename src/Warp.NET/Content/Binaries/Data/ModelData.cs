@@ -2,6 +2,9 @@ using Warp.NET.Content.Binaries.Parsers.Exceptions;
 
 namespace Warp.NET.Content.Binaries.Data;
 
+/// <summary>
+/// Represents data parsed from a model format, such as a .obj file.
+/// </summary>
 public record ModelData
 {
 	public ModelData(List<Vector3> positions, List<Vector2> textures, List<Vector3> normals, Dictionary<string, List<Face>> meshes)
