@@ -11,9 +11,10 @@ Warp.NET is a simplistic game engine using .NET 7 and OpenGL, aimed at 2D and 3D
 - Supports Windows, Mac, and Linux
 - Supports 2D and 3D
 - Game loop using fixed time step with automatic frame interpolation to support high frame rates
-- Makes use of the `System.Numerics` types
 - Automatic content builder and loader
 - Source generator which generates strongly-typed mappings for game assets
+- Makes use of the `System.Numerics` types
+- No use of `System.Reflection`
 - UI library
 - Relies on [dotnet/Silk.NET](https://github.com/dotnet/Silk.NET) for OpenGL, OpenAL, and GLFW bindings
 - No other external dependencies
