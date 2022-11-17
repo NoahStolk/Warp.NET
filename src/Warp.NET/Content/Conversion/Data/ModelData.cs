@@ -7,7 +7,7 @@ namespace Warp.NET.Content.Conversion.Data;
 /// </summary>
 public record ModelData
 {
-	public ModelData(List<Vector3> positions, List<Vector2> textures, List<Vector3> normals, Dictionary<string, List<Face>> meshes)
+	public ModelData(IReadOnlyList<Vector3> positions, IReadOnlyList<Vector2> textures, IReadOnlyList<Vector3> normals, IReadOnlyList<MeshData> meshes)
 	{
 		if (meshes.Count == 0)
 			throw new ObjParseException("Model must have at least one mesh.");
@@ -18,8 +18,8 @@ public record ModelData
 		Meshes = meshes;
 	}
 
-	public List<Vector3> Positions { get; }
-	public List<Vector2> Textures { get; }
-	public List<Vector3> Normals { get; }
-	public Dictionary<string, List<Face>> Meshes { get; }
+	public IReadOnlyList<Vector3> Positions { get; }
+	public IReadOnlyList<Vector2> Textures { get; }
+	public IReadOnlyList<Vector3> Normals { get; }
+	public IReadOnlyList<MeshData> Meshes { get; }
 }

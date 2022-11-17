@@ -1,4 +1,5 @@
-using Warp.NET.Content.Conversion.Converters;
+using Warp.NET.Content.Conversion.Binaries;
+using Warp.NET.Content.Conversion.Binaries.Data;
 
 namespace Warp.NET.Content.Conversion;
 
@@ -39,11 +40,10 @@ public static class ContentFileReader
 
 			switch (tocEntry.ContentType)
 			{
-				case ContentType.Model: models[tocEntry.Name] = ModelContentConverter.Deconstruct(br); break;
+				case ContentType.Model: models[tocEntry.Name] = GetModel(br); break;
 				case ContentType.Shader: SetShaderSource(shaderSourceCollections, br, tocEntry.Name); break;
-				case ContentType.Sound: sounds[tocEntry.Name] = SoundContentConverter.Deconstruct(br); break;
-				case ContentType.Texture: textures[tocEntry.Name] = TextureContentConverter.Deconstruct(br); break;
-
+				case ContentType.Sound: sounds[tocEntry.Name] = GetSound(br); break;
+				case ContentType.Texture: textures[tocEntry.Name] = GetTexture(br); break;
 				default: throw new NotSupportedException($"Reading {nameof(ContentType)} '{tocEntry.ContentType}' is not supported.");
 			}
 
@@ -64,6 +64,30 @@ public static class ContentFileReader
 		return new(models, shaders, sounds, textures);
 	}
 
+	private static Model GetModel(BinaryReader br)
+	{
+		ModelBinary modelBinary = ModelBinary.FromStream(br);
+		return new(modelBinary.Meshes.ToDictionary(m => m.MaterialName, m => GetMesh(modelBinary, m)));
+	}
+
+	private static Mesh GetMesh(ModelBinary modelBinary, MeshBinaryData meshBinaryData)
+	{
+		Vertex[] outVertices = new Vertex[meshBinaryData.Faces.Count];
+		uint[] outFaces = new uint[meshBinaryData.Faces.Count];
+		for (int j = 0; j < meshBinaryData.Faces.Count; j++)
+		{
+			ushort t = meshBinaryData.Faces[j].Texture;
+
+			outVertices[j] = new(
+			modelBinary.Positions[meshBinaryData.Faces[j].Position - 1],
+			modelBinary.Textures.Count > t - 1 && t > 0 ? modelBinary.Textures[t - 1] : default, // TODO: Separate face type?
+			modelBinary.Normals[meshBinaryData.Faces[j].Normal - 1]);
+			outFaces[j] = (ushort)j;
+		}
+
+		return new(outVertices, outFaces, TriangleRenderMode.Triangles);
+	}
+
 	private static void SetShaderSource(IDictionary<string, ShaderSourceCollection> shaderSources, BinaryReader br, string shaderName)
 	{
 		if (!shaderSources.TryGetValue(shaderName, out ShaderSourceCollection? value))
@@ -72,9 +96,9 @@ public static class ContentFileReader
 			shaderSources.Add(shaderName, value);
 		}
 
-		ShaderSource shaderSource = ShaderContentConverter.Deconstruct(br);
-		string code = Encoding.UTF8.GetString(shaderSource.SourceContents);
-		switch (shaderSource.Type)
+		ShaderBinary shaderBinary = ShaderBinary.FromStream(br);
+		string code = Encoding.UTF8.GetString(shaderBinary.Code);
+		switch (shaderBinary.ShaderContentType)
 		{
 			case ShaderContentType.Vertex:
 				value.VertexCode = code;
@@ -86,8 +110,20 @@ public static class ContentFileReader
 				value.FragmentCode = code;
 				break;
 			default:
-				throw new NotSupportedException($"{nameof(ShaderContentType)} '{shaderSource.Type}' is not supported.");
+				throw new NotSupportedException($"{nameof(ShaderContentType)} '{shaderBinary.ShaderContentType}' is not supported.");
 		}
+	}
+
+	private static Sound GetSound(BinaryReader br)
+	{
+		SoundBinary soundBinary = SoundBinary.FromStream(br);
+		return new(soundBinary.Channels, soundBinary.SampleRate, soundBinary.BitsPerSample, soundBinary.Data.Length, soundBinary.Data);
+	}
+
+	private static Texture GetTexture(BinaryReader br)
+	{
+		TextureBinary textureBinary = TextureBinary.FromStream(br);
+		return new(textureBinary.Width, textureBinary.Height, textureBinary.ColorData);
 	}
 
 	private sealed class ShaderSourceCollection

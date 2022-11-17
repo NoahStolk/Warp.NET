@@ -57,7 +57,7 @@ public static class ObjParser
 			}
 		}
 
-		return new(positions, textures, normals, meshes);
+		return new(positions, textures, normals, meshes.Select(kvp => new MeshData(kvp.Key, kvp.Value)).ToList());
 	}
 
 	private static float ParseVertexFloat(string value) => (float)double.Parse(value, NumberStyles.Float);

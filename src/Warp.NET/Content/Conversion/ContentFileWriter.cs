@@ -1,3 +1,4 @@
+using Warp.NET.Content.Conversion.Binaries;
 using Warp.NET.Content.Conversion.Converters;
 using Warp.NET.Utils;
 
@@ -16,17 +17,17 @@ public static class ContentFileWriter
 		using MemoryStream dataMemory = new();
 		using BinaryWriter dataWriter = new(dataMemory);
 
-		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".tga"))
-			Write<TextureContentConverter>(path, tocEntries, dataWriter);
+		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".obj"))
+			Write<ModelContentConverter, ModelBinary>(path, tocEntries, dataWriter);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) is ".vert" or ".geom" or ".frag"))
-			Write<ShaderContentConverter>(path, tocEntries, dataWriter);
+			Write<ShaderContentConverter, ShaderBinary>(path, tocEntries, dataWriter);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".wav"))
-			Write<SoundContentConverter>(path, tocEntries, dataWriter);
+			Write<SoundContentConverter, SoundBinary>(path, tocEntries, dataWriter);
 
-		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".obj"))
-			Write<ModelContentConverter>(path, tocEntries, dataWriter);
+		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".tga"))
+			Write<TextureContentConverter, TextureBinary>(path, tocEntries, dataWriter);
 
 		using MemoryStream contentFile = new();
 		using BinaryWriter contentFileWriter = new(contentFile);
@@ -44,14 +45,16 @@ public static class ContentFileWriter
 		File.WriteAllBytes(outputContentFilePath, contentFile.ToArray());
 	}
 
-	private static void Write<TBinary>(string path, List<TocEntry> toc, BinaryWriter dataWriter)
-		where TBinary : IContentConverter<TBinary>
+	private static void Write<TContentConverter, TBinary>(string path, List<TocEntry> toc, BinaryWriter dataWriter)
+		where TContentConverter : IContentConverter<TBinary>
+		where TBinary : IBinary<TBinary>
 	{
 		if (!FileNameUtils.PathIsValid(path))
 			return;
 
-		TBinary binary = TBinary.Construct(path);
-		dataWriter.Write(binary.Contents);
-		toc.Add(new(binary.ContentType, Path.GetFileNameWithoutExtension(path), (uint)binary.Contents.Length));
+		TBinary binary = TContentConverter.Construct(path);
+		byte[] bytes = binary.ToBytes();
+		dataWriter.Write(bytes);
+		toc.Add(new(binary.ContentType, Path.GetFileNameWithoutExtension(path), (uint)bytes.Length));
 	}
 }
