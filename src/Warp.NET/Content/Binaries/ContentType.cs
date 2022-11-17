@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Binaries;
 
-public enum ContentType
+public enum ContentType : byte
 {
 	/// <summary>
 	/// Vertex shader source code.

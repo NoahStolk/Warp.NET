@@ -50,7 +50,7 @@ public class Shader
 	{
 		string infoLog = Gl.Gl.GetShaderInfoLog(shaderId);
 		if (!string.IsNullOrWhiteSpace(infoLog))
-			throw new($"Shader compile error: {infoLog}");
+			throw new InvalidOperationException($"Shader compile error: {infoLog}");
 	}
 
 	public void Use()

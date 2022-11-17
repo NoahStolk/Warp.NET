@@ -28,21 +28,20 @@ public static class ContentFileWriter
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".obj"))
 			Write<ModelBinary>(path, tocEntries, dataWriter);
 
-		using MemoryStream tocMemory = new();
-		using BinaryWriter tocWriter = new(tocMemory);
+		using MemoryStream contentFile = new();
+		using BinaryWriter contentFileWriter = new(contentFile);
+
+		contentFileWriter.Write((ushort)tocEntries.Count);
 		foreach (TocEntry tocEntry in tocEntries)
 		{
-			tocWriter.Write((byte)tocEntry.ContentType);
-			tocWriter.Write(tocEntry.Name);
-			tocWriter.Write(tocEntry.Length);
+			contentFileWriter.Write((byte)tocEntry.ContentType);
+			contentFileWriter.Write(tocEntry.Name);
+			contentFileWriter.Write(tocEntry.Length);
 		}
 
-		byte[] final = new byte[sizeof(ushort) + tocMemory.Length + dataMemory.Length];
-		Buffer.BlockCopy(BitConverter.GetBytes((ushort)tocMemory.Length), 0, final, 0, sizeof(ushort));
-		Buffer.BlockCopy(tocMemory.GetBuffer(), 0, final, sizeof(ushort), (int)tocMemory.Length);
-		Buffer.BlockCopy(dataMemory.GetBuffer(), 0, final, sizeof(ushort) + (int)tocMemory.Length, (int)dataMemory.Length);
+		contentFileWriter.Write(dataMemory.ToArray());
 
-		File.WriteAllBytes(outputContentFilePath, final);
+		File.WriteAllBytes(outputContentFilePath, contentFile.ToArray());
 	}
 
 	private static void Write<TBinary>(string path, List<TocEntry> toc, BinaryWriter dataWriter)

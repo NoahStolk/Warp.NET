@@ -10,20 +10,20 @@ public static class ContentFileReader
 	public static void Read(string contentPath, Assembly gameAssembly)
 	{
 		if (!File.Exists(contentPath))
-			throw new("Content file does not exist.");
+			throw new InvalidOperationException("Content file does not exist.");
 
 		using FileStream fs = new(contentPath, FileMode.Open);
 		using BinaryReader br = new(fs);
-		ushort tocLength = br.ReadUInt16();
+		ushort tocEntryCount = br.ReadUInt16();
 
-		List<TocEntry> tocEntries = new();
-		while (br.BaseStream.Position < sizeof(ushort) + tocLength)
+		TocEntry[] tocEntries = new TocEntry[tocEntryCount];
+		for (int i = 0; i < tocEntryCount; i++)
 		{
 			ContentType contentType = (ContentType)br.ReadByte();
 			string name = br.ReadString();
 			uint length = br.ReadUInt32();
 
-			tocEntries.Add(new(contentType, name, length));
+			tocEntries[i] = new(contentType, name, length);
 		}
 
 		Type[] types = gameAssembly.GetTypes();

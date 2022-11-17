@@ -41,7 +41,7 @@ public class Sound
 		{
 			16 => stereo ? BufferFormat.Stereo16 : BufferFormat.Mono16,
 			8 => stereo ? BufferFormat.Stereo8 : BufferFormat.Mono8,
-			_ => throw new($"Could not get audio format for wave with {BitsPerSample} samples."),
+			_ => throw new NotSupportedException($"Could not get audio format for wave with {BitsPerSample} samples."),
 		};
 	}
 }
