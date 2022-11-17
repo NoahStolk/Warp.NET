@@ -7,21 +7,30 @@ namespace Warp.NET.SourceGen.Generators;
 [Generator]
 public class ContentGenerator : ISourceGenerator
 {
-	private const string _namespacePlaceholder = "%namespace%";
-	private const string _classNamePlaceholder = "%className%";
-	private const string _contentPlaceholder = "%content%";
-	private const string _contentTypePlaceholder = "%contentType%";
+	private const string _namespace = $"%{nameof(_namespace)}%";
+	private const string _className = $"%{nameof(_className)}%";
+	private const string _contentFieldInitializers = $"%{nameof(_contentFieldInitializers)}%";
+	private const string _contentFields = $"%{nameof(_contentFields)}%";
+	private const string _contentProperties = $"%{nameof(_contentProperties)}%";
+	private const string _contentType = $"%{nameof(_contentType)}%";
 
 	private const string _template = $$"""
 		using System;
 		using System.Collections.Generic;
 		using System.Linq;
 
-		namespace {{_namespacePlaceholder}};
+		namespace {{_namespace}};
 
-		public static class {{_classNamePlaceholder}}
+		public sealed class {{_className}} : Warp.NET.IContentContainer<{{_contentType}}>
 		{
-			{{_contentPlaceholder}}
+			public static void Initialize(IReadOnlyDictionary<string, {{_contentType}}> content)
+			{
+				{{_contentFieldInitializers}}
+			}
+
+			{{_contentFields}}
+
+			{{_contentProperties}}
 		}
 		""";
 
@@ -41,14 +50,12 @@ public class ContentGenerator : ISourceGenerator
 			return;
 
 		List<string> shaderPaths = GetFiles(contentRootDirectory, "Shaders", "*.vert");
-		List<string> tgaTexturePaths = GetFiles(contentRootDirectory, "Textures", "*.tga");
-		List<string> meshPaths = GetFiles(contentRootDirectory, "Meshes", "*.obj");
+		List<string> texturePaths = GetFiles(contentRootDirectory, "Textures", "*.tga");
 		List<string> modelPaths = GetFiles(contentRootDirectory, "Models", "*.obj");
 		List<string> soundPaths = GetFiles(contentRootDirectory, "Sounds", "*.wav");
 
 		CreateFile(context, gameNamespace, "Shaders", $"{Constants.RootNamespace}.Content.Shader", shaderPaths);
-		CreateFile(context, gameNamespace, "Textures", $"{Constants.RootNamespace}.Content.Texture", tgaTexturePaths);
-		CreateFile(context, gameNamespace, "Meshes", $"{Constants.RootNamespace}.Content.Mesh", meshPaths);
+		CreateFile(context, gameNamespace, "Textures", $"{Constants.RootNamespace}.Content.Texture", texturePaths);
 		CreateFile(context, gameNamespace, "Models", $"{Constants.RootNamespace}.Content.Model", modelPaths);
 		CreateFile(context, gameNamespace, "Sounds", $"{Constants.RootNamespace}.Content.Sound", soundPaths);
 	}
@@ -62,11 +69,30 @@ public class ContentGenerator : ISourceGenerator
 	private static void CreateFile(GeneratorExecutionContext context, string gameNamespace, string className, string contentTypeName, List<string> filePaths)
 	{
 		string sourceBuilder = _template
-			.Replace(_namespacePlaceholder, gameNamespace)
-			.Replace(_classNamePlaceholder, className)
-			.Replace(_contentTypePlaceholder, contentTypeName)
-			.Replace(_contentPlaceholder, string.Join(Constants.NewLine, filePaths.ConvertAll(p => $"public static {contentTypeName} {Path.GetFileNameWithoutExtension(p)} {{ get; set; }} = null!;")).IndentCode(1));
+			.Replace(_namespace, gameNamespace)
+			.Replace(_className, className)
+			.Replace(_contentType, contentTypeName)
+			.Replace(_contentFieldInitializers, string.Join(Constants.NewLine, filePaths.ConvertAll(p => $"{GetFieldNameFromFileName(p)} = content.TryGetValue(\"{GetPropertyNameFromFileName(p)}\", out {contentTypeName}? {GetLocalNameFromFileName(p)}) ? {GetLocalNameFromFileName(p)} : null;")).IndentCode(2))
+			.Replace(_contentFields, string.Join(Constants.NewLine, filePaths.ConvertAll(p => $"private static {contentTypeName}? {GetFieldNameFromFileName(p)};")).IndentCode(1))
+			.Replace(_contentProperties, string.Join(Constants.NewLine, filePaths.ConvertAll(p => $"public static {contentTypeName} {GetPropertyNameFromFileName(p)} => {GetFieldNameFromFileName(p)} ?? throw new InvalidOperationException(\"Content does not exist or has not been initialized.\");")).IndentCode(1));
 
 		context.AddSource(className, SourceBuilderUtils.Build(sourceBuilder));
+	}
+
+	private static string GetLocalNameFromFileName(string filePath)
+	{
+		string name = Path.GetFileNameWithoutExtension(filePath);
+		return name.FirstCharToLowerCase();
+	}
+
+	private static string GetFieldNameFromFileName(string filePath)
+	{
+		string name = Path.GetFileNameWithoutExtension(filePath);
+		return $"_{name.FirstCharToLowerCase()}";
+	}
+
+	private static string GetPropertyNameFromFileName(string filePath)
+	{
+		return Path.GetFileNameWithoutExtension(filePath);
 	}
 }

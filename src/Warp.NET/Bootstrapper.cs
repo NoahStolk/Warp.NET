@@ -1,4 +1,5 @@
-using Warp.NET.Content.Binaries;
+using Warp.NET.Content;
+using Warp.NET.Content.Conversion;
 
 namespace Warp.NET;
 
@@ -16,16 +17,23 @@ public static class Bootstrapper
 	/// <param name="initialWindowFullScreen">Whether full screen should be enabled when the game starts.</param>
 	/// <param name="contentRootDirectory">The content root directory to generate a content file from. If the directory does not exist, or is <see langword="null" />, the file will not be generated.</param>
 	/// <param name="contentFilePath">The generated content file path required to bootstrap the game.</param>
-	/// <param name="contentAssembly">The assembly that holds the generated content types (e.g. the Shaders and Textures classes). The entry assembly will be used if <see langword="null" />.</param>
-	/// <typeparam name="TGame">The game type which must implement <see cref="IGameBase{TSelf}"/>.</typeparam>
+	/// <typeparam name="TGame">The game type which must derive from <see cref="GameBase"/> and implement <see cref="IGameBase{TSelf}"/>.</typeparam>
 	/// <typeparam name="TBase">The base type which is used to access the game instance.</typeparam>
 	/// <typeparam name="TShaderUniformInitializer">The shader uniform initializer type. This type is generated.</typeparam>
+	/// <typeparam name="TModelContainer">The type containing the game's models. This type is generated.</typeparam>
+	/// <typeparam name="TShaderContainer">The type containing the game's shaders. This type is generated.</typeparam>
+	/// <typeparam name="TSoundContainer">The type containing the game's sounds. This type is generated.</typeparam>
+	/// <typeparam name="TTextureContainer">The type containing the game's textures. This type is generated.</typeparam>
 	/// <returns>The game instance.</returns>
-	/// <exception cref="InvalidOperationException">When the file at <paramref name="contentFilePath"/> does not exist, or when the entry assembly could not be retrieved.</exception>
-	public static TGame CreateGame<TGame, TBase, TShaderUniformInitializer>(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen, string? contentRootDirectory, string contentFilePath, Assembly? contentAssembly = null)
+	/// <exception cref="InvalidOperationException">When the file at <paramref name="contentFilePath"/> does not exist.</exception>
+	public static TGame CreateGame<TGame, TBase, TShaderUniformInitializer, TModelContainer, TShaderContainer, TSoundContainer, TTextureContainer>(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen, string? contentRootDirectory, string contentFilePath)
 		where TGame : GameBase, IGameBase<TGame>
 		where TBase : IBase<TGame>
-		where TShaderUniformInitializer : IShaderUniformInitializer, new()
+		where TShaderUniformInitializer : IShaderUniformInitializer
+		where TModelContainer : IContentContainer<Model>
+		where TShaderContainer : IContentContainer<Shader>
+		where TSoundContainer : IContentContainer<Sound>
+		where TTextureContainer : IContentContainer<Texture>
 	{
 		if (initialWindowFullScreen)
 			Graphics.CreateWindowFull(initialWindowTitle);
@@ -38,7 +46,11 @@ public static class Bootstrapper
 		if (!File.Exists(contentFilePath))
 			throw new InvalidOperationException("The generated content file is missing. Make sure to build in DEBUG mode or copy the file generated in DEBUG mode to the RELEASE output.");
 
-		ContentFileReader.Read(contentFilePath, contentAssembly ?? Assembly.GetEntryAssembly() ?? throw new InvalidOperationException("Could not get entry assembly."));
+		DecompiledContentFile decompiledContentFile = ContentFileReader.Read(contentFilePath);
+		TModelContainer.Initialize(decompiledContentFile.Models);
+		TShaderContainer.Initialize(decompiledContentFile.Shaders);
+		TSoundContainer.Initialize(decompiledContentFile.Sounds);
+		TTextureContainer.Initialize(decompiledContentFile.Textures);
 
 		TShaderUniformInitializer.Initialize();
 

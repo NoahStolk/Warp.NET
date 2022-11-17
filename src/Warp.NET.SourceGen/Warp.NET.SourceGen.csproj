@@ -24,7 +24,7 @@
     <PackageId>NoahStolk.Warp.NET.SourceGen</PackageId>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/NoahStolk/Warp.NET</RepositoryUrl>
-    <Version>0.1.0</Version>
+    <Version>0.1.1-alpha.2</Version>
   </PropertyGroup>
 
 </Project>
