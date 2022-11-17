@@ -1,7 +1,7 @@
-using Warp.NET.Content.Parsers.Data;
-using Warp.NET.Content.Parsers.Exceptions;
+using Warp.NET.Content.Binaries.Data;
+using Warp.NET.Content.Binaries.Parsers.Exceptions;
 
-namespace Warp.NET.Content.Parsers;
+namespace Warp.NET.Content.Binaries.Parsers;
 
 public static class WaveParser
 {
@@ -12,9 +12,9 @@ public static class WaveParser
 	private const int _fmtMinimumSize = 16;
 	private const int _audioFormat = 1;
 
-	public static WaveData Parse(byte[] waveFileContents)
+	public static WaveData Parse(byte[] fileContents)
 	{
-		using MemoryStream ms = new(waveFileContents);
+		using MemoryStream ms = new(fileContents);
 		using BinaryReader br = new(ms);
 		string riffHeader = Encoding.Default.GetString(br.ReadBytes(4));
 		if (riffHeader != _riffHeader)
