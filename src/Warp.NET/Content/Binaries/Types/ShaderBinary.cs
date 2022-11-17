@@ -1,25 +1,34 @@
 namespace Warp.NET.Content.Binaries.Types;
 
-public record ShaderBinary(ContentType ContentType, byte[] Contents) : IBinary<ShaderBinary>
+public record ShaderBinary(byte[] Contents) : IBinary<ShaderBinary>
 {
-	private static readonly Encoding _encoding = Encoding.UTF8;
+	public ContentType ContentType => ContentType.Shader;
 
 	public static ShaderBinary Construct(string inputPath)
 	{
-		string code = File.ReadAllText(inputPath, _encoding);
-
+		byte[] code = File.ReadAllBytes(inputPath);
 		string extension = Path.GetExtension(inputPath);
-		ContentType contentType = extension switch
+		ShaderContentType shaderContentType = extension switch
 		{
-			".vert" => ContentType.VertexShader,
-			".geom" => ContentType.GeometryShader,
-			".frag" => ContentType.FragmentShader,
+			".vert" => ShaderContentType.Vertex,
+			".geom" => ShaderContentType.Geometry,
+			".frag" => ShaderContentType.Fragment,
 			_ => throw new NotSupportedException($"Extension {extension} for shaders is not supported."),
 		};
 
 		using MemoryStream ms = new();
 		using BinaryWriter bw = new(ms);
-		bw.Write(_encoding.GetBytes(code));
-		return new(contentType, ms.ToArray());
+		bw.Write((byte)shaderContentType);
+		bw.Write((ushort)code.Length);
+		bw.Write(code);
+		return new(ms.ToArray());
+	}
+
+	public static ShaderSource Deconstruct(BinaryReader br)
+	{
+		ShaderContentType shaderContentType = (ShaderContentType)br.ReadByte();
+		ushort codeLength = br.ReadUInt16();
+		byte[] code = br.ReadBytes(codeLength);
+		return new(shaderContentType, code);
 	}
 }

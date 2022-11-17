@@ -10,7 +10,7 @@ public static class ObjParser
 		List<Vector3> positions = new();
 		List<Vector2> textures = new();
 		List<Vector3> normals = new();
-		Dictionary<string, List<Face>> materials = new();
+		Dictionary<string, List<Face>> meshes = new();
 
 		string text = Encoding.UTF8.GetString(fileContents);
 		string[] lines = text.Split('\n');
@@ -47,17 +47,17 @@ public static class ObjParser
 
 					foreach (Face face in faces)
 					{
-						if (materials.TryGetValue(useMaterial, out List<Face>? value))
+						if (meshes.TryGetValue(useMaterial, out List<Face>? value))
 							value.Add(face);
 						else
-							materials.Add(useMaterial, new() { face });
+							meshes.Add(useMaterial, new() { face });
 					}
 
 					break;
 			}
 		}
 
-		return new(positions, textures, normals, materials);
+		return new(positions, textures, normals, meshes);
 	}
 
 	private static float ParseVertexFloat(string value) => (float)double.Parse(value, NumberStyles.Float);

@@ -3,8 +3,10 @@ using Warp.NET.Content.Binaries.Parsers;
 
 namespace Warp.NET.Content.Binaries.Types;
 
-public record SoundBinary(ContentType ContentType, byte[] Contents) : IBinary<SoundBinary>
+public record SoundBinary(byte[] Contents) : IBinary<SoundBinary>
 {
+	public ContentType ContentType => ContentType.Sound;
+
 	public static SoundBinary Construct(string inputPath)
 	{
 		WaveData waveData = WaveParser.Parse(File.ReadAllBytes(inputPath));
@@ -17,6 +19,16 @@ public record SoundBinary(ContentType ContentType, byte[] Contents) : IBinary<So
 		bw.Write(waveData.Data.Length);
 		bw.Write(waveData.Data);
 
-		return new(ContentType.Sound, ms.ToArray());
+		return new(ms.ToArray());
+	}
+
+	public static Sound Deconstruct(BinaryReader br)
+	{
+		short channels = br.ReadInt16();
+		int sampleRate = br.ReadInt32();
+		short bitsPerSample = br.ReadInt16();
+		int size = br.ReadInt32();
+		byte[] data = br.ReadBytes(size);
+		return new(channels, sampleRate, bitsPerSample, data.Length, data);
 	}
 }
