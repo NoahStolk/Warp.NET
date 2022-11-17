@@ -1,8 +1,8 @@
-using Warp.NET.Content.Binaries.Data;
-using Warp.NET.Content.Binaries.Parsers.Exceptions;
+using Warp.NET.Content.Conversion.Data;
+using Warp.NET.Content.Conversion.Parsers.Exceptions;
 using Warp.NET.Utils;
 
-namespace Warp.NET.Content.Binaries.Parsers;
+namespace Warp.NET.Content.Conversion.Parsers;
 
 public static class TgaParser
 {

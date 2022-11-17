@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace Warp.NET.Content.Binaries.Parsers.Exceptions;
+namespace Warp.NET.Content.Conversion.Parsers.Exceptions;
 
 [Serializable]
 public class ObjParseException : Exception

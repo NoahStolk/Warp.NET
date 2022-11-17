@@ -1,5 +1,5 @@
-using Warp.NET.Content.Binaries.Data;
-using Warp.NET.Content.Binaries.Parsers;
+using Warp.NET.Content.Conversion.Data;
+using Warp.NET.Content.Conversion.Parsers;
 using Warp.NET.Tests.Utils;
 
 namespace Warp.NET.Tests;

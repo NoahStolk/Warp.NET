@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Binaries;
+namespace Warp.NET.Content.Conversion;
 
 public enum TextureContentType : byte
 {

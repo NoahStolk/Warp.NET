@@ -1,7 +1,7 @@
 using System.Globalization;
-using Warp.NET.Content.Binaries.Data;
+using Warp.NET.Content.Conversion.Data;
 
-namespace Warp.NET.Content.Binaries.Parsers;
+namespace Warp.NET.Content.Conversion.Parsers;
 
 public static class ObjParser
 {

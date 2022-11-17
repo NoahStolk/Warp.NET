@@ -1,7 +1,7 @@
-using Warp.NET.Content.Binaries.ContentConverters;
+using Warp.NET.Content.Conversion.Converters;
 using Warp.NET.Utils;
 
-namespace Warp.NET.Content.Binaries;
+namespace Warp.NET.Content.Conversion;
 
 /// <summary>
 /// Turns all content source files into binary and writes everything to a single content file.

@@ -1,7 +1,7 @@
-using Warp.NET.Content.Binaries.Data;
-using Warp.NET.Content.Binaries.Parsers;
+using Warp.NET.Content.Conversion.Data;
+using Warp.NET.Content.Conversion.Parsers;
 
-namespace Warp.NET.Content.Binaries.ContentConverters;
+namespace Warp.NET.Content.Conversion.Converters;
 
 public record SoundContentConverter(byte[] Contents) : IContentConverter<SoundContentConverter>
 {

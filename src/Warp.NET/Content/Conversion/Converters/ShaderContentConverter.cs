@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Binaries.ContentConverters;
+namespace Warp.NET.Content.Conversion.Converters;
 
 public record ShaderContentConverter(byte[] Contents) : IContentConverter<ShaderContentConverter>
 {

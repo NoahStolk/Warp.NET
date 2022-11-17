@@ -1,8 +1,8 @@
-using Warp.NET.Content.Binaries.Data;
-using Warp.NET.Content.Binaries.Parsers;
+using Warp.NET.Content.Conversion.Data;
+using Warp.NET.Content.Conversion.Parsers;
 using Warp.NET.Extensions;
 
-namespace Warp.NET.Content.Binaries.ContentConverters;
+namespace Warp.NET.Content.Conversion.Converters;
 
 public record ModelContentConverter(byte[] Contents) : IContentConverter<ModelContentConverter>
 {

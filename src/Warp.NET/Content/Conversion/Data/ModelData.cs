@@ -1,6 +1,6 @@
-using Warp.NET.Content.Binaries.Parsers.Exceptions;
+using Warp.NET.Content.Conversion.Parsers.Exceptions;
 
-namespace Warp.NET.Content.Binaries.Data;
+namespace Warp.NET.Content.Conversion.Data;
 
 /// <summary>
 /// Represents data parsed from a model format, such as a .obj file.

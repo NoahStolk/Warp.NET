@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Binaries.Data;
+namespace Warp.NET.Content.Conversion.Data;
 
 /// <summary>
 /// Represents data parsed from a sound format, such as a .wav file.

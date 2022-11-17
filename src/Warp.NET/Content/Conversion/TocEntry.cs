@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Binaries;
+namespace Warp.NET.Content.Conversion;
 
 /// <summary>
 /// Represents an entry in the table of contents (TOC) buffer in the content file.

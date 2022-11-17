@@ -1,6 +1,6 @@
-using Warp.NET.Content.Binaries.ContentConverters;
+using Warp.NET.Content.Conversion.Converters;
 
-namespace Warp.NET.Content.Binaries;
+namespace Warp.NET.Content.Conversion;
 
 public static class ContentFileReader
 {
