@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="NoahStolk.WaveParser" Version="1.0.1" />
     <PackageReference Include="Silk.NET.GLFW" Version="2.16.0" />
     <PackageReference Include="Silk.NET.OpenAL" Version="2.16.0" />
     <PackageReference Include="Silk.NET.OpenGL" Version="2.16.0" />
