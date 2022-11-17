@@ -1,6 +1,6 @@
 using Warp.NET.Sorting;
 
-namespace Warp.NET.Tests;
+namespace Warp.NET.Tests.SortingTests;
 
 [TestClass]
 public class QuickSortTests

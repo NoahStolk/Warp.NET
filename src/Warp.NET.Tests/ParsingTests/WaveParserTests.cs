@@ -2,10 +2,10 @@ using Warp.NET.Content.Conversion.Data;
 using Warp.NET.Content.Conversion.Parsers;
 using Warp.NET.Tests.Utils;
 
-namespace Warp.NET.Tests;
+namespace Warp.NET.Tests.ParsingTests;
 
 [TestClass]
-public class WaveParseTests
+public class WaveParserTests
 {
 	[DataTestMethod]
 	[DataRow("Sample1.wav", (short)1, 11000, 11000, (short)1, (short)8, 2208, 2208, 0.2)]

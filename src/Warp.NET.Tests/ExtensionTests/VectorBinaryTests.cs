@@ -1,6 +1,6 @@
 using Warp.NET.Extensions;
 
-namespace Warp.NET.Tests;
+namespace Warp.NET.Tests.ExtensionTests;
 
 [TestClass]
 public class VectorBinaryTests

@@ -2,7 +2,7 @@ using Warp.NET.Content.Conversion.Binaries;
 using Warp.NET.Content.Conversion.Converters;
 using Warp.NET.Tests.Utils;
 
-namespace Warp.NET.Tests;
+namespace Warp.NET.Tests.ContentTests;
 
 [TestClass]
 public class TextureBinaryTests
@@ -10,11 +10,11 @@ public class TextureBinaryTests
 	[DataTestMethod]
 	[DataRow("Font.tga", 1152, 12)]
 	[DataRow("Placeholder.tga", 16, 16)]
-	public void TestTextureBinary(string fileName, int width, int height)
+	public void TestTextureBinary(string fileName, int expectedWidth, int expectedHeight)
 	{
 		TextureBinary textureBinaryFromFile = TextureContentConverter.Construct(ResourceUtils.GetResourcePath(fileName));
-		Assert.AreEqual(width, textureBinaryFromFile.Width);
-		Assert.AreEqual(height, textureBinaryFromFile.Height);
+		Assert.AreEqual(expectedWidth, textureBinaryFromFile.Width);
+		Assert.AreEqual(expectedHeight, textureBinaryFromFile.Height);
 
 		byte[] textureBytes = textureBinaryFromFile.ToBytes();
 
@@ -22,8 +22,8 @@ public class TextureBinaryTests
 		using BinaryReader br = new(ms);
 
 		TextureBinary textureBinaryConverted = TextureBinary.FromStream(br);
-		Assert.AreEqual(width, textureBinaryConverted.Width);
-		Assert.AreEqual(height, textureBinaryConverted.Height);
+		Assert.AreEqual(expectedWidth, textureBinaryConverted.Width);
+		Assert.AreEqual(expectedHeight, textureBinaryConverted.Height);
 
 		CollectionAssert.AreEqual(textureBinaryFromFile.ColorData, textureBinaryConverted.ColorData);
 	}

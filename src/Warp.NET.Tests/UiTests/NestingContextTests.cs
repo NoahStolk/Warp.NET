@@ -1,7 +1,7 @@
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
 
-namespace Warp.NET.Tests;
+namespace Warp.NET.Tests.UiTests;
 
 [TestClass]
 public class NestingContextTests
