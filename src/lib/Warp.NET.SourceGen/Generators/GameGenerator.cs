@@ -41,7 +41,13 @@ public class GameGenerator : IIncrementalGenerator
 			public static Game Self
 			{
 				get => _self ?? throw new InvalidOperationException("Game is not initialized.");
-				set => _self = value;
+				set
+				{
+					if (_self != null)
+						throw new InvalidOperationException("Game is already initialized.");
+
+					_self = value;
+				}
 			}
 
 			{{_gameObjectListProperties}}
