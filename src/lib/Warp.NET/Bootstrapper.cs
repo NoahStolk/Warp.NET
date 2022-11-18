@@ -18,7 +18,6 @@ public static class Bootstrapper
 	/// <param name="contentRootDirectory">The content root directory to generate a content file from. If the directory does not exist, or is <see langword="null" />, the file will not be generated.</param>
 	/// <param name="contentFilePath">The generated content file path required to bootstrap the game.</param>
 	/// <typeparam name="TGame">The game type which must derive from <see cref="GameBase"/> and implement <see cref="IGameBase{TSelf}"/>.</typeparam>
-	/// <typeparam name="TBase">The base type which is used to access the game instance.</typeparam>
 	/// <typeparam name="TShaderUniformInitializer">The shader uniform initializer type. This type is generated.</typeparam>
 	/// <typeparam name="TModelContainer">The type containing the game's models. This type is generated.</typeparam>
 	/// <typeparam name="TShaderContainer">The type containing the game's shaders. This type is generated.</typeparam>
@@ -26,9 +25,8 @@ public static class Bootstrapper
 	/// <typeparam name="TTextureContainer">The type containing the game's textures. This type is generated.</typeparam>
 	/// <returns>The game instance.</returns>
 	/// <exception cref="InvalidOperationException">When the file at <paramref name="contentFilePath"/> does not exist.</exception>
-	public static TGame CreateGame<TGame, TBase, TShaderUniformInitializer, TModelContainer, TShaderContainer, TSoundContainer, TTextureContainer>(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen, string? contentRootDirectory, string contentFilePath)
+	public static TGame CreateGame<TGame, TShaderUniformInitializer, TModelContainer, TShaderContainer, TSoundContainer, TTextureContainer>(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen, string? contentRootDirectory, string contentFilePath)
 		where TGame : GameBase, IGameBase<TGame>
-		where TBase : IBase<TGame>
 		where TShaderUniformInitializer : IShaderUniformInitializer
 		where TModelContainer : IContentContainer<Model>
 		where TShaderContainer : IContentContainer<Shader>
@@ -56,7 +54,7 @@ public static class Bootstrapper
 
 		TGame game = TGame.Construct(initialWindowTitle, initialWindowWidth, initialWindowHeight, initialWindowFullScreen);
 		WarpBase.Game = game;
-		TBase.Game = game;
+		TGame.Self = game;
 		return game;
 	}
 }

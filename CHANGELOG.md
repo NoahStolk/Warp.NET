@@ -4,6 +4,11 @@ This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## TODO
 
+### Changed
+
+- The game class generator now generates the game constructor and the static `Construct` method.
+- `Base` classes are no longer required. The game instance can now be accessed using the `Game.Self` property.
+
 ### Fixed
 
 - Fixed not always generating required types.
