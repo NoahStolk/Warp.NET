@@ -8,8 +8,14 @@ namespace Warp.NET.Samples.Text;
 [GenerateGame]
 public sealed partial class Game
 {
-	private readonly Matrix4x4 _projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, 1024, 768, 0, 0, 1);
+	private readonly Matrix4x4 _projectionMatrix;
 	private readonly MonoSpaceFontRenderer _monoSpaceFontRenderer = new(new(Textures.Font, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  "));
+
+	private Game(GameParameters gameParameters)
+		: base(gameParameters)
+	{
+		_projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, 0, 1);
+	}
 
 	protected override void Render()
 	{

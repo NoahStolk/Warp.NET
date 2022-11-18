@@ -7,5 +7,6 @@ const string? contentRootDirectory = @"..\..\..\Content";
 const string? contentRootDirectory = null;
 #endif
 
-Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Models, Shaders, Sounds, Textures>("Warp.NET.Samples.Window", 1024, 768, false, contentRootDirectory, "c");
+GameParameters gameParameters = new("Warp.NET.Samples.Window", 1024, 768, false);
+Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
 game.Run();

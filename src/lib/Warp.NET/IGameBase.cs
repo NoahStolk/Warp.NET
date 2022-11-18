@@ -5,5 +5,5 @@ public interface IGameBase<TSelf>
 {
 	static abstract TSelf Self { get; set; }
 
-	static abstract TSelf Construct(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen);
+	static abstract TSelf Construct(GameParameters gameParameters);
 }

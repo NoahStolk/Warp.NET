@@ -27,12 +27,12 @@ public abstract class GameBase
 	private int _updates;
 	private int _renders;
 
-	protected GameBase(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen)
+	protected GameBase(GameParameters gameParameters)
 	{
-		InitialWindowTitle = initialWindowTitle;
-		InitialWindowWidth = initialWindowWidth;
-		InitialWindowHeight = initialWindowHeight;
-		InitialWindowFullScreen = initialWindowFullScreen;
+		InitialWindowTitle = gameParameters.InitialWindowTitle;
+		InitialWindowWidth = gameParameters.InitialWindowWidth;
+		InitialWindowHeight = gameParameters.InitialWindowHeight;
+		InitialWindowFullScreen = gameParameters.InitialWindowFullScreen;
 
 		UpdateRate = 60;
 		MainLoopRate = 300;

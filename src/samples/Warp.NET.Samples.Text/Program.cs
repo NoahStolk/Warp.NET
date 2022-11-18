@@ -13,7 +13,8 @@ const string? contentRootDirectory = @"..\..\..\Content";
 const string? contentRootDirectory = null;
 #endif
 
-Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Models, Shaders, Sounds, Textures>("2D sample: Text", w, h, false, contentRootDirectory, "c");
+GameParameters gameParameters = new("2D sample: Text", w, h, false);
+Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
 game.Run();
 
 static void OnChangeWindowSize(int width, int height)
