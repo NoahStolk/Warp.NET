@@ -3,7 +3,7 @@ using System.Numerics;
 using Warp.NET.Numerics;
 using Warp.NET.Text;
 
-namespace Warp.NET.Samples.Text.Renderers;
+namespace Warp.NET.Editor.Rendering.Renderers;
 
 public class MonoSpaceFontRenderer
 {
@@ -35,9 +35,9 @@ public class MonoSpaceFontRenderer
 		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
 	}
 
-	public void Schedule(Vector2i<int> scale, Vector2i<int> position, string text, TextAlign textAlign)
+	public void Schedule(Vector2i<int> scale, Vector2i<int> position, float depth, Color color, string text, TextAlign textAlign)
 	{
-		_collection.Add(new(scale, position, text, textAlign));
+		_collection.Add(new(scale, position, depth, color, text, textAlign, ScissorScheduler.CurrentScissor));
 	}
 
 	public void Render()
@@ -48,8 +48,10 @@ public class MonoSpaceFontRenderer
 
 		foreach (MonoSpaceText mst in _collection)
 		{
-			int charWidth = _font.Texture.Width / _font.CharAmount;
+			ScissorActivator.SetScissor(mst.Scissor);
+
 			int charHeight = _font.Texture.Height;
+			int charWidth = _font.Texture.Width / _font.CharAmount;
 			int scaledCharWidth = mst.Scale.X * charWidth;
 			int scaledCharHeight = mst.Scale.Y * charHeight;
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scaledCharWidth, scaledCharHeight, 1);
@@ -64,12 +66,13 @@ public class MonoSpaceFontRenderer
 
 			int originX = relativePosition.X;
 
+			Shader.SetVector4(FontUniforms.Color, mst.Color);
 			foreach (char c in mst.Text)
 			{
 				float? offset = _font.GetTextureOffset(c);
 				if (offset.HasValue)
 				{
-					Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(mst.Position.X + relativePosition.X, mst.Position.Y + relativePosition.Y, 0);
+					Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(mst.Position.X + relativePosition.X, mst.Position.Y + relativePosition.Y, mst.Depth);
 					Shader.SetMatrix4x4(FontUniforms.Model, scaleMatrix * translationMatrix);
 					Shader.SetFloat(FontUniforms.Offset, offset.Value);
 					Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
@@ -84,5 +87,5 @@ public class MonoSpaceFontRenderer
 		_collection.Clear();
 	}
 
-	private readonly record struct MonoSpaceText(Vector2i<int> Scale, Vector2i<int> Position, string Text, TextAlign TextAlign);
+	private readonly record struct MonoSpaceText(Vector2i<int> Scale, Vector2i<int> Position, float Depth, Color Color, string Text, TextAlign TextAlign, Scissor? Scissor);
 }

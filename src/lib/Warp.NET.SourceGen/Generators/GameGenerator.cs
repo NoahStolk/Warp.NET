@@ -13,7 +13,6 @@ public class GameGenerator : IIncrementalGenerator
 	private const string _contentRootAdditionalFileName = "Content";
 
 	private const string _namespace = $"%{nameof(_namespace)}%";
-	private const string _menuProperties = $"%{nameof(_menuProperties)}%";
 	private const string _singletonProperties = $"%{nameof(_singletonProperties)}%";
 	private const string _gameObjectListFields = $"%{nameof(_gameObjectListFields)}%";
 	private const string _gameObjectListProperties = $"%{nameof(_gameObjectListProperties)}%";
@@ -47,8 +46,6 @@ public class GameGenerator : IIncrementalGenerator
 
 			{{_gameObjectListProperties}}
 
-			{{_menuProperties}}
-
 			{{_singletonProperties}}
 
 			public static Game Construct(GameParameters gameParameters)
@@ -73,7 +70,6 @@ public class GameGenerator : IIncrementalGenerator
 		""";
 
 	private static readonly TypeName _generateSingletonAttributeTypeName = new("GenerateSingletonAttribute");
-	private static readonly TypeName _generateMenuAttributeTypeName = new("GenerateMenuAttribute");
 	private static readonly TypeName _generateGameObjectListAttributeTypeName = new("GenerateGameObjectListAttribute");
 	private static readonly TypeName _generateGameAttributeTypeName = new("GenerateGameAttribute");
 
@@ -81,7 +77,6 @@ public class GameGenerator : IIncrementalGenerator
 	{
 		// TODO: Generate unique attribute per assembly. (Internal?)
 		context.RegisterPostInitializationOutput(ctx => ctx.AddSource(_generateSingletonAttributeTypeName.Type, SourceBuilderUtils.GenerateAttribute(AttributeTargets.Class, _generateSingletonAttributeTypeName.Type)));
-		context.RegisterPostInitializationOutput(ctx => ctx.AddSource(_generateMenuAttributeTypeName.Type, SourceBuilderUtils.GenerateAttribute(AttributeTargets.Class, _generateMenuAttributeTypeName.Type)));
 		context.RegisterPostInitializationOutput(ctx => ctx.AddSource(_generateGameObjectListAttributeTypeName.Type, SourceBuilderUtils.GenerateAttribute(AttributeTargets.Class | AttributeTargets.Interface, _generateGameObjectListAttributeTypeName.Type)));
 		context.RegisterPostInitializationOutput(ctx => ctx.AddSource(_generateGameAttributeTypeName.Type, SourceBuilderUtils.GenerateAttribute(AttributeTargets.Class, _generateGameAttributeTypeName.Type)));
 
@@ -90,13 +85,6 @@ public class GameGenerator : IIncrementalGenerator
 			.CreateSyntaxProvider(
 				predicate: static (sn, _) => sn is ClassDeclarationSyntax { AttributeLists.Count: > 0 },
 				transform: static (ctx, _) => ctx.GetTypeWithAttribute<ClassDeclarationSyntax>(_generateSingletonAttributeTypeName.FullName))
-			.Where(static m => m is not null)!;
-
-		// ! LINQ query filters out null values.
-		IncrementalValuesProvider<ClassDeclarationSyntax> menuTypeDeclarations = context.SyntaxProvider
-			.CreateSyntaxProvider(
-				predicate: static (sn, _) => sn is ClassDeclarationSyntax { AttributeLists.Count: > 0 },
-				transform: static (ctx, _) => ctx.GetTypeWithAttribute<ClassDeclarationSyntax>(_generateMenuAttributeTypeName.FullName))
 			.Where(static m => m is not null)!;
 
 		// ! LINQ query filters out null values.
@@ -118,11 +106,8 @@ public class GameGenerator : IIncrementalGenerator
 				(
 					(
 						(
-							(
-								Compilation Compilation,
-								ImmutableArray<ClassDeclarationSyntax> Singletons
-							) Left,
-							ImmutableArray<ClassDeclarationSyntax> Menus
+							Compilation Compilation,
+							ImmutableArray<ClassDeclarationSyntax> Singletons
 						) Left,
 						ImmutableArray<TypeDeclarationSyntax> GameObjectLists
 					) Left,
@@ -133,19 +118,17 @@ public class GameGenerator : IIncrementalGenerator
 		> compilation =
 			context.CompilationProvider
 				.Combine(singletonTypeDeclarations.Collect())
-				.Combine(menuTypeDeclarations.Collect())
 				.Combine(gameObjectListTypeDeclarations.Collect())
 				.Combine(gameTypeDeclarations.Collect())
 				.Combine(context.AdditionalTextsProvider.Where(at => Path.GetFileName(at.Path) == _contentRootAdditionalFileName).Collect());
 
 		context.RegisterSourceOutput(
 			compilation,
-			static (spc, source) => Execute(source.Left.Left.Left.Left.Compilation, source.Left.Left.Left.Left.Singletons, source.Left.Left.Left.Menus, source.Left.Left.GameObjectLists, source.Left.Games, spc));
+			static (spc, source) => Execute(source.Left.Left.Left.Compilation, source.Left.Left.Left.Singletons, source.Left.Left.GameObjectLists, source.Left.Games, spc));
 
 		static void Execute(
 			Compilation compilation,
 			ImmutableArray<ClassDeclarationSyntax> singletonDeclarations,
-			ImmutableArray<ClassDeclarationSyntax> menuDeclarations,
 			ImmutableArray<TypeDeclarationSyntax> gameObjectListDeclarations,
 			ImmutableArray<ClassDeclarationSyntax> gameDeclarations,
 			SourceProductionContext context)
@@ -161,18 +144,13 @@ public class GameGenerator : IIncrementalGenerator
 			if (!singletonDeclarations.IsDefaultOrEmpty)
 				singletons = compilation.GetTypeDataFromName(singletonDeclarations.Distinct(), s => new Singleton(s), context.CancellationToken);
 
-			List<Menu> menus = new();
-			if (!menuDeclarations.IsDefaultOrEmpty)
-				menus = compilation.GetTypeDataFromName(menuDeclarations.Distinct(), s => new Menu(s), context.CancellationToken);
-
 			List<GameObjectList> gameObjectLists = new();
 			if (!gameObjectListDeclarations.IsDefaultOrEmpty)
 				gameObjectLists = compilation.GetTypeDataFromName(gameObjectListDeclarations.Distinct(), s => new GameObjectList(s), context.CancellationToken);
 
 			string sourceBuilder = _gameTemplate
 				.Replace(_namespace, gameNamespace)
-				.Replace(_menuProperties, string.Join(Constants.NewLine, menus.ConvertAll(s => $"public {s.FullTypeName} {s.PropertyName} {{ get; }} = new();")).IndentCode(1))
-				.Replace(_singletonProperties, string.Join(Constants.NewLine, singletons.ConvertAll(s => $"public {s.FullTypeName} {s.PropertyName} {{ get; private set; }} = new();")).IndentCode(1))
+				.Replace(_singletonProperties, string.Join(Constants.NewLine, singletons.ConvertAll(s => $"public {s.FullTypeName} {s.PropertyName} {{ get; }} = new();")).IndentCode(1))
 				.Replace(_gameObjectListFields, string.Join(Constants.NewLine, gameObjectLists.ConvertAll(s => $"private readonly List<{s.FullTypeName}> {s.FieldName} = new();")).IndentCode(1))
 				.Replace(_gameObjectListProperties, string.Join(Constants.NewLine, gameObjectLists.ConvertAll(s => $"public IReadOnlyList<{s.FullTypeName}> {s.PropertyName} => {s.FieldName};")).IndentCode(1))
 				.Replace(_gameObjectListAdds, string.Join(Constants.NewLine, gameObjectLists.ConvertAll(s => GenerateHandles(s, "Add"))).IndentCode(2))

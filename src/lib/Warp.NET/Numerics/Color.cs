@@ -4,9 +4,13 @@ namespace Warp.NET.Numerics;
 
 public readonly record struct Color(byte R, byte G, byte B, byte A)
 {
+	public static Color Invisible { get; } = new(byte.MinValue, byte.MinValue, byte.MinValue, byte.MinValue);
+
 	public static Color White { get; } = new(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 	public static Color Black { get; } = new(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue);
-	public static Color Transparent { get; } = new(byte.MinValue, byte.MinValue, byte.MinValue, byte.MinValue);
+
+	public static Color HalfTransparentWhite { get; } = new(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue / 2);
+	public static Color HalfTransparentBlack { get; } = new(byte.MinValue, byte.MinValue, byte.MinValue, byte.MaxValue / 2);
 
 	public static Color Red { get; } = new(byte.MaxValue, byte.MinValue, byte.MinValue, byte.MaxValue);
 	public static Color Green { get; } = new(byte.MinValue, byte.MaxValue, byte.MinValue, byte.MaxValue);
@@ -15,6 +19,8 @@ public readonly record struct Color(byte R, byte G, byte B, byte A)
 	public static Color Yellow { get; } = new(byte.MaxValue, byte.MaxValue, byte.MinValue, byte.MaxValue);
 	public static Color Aqua { get; } = new(byte.MinValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
 	public static Color Purple { get; } = new(byte.MaxValue, byte.MinValue, byte.MaxValue, byte.MaxValue);
+
+	public static Color Orange { get; } = new(byte.MaxValue, byte.MaxValue / 2, byte.MinValue, byte.MaxValue);
 
 	public static implicit operator Vector3(Color color)
 		=> new(color.R / (float)byte.MaxValue, color.G / (float)byte.MaxValue, color.B / (float)byte.MaxValue);

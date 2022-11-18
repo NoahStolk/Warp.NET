@@ -7,6 +7,20 @@ This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Added `Charset` content type.
+- Added `TextAlign` enum.
+- Added more default colors:
+  - `HalfTransparentWhite` (1, 1, 1, 0.5)
+  - `HalfTransparentBlack` (0, 0, 0, 0.5)
+  - `Orange` (1, 0.5, 0, 1)
+
+### Changed
+
+- Renamed `Color.Transparent` to `Color.Invisible`.
+- Changed `DebugStack.Add` signatures.
+
+### Removed
+
+- Removed `GenerateMenuAttribute` and generating menus; use `GenerateSingletonAttribute` instead.
 
 ### Fixed
 
