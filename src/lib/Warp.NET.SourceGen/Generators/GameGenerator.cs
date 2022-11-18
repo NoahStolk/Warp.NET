@@ -27,15 +27,25 @@ public class GameGenerator : IIncrementalGenerator
 
 		namespace {{_namespace}};
 
-		public partial class Game
+		public partial class Game : GameBase, IGameBase<Game>
 		{
 			{{_gameObjectListFields}}
+
+			private Game(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen)
+				: base(initialWindowTitle, initialWindowWidth, initialWindowHeight, initialWindowFullScreen)
+			{
+			}
 
 			{{_gameObjectListProperties}}
 
 			{{_menuProperties}}
 
 			{{_singletonProperties}}
+
+			public static Game Construct(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen)
+			{
+				return new(initialWindowTitle, initialWindowWidth, initialWindowHeight, initialWindowFullScreen);
+			}
 
 			protected override void HandleAdds({{Constants.RootNamespace}}.GameObjects.IGameObject gameObject)
 			{
