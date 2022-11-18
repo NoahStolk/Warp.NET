@@ -69,10 +69,14 @@ public class MonoSpaceFontRenderer
 			Shader.SetVector4(FontUniforms.Color, mst.Color);
 			foreach (char c in mst.Text)
 			{
-				Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(mst.Position.X + relativePosition.X, mst.Position.Y + relativePosition.Y, mst.Depth);
-				Shader.SetMatrix4x4(FontUniforms.Model, scaleMatrix * translationMatrix);
-				Shader.SetFloat(FontUniforms.Offset, _font.GetTextureOffset(c));
-				Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+				float? offset = _font.GetTextureOffset(c);
+				if (offset.HasValue)
+				{
+					Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(mst.Position.X + relativePosition.X, mst.Position.Y + relativePosition.Y, mst.Depth);
+					Shader.SetMatrix4x4(FontUniforms.Model, scaleMatrix * translationMatrix);
+					Shader.SetFloat(FontUniforms.Offset, offset.Value);
+					Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+				}
 
 				_font.AdvancePosition(c, ref relativePosition, originX, scaledCharWidth, scaledCharHeight);
 			}

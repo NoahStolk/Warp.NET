@@ -9,8 +9,8 @@ namespace Warp.NET.Samples.Text;
 public sealed partial class Game
 {
 	private readonly Matrix4x4 _projectionMatrix;
-	private readonly MonoSpaceFontRenderer spleen6x12Renderer = new(new(Textures.Spleen6x12, Charsets.Ascii_32_126));
-	private readonly MonoSpaceFontRenderer spleen16x32Renderer = new(new(Textures.Spleen16x32, Charsets.Ascii_32_126));
+	private readonly MonoSpaceFontRenderer _spleen6X12Renderer = new(new(Textures.Spleen6x12, Charsets.Ascii_32_126));
+	private readonly MonoSpaceFontRenderer _spleen16X32Renderer = new(new(Textures.Spleen16x32, Charsets.Ascii_32_126));
 
 	private Game(GameParameters gameParameters)
 		: base(gameParameters)
@@ -24,18 +24,18 @@ public sealed partial class Game
 
 		const int x = 512;
 		int y = 128;
-		spleen6x12Renderer.Render(new(1), new(x, y), "Tiny text");
-		spleen16x32Renderer.Schedule(new(2), new(x, y += 64), "Big text", TextAlign.Left);
-		spleen16x32Renderer.Schedule(new(1), new(x, y += 64), "Left align", TextAlign.Left);
-		spleen16x32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Left);
-		spleen16x32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Left);
-		spleen16x32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Left);
-		spleen16x32Renderer.Schedule(new(1), new(x, y += 64), "Center align", TextAlign.Middle);
-		spleen16x32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Middle);
-		spleen16x32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Middle);
-		spleen16x32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Middle);
-		spleen16x32Renderer.Schedule(new(1), new(64, 64), "Text with...\n...line breaks", TextAlign.Left);
-		spleen16x32Renderer.Schedule(new(1), new(512, 64), "Centered text with...\n...line breaks", TextAlign.Middle);
+		_spleen6X12Renderer.Schedule(new(1), new(x, y), "Tiny text", TextAlign.Left);
+		_spleen16X32Renderer.Schedule(new(2), new(x, y += 64), "Big text", TextAlign.Left);
+		_spleen16X32Renderer.Schedule(new(1), new(x, y += 64), "Left align", TextAlign.Left);
+		_spleen16X32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Left);
+		_spleen16X32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Left);
+		_spleen16X32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Left);
+		_spleen16X32Renderer.Schedule(new(1), new(x, y += 64), "Center align", TextAlign.Middle);
+		_spleen16X32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Middle);
+		_spleen16X32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Middle);
+		_spleen16X32Renderer.Schedule(new(1), new(x, y += 64), $"{x} x {y}", TextAlign.Middle);
+		_spleen16X32Renderer.Schedule(new(1), new(64, 64), "Text with...\n...line breaks", TextAlign.Left);
+		_spleen16X32Renderer.Schedule(new(1), new(512, 64), "Centered text with...\n...line breaks", TextAlign.Middle);
 	}
 
 	protected override void Render()
@@ -46,7 +46,7 @@ public sealed partial class Game
 		Shaders.Font.Use();
 		Shader.SetMatrix4x4(FontUniforms.Projection, _projectionMatrix);
 
-		spleen6x12Renderer.Render();
-		spleen16x32Renderer.Render();
+		_spleen6X12Renderer.Render();
+		_spleen16X32Renderer.Render();
 	}
 }

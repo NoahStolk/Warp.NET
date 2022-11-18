@@ -50,10 +50,8 @@ public class MonoSpaceFontRenderer
 		{
 			int charWidth = _font.Texture.Width / _font.CharAmount;
 			int charHeight = _font.Texture.Height;
-			int halfCharWidth = (int)(charWidth / 2f);
-			int halfCharHeight = (int)(charHeight / 2f);
-			int scaledCharWidth = scale.X * charWidth;
-			int scaledCharHeight = scale.Y * charHeight;
+			int scaledCharWidth = mst.Scale.X * charWidth;
+			int scaledCharHeight = mst.Scale.Y * charHeight;
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scaledCharWidth, scaledCharHeight, 1);
 
 			Vector2i<int> textSize = _font.MeasureText(mst.Text) * mst.Scale;
@@ -71,7 +69,7 @@ public class MonoSpaceFontRenderer
 				float? offset = _font.GetTextureOffset(c);
 				if (offset.HasValue)
 				{
-					Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(position.X + relativePosition.X, position.Y + relativePosition.Y, 0);
+					Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(mst.Position.X + relativePosition.X, mst.Position.Y + relativePosition.Y, 0);
 					Shader.SetMatrix4x4(FontUniforms.Model, scaleMatrix * translationMatrix);
 					Shader.SetFloat(FontUniforms.Offset, offset.Value);
 					Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);

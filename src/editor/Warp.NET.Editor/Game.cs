@@ -26,7 +26,7 @@ public sealed partial class Game
 		DebugStack.DisplaySetting = DebugStackDisplaySetting.Simple;
 	}
 
-	public MonoSpaceFontRenderer MonoSpaceFontRenderer { get; } = new(new(Textures.Font, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  "));
+	public MonoSpaceFontRenderer MonoSpaceFontRenderer { get; } = new(new(Textures.Spleen6x12, Charsets.Ascii_32_126));
 	public SpriteRenderer SpriteRenderer { get; } = new();
 	public RectangleRenderer RectangleRenderer { get; } = new();
 	public CircleRenderer CircleRenderer { get; } = new();

@@ -11,5 +11,5 @@ const string? contentRootDirectory = null;
 #endif
 
 GameParameters gameParameters = new("Warp.NET Editor", Constants.InitialWindowWidth, Constants.InitialWindowHeight, false);
-Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
+Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Charsets, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
 game.Run();
