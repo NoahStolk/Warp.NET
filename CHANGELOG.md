@@ -8,6 +8,10 @@ This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Added `Charset` content type.
 
+### Fixed
+
+- `MonoSpaceFont.GetTextureOffset` now returns null when the character does not exist in the charset.
+
 ## 0.1.2
 
 ### Added

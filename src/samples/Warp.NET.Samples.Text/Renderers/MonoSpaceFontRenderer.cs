@@ -43,13 +43,15 @@ public class MonoSpaceFontRenderer
 
 		Gl.BindVertexArray(_vao);
 
+		int charWidth = _font.Texture.Width / _font.CharAmount;
 		int charHeight = _font.Texture.Height;
+		int halfCharWidth = (int)(charWidth / 2f);
 		int halfCharHeight = (int)(charHeight / 2f);
-		int scaledCharWidth = scale.X * charHeight;
+		int scaledCharWidth = scale.X * charWidth;
 		int scaledCharHeight = scale.Y * charHeight;
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scaledCharWidth, scaledCharHeight, 1);
 
-		Vector2i<int> relativePosition = new(halfCharHeight, halfCharHeight);
+		Vector2i<int> relativePosition = new(halfCharWidth, halfCharHeight);
 		if (center)
 		{
 			Vector2i<int> textSize = _font.MeasureText(text) * scale;
@@ -58,10 +60,14 @@ public class MonoSpaceFontRenderer
 
 		foreach (char c in text)
 		{
-			Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(position.X + relativePosition.X, position.Y + relativePosition.Y, 0);
-			Shader.SetMatrix4x4(FontUniforms.Model, scaleMatrix * translationMatrix);
-			Shader.SetFloat(FontUniforms.Offset, _font.GetTextureOffset(c));
-			Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+			float? offset = _font.GetTextureOffset(c);
+			if (offset.HasValue)
+			{
+				Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(position.X + relativePosition.X, position.Y + relativePosition.Y, 0);
+				Shader.SetMatrix4x4(FontUniforms.Model, scaleMatrix * translationMatrix);
+				Shader.SetFloat(FontUniforms.Offset, offset.Value);
+				Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+			}
 
 			_font.AdvancePosition(c, ref relativePosition, halfCharHeight, scaledCharWidth, scaledCharHeight);
 		}
