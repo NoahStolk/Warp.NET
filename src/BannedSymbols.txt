@@ -1,0 +1,2 @@
+T:System.Drawing.Color;Do not use System.Drawing types
+T:System.Reflection.PropertyInfo;Do not use System.Reflection types

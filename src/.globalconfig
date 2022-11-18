@@ -161,6 +161,9 @@ dotnet_diagnostic.NX0003.severity                                        = error
 # Add a way to break out of this method/property's recursion.
 dotnet_diagnostic.S2190.severity                                         = error
 
+# The symbol is banned in this project.
+dotnet_diagnostic.RS0030.severity                                        = error
+
 # Severity: suggestion
 
 # Complete the task associated to this 'TODO' comment.

@@ -12,6 +12,10 @@
 	</PropertyGroup>
 
 	<ItemGroup Label="Static code analysis">
+		<PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.3.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Nullable.Extended.Analyzer" Version="1.10.4539">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,6 +32,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Label="Banned symbols">
+		<AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt" />
 	</ItemGroup>
 
 </Project>
