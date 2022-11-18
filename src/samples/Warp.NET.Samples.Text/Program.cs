@@ -14,7 +14,7 @@ const string? contentRootDirectory = null;
 #endif
 
 GameParameters gameParameters = new("2D sample: Text", w, h, false);
-Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
+Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Charsets, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
 game.Run();
 
 static void OnChangeWindowSize(int width, int height)

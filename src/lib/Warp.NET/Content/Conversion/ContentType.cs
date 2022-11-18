@@ -6,4 +6,5 @@ public enum ContentType : byte
 	Texture = 0x01,
 	Sound = 0x02,
 	Model = 0x03,
+	Charset = 0x04,
 }

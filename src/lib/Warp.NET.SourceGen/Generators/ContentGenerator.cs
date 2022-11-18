@@ -47,10 +47,11 @@ public class ContentGenerator : ISourceGenerator
 
 		// These files must always be generated.
 		string? contentRootDirectory = Path.GetDirectoryName(context.AdditionalFiles.FirstOrDefault(at => Path.GetFileName(at.Path) == "Content")?.Path);
-		CreateFile(context, gameNamespace, "Shaders", $"{Constants.RootNamespace}.Content.Shader", GetFiles(contentRootDirectory, "Shaders", "*.vert"));
-		CreateFile(context, gameNamespace, "Textures", $"{Constants.RootNamespace}.Content.Texture", GetFiles(contentRootDirectory, "Textures", "*.tga"));
+		CreateFile(context, gameNamespace, "Charsets", $"{Constants.RootNamespace}.Content.Charset", GetFiles(contentRootDirectory, "Charsets", "*.txt"));
 		CreateFile(context, gameNamespace, "Models", $"{Constants.RootNamespace}.Content.Model", GetFiles(contentRootDirectory, "Models", "*.obj"));
+		CreateFile(context, gameNamespace, "Shaders", $"{Constants.RootNamespace}.Content.Shader", GetFiles(contentRootDirectory, "Shaders", "*.vert"));
 		CreateFile(context, gameNamespace, "Sounds", $"{Constants.RootNamespace}.Content.Sound", GetFiles(contentRootDirectory, "Sounds", "*.wav"));
+		CreateFile(context, gameNamespace, "Textures", $"{Constants.RootNamespace}.Content.Texture", GetFiles(contentRootDirectory, "Textures", "*.tga"));
 	}
 
 	private static List<string> GetFiles(string? contentRootDirectory, string contentFolderName, string contentFileSearchPattern)
