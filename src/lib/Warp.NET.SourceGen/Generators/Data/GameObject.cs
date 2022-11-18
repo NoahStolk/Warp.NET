@@ -2,7 +2,7 @@ namespace Warp.NET.SourceGen.Generators.Data;
 
 public class GameObject
 {
-	public GameObject(string fullTypeName, List<GameObjectState> states, List<GameObjectChild> children)
+	public GameObject(string fullTypeName, List<GameObjectInterpolationState> states, List<GameObjectChild> children)
 	{
 		FullTypeName = fullTypeName;
 		States = states;
@@ -17,7 +17,7 @@ public class GameObject
 	}
 
 	public string FullTypeName { get; }
-	public List<GameObjectState> States { get; }
+	public List<GameObjectInterpolationState> States { get; }
 	public List<GameObjectChild> Children { get; }
 
 	public string Namespace { get; }

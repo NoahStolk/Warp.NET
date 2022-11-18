@@ -16,6 +16,11 @@ This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Renamed `Color.Transparent` to `Color.Invisible`.
+- Changed `DebugStack.Add` signatures.
+
+### Removed
+
+- Removed `GenerateMenuAttribute` and generating menus; use `GenerateSingletonAttribute` instead.
 
 ### Fixed
 
