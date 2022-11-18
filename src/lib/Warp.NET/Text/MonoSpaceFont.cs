@@ -36,7 +36,14 @@ public class MonoSpaceFont
 
 	public ImmutableArray<float> Vertices { get; }
 
-	public float GetTextureOffset(char c) => _charset.IndexOf(c) / (float)CharAmount;
+	public float? GetTextureOffset(char c)
+	{
+		int index = _charset.IndexOf(c);
+		if (index == -1)
+			return null;
+
+		return index / (float)CharAmount;
+	}
 
 	public Vector2i<int> MeasureText(string text)
 	{
