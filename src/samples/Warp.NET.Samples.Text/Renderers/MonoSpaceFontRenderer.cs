@@ -10,6 +10,8 @@ public class MonoSpaceFontRenderer
 	private readonly uint _vao;
 	private readonly MonoSpaceFont _font;
 
+	private readonly List<MonoSpaceText> _collection = new();
+
 	public unsafe MonoSpaceFontRenderer(MonoSpaceFont font)
 	{
 		_font = font;
@@ -33,45 +35,56 @@ public class MonoSpaceFontRenderer
 		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
 	}
 
-	public void Render(Vector2i<int> scale, Vector2 position, object? obj, bool center = false)
+	public void Schedule(Vector2i<int> scale, Vector2i<int> position, string text, TextAlign textAlign)
 	{
-		string? text = obj?.ToString();
-		if (string.IsNullOrWhiteSpace(text))
-			return;
+		_collection.Add(new(scale, position, text, textAlign));
+	}
 
+	public void Render()
+	{
 		_font.Texture.Use();
 
 		Gl.BindVertexArray(_vao);
 
-		int charWidth = _font.Texture.Width / _font.CharAmount;
-		int charHeight = _font.Texture.Height;
-		int halfCharWidth = (int)(charWidth / 2f);
-		int halfCharHeight = (int)(charHeight / 2f);
-		int scaledCharWidth = scale.X * charWidth;
-		int scaledCharHeight = scale.Y * charHeight;
-		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scaledCharWidth, scaledCharHeight, 1);
-
-		Vector2i<int> relativePosition = new(halfCharWidth, halfCharHeight);
-		if (center)
+		foreach (MonoSpaceText mst in _collection)
 		{
-			Vector2i<int> textSize = _font.MeasureText(text) * scale;
-			relativePosition -= textSize / 2;
-		}
+			int charWidth = _font.Texture.Width / _font.CharAmount;
+			int charHeight = _font.Texture.Height;
+			int halfCharWidth = (int)(charWidth / 2f);
+			int halfCharHeight = (int)(charHeight / 2f);
+			int scaledCharWidth = scale.X * charWidth;
+			int scaledCharHeight = scale.Y * charHeight;
+			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scaledCharWidth, scaledCharHeight, 1);
 
-		foreach (char c in text)
-		{
-			float? offset = _font.GetTextureOffset(c);
-			if (offset.HasValue)
+			Vector2i<int> textSize = _font.MeasureText(mst.Text) * mst.Scale;
+			Vector2i<int> relativePosition = mst.TextAlign switch
 			{
-				Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(position.X + relativePosition.X, position.Y + relativePosition.Y, 0);
-				Shader.SetMatrix4x4(FontUniforms.Model, scaleMatrix * translationMatrix);
-				Shader.SetFloat(FontUniforms.Offset, offset.Value);
-				Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
-			}
+				TextAlign.Middle => new Vector2i<int>(scaledCharWidth / 2, scaledCharHeight / 2) - textSize / 2,
+				TextAlign.Right => new Vector2i<int>(scaledCharWidth / 2, scaledCharHeight / 2) - textSize with { Y = 0 },
+				_ => new(scaledCharWidth / 2, scaledCharHeight / 2),
+			};
 
-			_font.AdvancePosition(c, ref relativePosition, halfCharHeight, scaledCharWidth, scaledCharHeight);
+			int originX = relativePosition.X;
+
+			foreach (char c in mst.Text)
+			{
+				float? offset = _font.GetTextureOffset(c);
+				if (offset.HasValue)
+				{
+					Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(position.X + relativePosition.X, position.Y + relativePosition.Y, 0);
+					Shader.SetMatrix4x4(FontUniforms.Model, scaleMatrix * translationMatrix);
+					Shader.SetFloat(FontUniforms.Offset, offset.Value);
+					Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+				}
+
+				_font.AdvancePosition(c, ref relativePosition, originX, scaledCharWidth, scaledCharHeight);
+			}
 		}
 
 		Gl.BindVertexArray(0);
+
+		_collection.Clear();
 	}
+
+	private readonly record struct MonoSpaceText(Vector2i<int> Scale, Vector2i<int> Position, string Text, TextAlign TextAlign);
 }
