@@ -9,7 +9,7 @@ namespace Warp.NET.Samples.Text;
 public sealed partial class Game
 {
 	private readonly Matrix4x4 _projectionMatrix;
-	private readonly MonoSpaceFontRenderer _monoSpaceFontRenderer = new(new(Textures.Font, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  "));
+	private readonly MonoSpaceFontRenderer _monoSpaceFontRenderer = new(new(Textures.Font, Charsets.Font));
 
 	private Game(GameParameters gameParameters)
 		: base(gameParameters)

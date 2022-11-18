@@ -2,6 +2,12 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## TODO
+
+### Added
+
+- Added `Charset` content type.
+
 ## 0.1.2
 
 ### Added

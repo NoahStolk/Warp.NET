@@ -9,13 +9,13 @@ public class MonoSpaceFont
 	private readonly string _charset;
 	private readonly char _lineBreak;
 
-	public MonoSpaceFont(Texture texture, string charset, char lineBreak = '\n')
+	public MonoSpaceFont(Texture texture, Charset charset, char lineBreak = '\n')
 	{
 		Texture = texture;
-		_charset = charset;
+		_charset = charset.Characters;
 		_lineBreak = lineBreak;
 
-		CharAmount = charset.Length;
+		CharAmount = charset.Characters.Length;
 		CharVertexWidth = 1.0f / CharAmount;
 
 		Vertices = ImmutableArray.Create(stackalloc float[24]

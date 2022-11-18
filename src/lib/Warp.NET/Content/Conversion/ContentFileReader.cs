@@ -27,6 +27,7 @@ public static class ContentFileReader
 			tocEntries[i] = new(contentType, name, length);
 		}
 
+		Dictionary<string, Charset> charsets = new();
 		Dictionary<string, Model> models = new();
 		Dictionary<string, Shader> shaders = new();
 		Dictionary<string, Sound> sounds = new();
@@ -40,6 +41,7 @@ public static class ContentFileReader
 
 			switch (tocEntry.ContentType)
 			{
+				case ContentType.Charset: charsets[tocEntry.Name] = GetCharset(br); break;
 				case ContentType.Model: models[tocEntry.Name] = GetModel(br); break;
 				case ContentType.Shader: SetShaderSource(shaderSourceCollections, br, tocEntry.Name); break;
 				case ContentType.Sound: sounds[tocEntry.Name] = GetSound(br); break;
@@ -61,7 +63,13 @@ public static class ContentFileReader
 			shaders[shaderSource.Key] = new(shaderSource.Value.VertexCode, shaderSource.Value.GeometryCode, shaderSource.Value.FragmentCode);
 		}
 
-		return new(models, shaders, sounds, textures);
+		return new(charsets, models, shaders, sounds, textures);
+	}
+
+	private static Charset GetCharset(BinaryReader br)
+	{
+		CharsetBinary charsetBinary = CharsetBinary.FromStream(br);
+		return new(charsetBinary.Characters);
 	}
 
 	private static Model GetModel(BinaryReader br)
