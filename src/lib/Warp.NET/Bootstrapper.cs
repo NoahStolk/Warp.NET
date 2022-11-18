@@ -4,7 +4,7 @@ using Warp.NET.Content.Conversion;
 namespace Warp.NET;
 
 /// <summary>
-/// Used to initiate game classes.
+/// Used to instantiate game classes.
 /// </summary>
 public static class Bootstrapper
 {
