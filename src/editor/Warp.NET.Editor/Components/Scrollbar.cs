@@ -1,4 +1,3 @@
-using Warp.NET.Editor.Rendering;
 using Warp.NET.Numerics;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -20,15 +19,15 @@ public class Scrollbar : AbstractScrollbar
 
 		Vector2i<int> borderVec = new(border);
 		Vector2i<int> scale = Bounds.Size;
-		Vector2i<int> topLeft = new(Bounds.X1, Bounds.Y1);
+		Vector2i<int> center = Bounds.TopLeft + Bounds.Size / 2;
 
 		Color thumbColor = Color.Gray(0.75f);
-		RenderBatchCollector.RenderRectangleTopLeft(scale, parentPosition + topLeft, Depth, thumbColor);
-		RenderBatchCollector.RenderRectangleTopLeft(scale - borderVec, parentPosition + topLeft + new Vector2i<int>(border / 2), Depth + 1, Hold ? Color.Gray(0.5f) : Hover ? Color.Gray(0.25f) : Color.Black);
+		Game.Self.RectangleRenderer.Schedule(scale, parentPosition + center, Depth, thumbColor);
+		Game.Self.RectangleRenderer.Schedule(scale - borderVec, parentPosition + center + new Vector2i<int>(border / 2), Depth + 1, Hold ? Color.Gray(0.5f) : Hover ? Color.Gray(0.25f) : Color.Black);
 
 		const int thumbPadding = 4;
 		Vector2i<int> thumbScale = new(scale.X - thumbPadding, (int)MathF.Ceiling(scale.Y * ThumbPercentageSize) - thumbPadding + 1); // + 1 needed for scaled UI for some reason.
 		float percentageForRendering = Math.Clamp(TopPercentage, 0, 1 - ThumbPercentageSize);
-		RenderBatchCollector.RenderRectangleTopLeft(thumbScale, parentPosition + topLeft + new Vector2i<int>(thumbPadding / 2, (int)MathF.Round(percentageForRendering * scale.Y) + thumbPadding / 2), Depth + 2, thumbColor);
+		Game.Self.RectangleRenderer.Schedule(thumbScale, parentPosition + center + new Vector2i<int>(thumbPadding / 2, (int)MathF.Round(percentageForRendering * scale.Y) + thumbPadding / 2), Depth + 2, thumbColor);
 	}
 }

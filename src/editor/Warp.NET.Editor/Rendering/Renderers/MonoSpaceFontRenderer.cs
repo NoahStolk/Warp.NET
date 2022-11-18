@@ -1,6 +1,5 @@
 using Silk.NET.OpenGL;
 using System.Numerics;
-using Warp.NET.Editor.Rendering.BatchedData;
 using Warp.NET.Numerics;
 using Warp.NET.Text;
 
@@ -10,6 +9,8 @@ public class MonoSpaceFontRenderer
 {
 	private readonly uint _vao;
 	private readonly MonoSpaceFont _font;
+
+	private readonly List<MonoSpaceText> _collection = new();
 
 	public unsafe MonoSpaceFontRenderer(MonoSpaceFont font)
 	{
@@ -34,13 +35,18 @@ public class MonoSpaceFontRenderer
 		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
 	}
 
-	public void Render(List<MonoSpaceText> texts)
+	public void Schedule(Vector2i<int> scale, Vector2i<int> position, float depth, Color color, string text, TextAlign textAlign)
+	{
+		_collection.Add(new(scale, position, depth, color, text, textAlign, ScissorScheduler.CurrentScissor));
+	}
+
+	public void Render()
 	{
 		_font.Texture.Use();
 
 		Gl.BindVertexArray(_vao);
 
-		foreach (MonoSpaceText mst in texts)
+		foreach (MonoSpaceText mst in _collection)
 		{
 			ScissorActivator.SetScissor(mst.Scissor);
 
@@ -50,17 +56,13 @@ public class MonoSpaceFontRenderer
 			int scaledCharHeight = mst.Scale.Y * charHeight;
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scaledCharWidth, scaledCharHeight, 1);
 
-			Vector2i<int> relativePosition = new(scaledCharWidth / 2, scaledCharHeight / 2);
-			if (mst.TextAlign == TextAlign.Middle)
+			Vector2i<int> textSize = _font.MeasureText(mst.Text) * mst.Scale;
+			Vector2i<int> relativePosition = mst.TextAlign switch
 			{
-				Vector2i<int> textSize = _font.MeasureText(mst.Text) * mst.Scale;
-				relativePosition -= textSize / 2;
-			}
-			else if (mst.TextAlign == TextAlign.Right)
-			{
-				Vector2i<int> textSize = _font.MeasureText(mst.Text) * mst.Scale;
-				relativePosition -= textSize with { Y = 0 };
-			}
+				TextAlign.Middle => new Vector2i<int>(scaledCharWidth / 2, scaledCharHeight / 2) - textSize / 2,
+				TextAlign.Right => new Vector2i<int>(scaledCharWidth / 2, scaledCharHeight / 2) - textSize with { Y = 0 },
+				_ => new(scaledCharWidth / 2, scaledCharHeight / 2),
+			};
 
 			int originX = relativePosition.X;
 
@@ -77,5 +79,9 @@ public class MonoSpaceFontRenderer
 		}
 
 		Gl.BindVertexArray(0);
+
+		_collection.Clear();
 	}
+
+	private readonly record struct MonoSpaceText(Vector2i<int> Scale, Vector2i<int> Position, float Depth, Color Color, string Text, TextAlign TextAlign, Scissor? Scissor);
 }

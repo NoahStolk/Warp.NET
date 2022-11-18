@@ -16,12 +16,12 @@ public abstract class ScrollContent<TSelf, TParent> : AbstractScrollContent<TSel
 
 	public override void Render(Vector2i<int> parentPosition)
 	{
-		RenderBatchCollector.SetScissor(Scissor.Create(Bounds, parentPosition, ViewportState.Offset, ViewportState.Scale));
+		ScissorScheduler.SetScissor(Scissor.Create(Bounds, parentPosition, ViewportState.Offset, ViewportState.Scale));
 
 		base.Render(parentPosition);
 
-		RenderBatchCollector.RenderRectangleTopLeft(Bounds.Size, parentPosition + new Vector2i<int>(Bounds.X1, Bounds.Y1), Depth, Color.Black);
+		Game.Self.RectangleRenderer.Schedule(Bounds.Size, parentPosition + Bounds.TopLeft + Bounds.Size / 2, Depth, Color.Black);
 
-		RenderBatchCollector.UnsetScissor();
+		ScissorScheduler.UnsetScissor();
 	}
 }

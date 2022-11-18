@@ -15,9 +15,6 @@ namespace Warp.NET.Editor;
 public sealed partial class Game
 {
 	private readonly Matrix4x4 _projectionMatrix;
-	private readonly MonoSpaceFontRenderer _monoSpaceFontRenderer = new(new(Textures.Font, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  "));
-	private readonly SpriteRenderer _spriteRenderer = new();
-	private readonly UiRenderer _uiRenderer = new();
 
 	private readonly MainLayout _mainLayout = new();
 
@@ -28,6 +25,11 @@ public sealed partial class Game
 
 		DebugStack.DisplaySetting = DebugStackDisplaySetting.Simple;
 	}
+
+	public MonoSpaceFontRenderer MonoSpaceFontRenderer { get; } = new(new(Textures.Font, @" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?:()[]{}<>|@^$%#&/\+*`,'=~;.-_  "));
+	public SpriteRenderer SpriteRenderer { get; } = new();
+	public RectangleRenderer RectangleRenderer { get; } = new();
+	public CircleRenderer CircleRenderer { get; } = new();
 
 	protected override void Update()
 	{
@@ -42,9 +44,9 @@ public sealed partial class Game
 	{
 		base.PrepareRender();
 
-		RenderBatchCollector.RenderMonoSpaceText(new(2), CoordinateSystem.Get(0.5f, 0.125f), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
-		RenderBatchCollector.RenderMonoSpaceText(new(1), CoordinateSystem.Get(0, 0.8f), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
-		RenderBatchCollector.RenderCircleCenter(ViewportState.MousePosition.RoundToVector2Int32(), 12, 0, Color.Red);
+		MonoSpaceFontRenderer.Schedule(new(2), CoordinateSystem.Get(0.5f, 0.125f), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
+		MonoSpaceFontRenderer.Schedule(new(1), CoordinateSystem.Get(0, 0.8f), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
+		CircleRenderer.Schedule(ViewportState.MousePosition.RoundToVector2Int32(), 12, 0, Color.Red);
 
 		_mainLayout.NestingContext.Render(default);
 	}
@@ -56,17 +58,15 @@ public sealed partial class Game
 
 		Shaders.Ui.Use();
 		Shader.SetMatrix4x4(UiUniforms.Projection, _projectionMatrix);
-		_uiRenderer.RenderRectangleTriangles();
-		_uiRenderer.RenderCircleLines();
+		RectangleRenderer.Render();
+		CircleRenderer.Render();
 
 		Shaders.Font.Use();
 		Shader.SetMatrix4x4(FontUniforms.Projection, _projectionMatrix);
-		_monoSpaceFontRenderer.Render(RenderBatchCollector.MonoSpaceTexts);
+		MonoSpaceFontRenderer.Render();
 
 		Shaders.Sprite.Use();
 		Shader.SetMatrix4x4(SpriteUniforms.Projection, _projectionMatrix);
-		_spriteRenderer.Render();
-
-		RenderBatchCollector.Clear();
+		SpriteRenderer.Render();
 	}
 }

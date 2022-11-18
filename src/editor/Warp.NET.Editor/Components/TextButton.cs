@@ -1,5 +1,4 @@
 using Warp.NET.Editor.Components.Styles;
-using Warp.NET.Editor.Rendering;
 using Warp.NET.Numerics;
 using Warp.NET.Text;
 using Warp.NET.Ui;
@@ -34,6 +33,6 @@ public class TextButton : Button
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
 
-		RenderBatchCollector.RenderMonoSpaceText(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, TextButtonStyle.TextColor, Text, TextButtonStyle.TextAlign);
+		Game.Self.MonoSpaceFontRenderer.Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, TextButtonStyle.TextColor, Text, TextButtonStyle.TextAlign);
 	}
 }

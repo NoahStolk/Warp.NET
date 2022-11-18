@@ -1,6 +1,5 @@
 using System.Numerics;
 using Warp.NET.Editor.Components.Styles;
-using Warp.NET.Editor.Rendering;
 using Warp.NET.Extensions;
 using Warp.NET.Numerics;
 using Warp.NET.Ui;
@@ -26,6 +25,6 @@ public class IconButton : Button
 		Vector2i<int> scale = Bounds.Size;
 		Vector2i<int> topLeft = Bounds.TopLeft;
 		Vector2i<int> center = topLeft + scale / 2;
-		RenderBatchCollector.RenderSprite(_textureSize, (parentPosition + center).ToVector2(), Depth + 2, _texture, IsDisabled ? Color.HalfTransparentWhite : Color.White);
+		Game.Self.SpriteRenderer.Schedule(_textureSize, (parentPosition + center).ToVector2(), Depth + 2, _texture, IsDisabled ? Color.HalfTransparentWhite : Color.White);
 	}
 }

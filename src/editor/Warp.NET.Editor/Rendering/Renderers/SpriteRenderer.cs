@@ -1,12 +1,14 @@
 using Silk.NET.OpenGL;
 using System.Numerics;
-using Warp.NET.Editor.Rendering.BatchedData;
+using Warp.NET.Numerics;
 
 namespace Warp.NET.Editor.Rendering.Renderers;
 
 public class SpriteRenderer
 {
 	private readonly uint _vao;
+
+	private readonly List<Sprite> _collection = new();
 
 	public unsafe SpriteRenderer()
 	{
@@ -41,14 +43,19 @@ public class SpriteRenderer
 		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
 	}
 
+	public void Schedule(Vector2 scale, Vector2 centerPosition, float depth, Texture texture, Color color)
+	{
+		_collection.Add(new(scale, centerPosition, depth, texture, color, ScissorScheduler.CurrentScissor));
+	}
+
 	public void Render()
 	{
-		if (RenderBatchCollector.Sprites.Count == 0)
+		if (_collection.Count == 0)
 			return;
 
 		Gl.BindVertexArray(_vao);
 
-		foreach (Sprite sprite in RenderBatchCollector.Sprites)
+		foreach (Sprite sprite in _collection)
 		{
 			ScissorActivator.SetScissor(sprite.Scissor);
 
@@ -62,5 +69,9 @@ public class SpriteRenderer
 		}
 
 		Gl.BindVertexArray(0);
+
+		_collection.Clear();
 	}
+
+	private readonly record struct Sprite(Vector2 Scale, Vector2 CenterPosition, float Depth, Texture Texture, Color Color, Scissor? Scissor);
 }

@@ -1,4 +1,3 @@
-using Warp.NET.Editor.Rendering;
 using Warp.NET.Numerics;
 using Warp.NET.Text;
 using Warp.NET.Ui;
@@ -31,6 +30,6 @@ public class Label : AbstractLabel
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
 
-		RenderBatchCollector.RenderMonoSpaceText(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, _textColor, Text, _textAlign);
+		Game.Self.MonoSpaceFontRenderer.Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, _textColor, Text, _textAlign);
 	}
 }

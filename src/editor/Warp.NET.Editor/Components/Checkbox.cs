@@ -1,4 +1,3 @@
-using Warp.NET.Editor.Rendering;
 using Warp.NET.Numerics;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -28,10 +27,10 @@ public class Checkbox : AbstractCheckbox
 		Vector2i<int> center = topLeft + fullScale / 2;
 		Vector2i<int> scale = fullScale - marginVec;
 
-		RenderBatchCollector.RenderRectangleCenter(scale + borderVec, parentPosition + center, Depth, Color.White);
-		RenderBatchCollector.RenderRectangleCenter(scale, parentPosition + center, Depth + 1, Hover ? Color.Gray(0.25f) : Color.Black);
+		Game.Self.RectangleRenderer.Schedule(scale + borderVec, parentPosition + center, Depth, Color.White);
+		Game.Self.RectangleRenderer.Schedule(scale, parentPosition + center, Depth + 1, Hover ? Color.Gray(0.25f) : Color.Black);
 
 		if (CurrentValue)
-			RenderBatchCollector.RenderRectangleCenter(scale - borderTickVec, parentPosition + center, Depth + 2, Color.Gray(0.75f));
+			Game.Self.RectangleRenderer.Schedule(scale - borderTickVec, parentPosition + center, Depth + 2, Color.Gray(0.75f));
 	}
 }

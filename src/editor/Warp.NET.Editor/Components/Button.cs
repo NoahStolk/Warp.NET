@@ -1,5 +1,4 @@
 using Warp.NET.Editor.Components.Styles;
-using Warp.NET.Editor.Rendering;
 using Warp.NET.Numerics;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -25,7 +24,7 @@ public class Button : AbstractButton
 		Vector2i<int> topLeft = Bounds.TopLeft;
 		Vector2i<int> center = topLeft + scale / 2;
 
-		RenderBatchCollector.RenderRectangleCenter(scale, parentPosition + center, Depth, ButtonStyle.BorderColor);
-		RenderBatchCollector.RenderRectangleCenter(scale - borderVec * 2, parentPosition + center, Depth + 1, Hover && !IsDisabled ? ButtonStyle.HoverBackgroundColor : ButtonStyle.BackgroundColor);
+		Game.Self.RectangleRenderer.Schedule(scale, parentPosition + center, Depth, ButtonStyle.BorderColor);
+		Game.Self.RectangleRenderer.Schedule(scale - borderVec * 2, parentPosition + center, Depth + 1, Hover && !IsDisabled ? ButtonStyle.HoverBackgroundColor : ButtonStyle.BackgroundColor);
 	}
 }
