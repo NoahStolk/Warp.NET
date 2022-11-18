@@ -8,5 +8,5 @@ const string? contentRootDirectory = null;
 #endif
 
 GameParameters gameParameters = new("Warp.NET.Samples.Window", 1024, 768, false);
-Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
+Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Charsets, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
 game.Run();
