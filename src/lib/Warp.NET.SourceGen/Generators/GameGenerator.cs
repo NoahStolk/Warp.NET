@@ -29,11 +29,19 @@ public class GameGenerator : IIncrementalGenerator
 
 		public partial class Game : GameBase, IGameBase<Game>
 		{
+			private static Game? _self;
+
 			{{_gameObjectListFields}}
 
 			private Game(string initialWindowTitle, int initialWindowWidth, int initialWindowHeight, bool initialWindowFullScreen)
 				: base(initialWindowTitle, initialWindowWidth, initialWindowHeight, initialWindowFullScreen)
 			{
+			}
+
+			public static Game Self
+			{
+				get => _self ?? throw new InvalidOperationException("Game is not initialized.");
+				set => _self = value;
 			}
 
 			{{_gameObjectListProperties}}
