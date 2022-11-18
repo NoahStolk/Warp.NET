@@ -103,13 +103,13 @@ public class GameObjectGenerator : IIncrementalGenerator
 			if (gameObjectTypeName == null)
 				continue;
 
-			List<GameObjectState> states = new();
+			List<GameObjectInterpolationState> states = new();
 			List<GameObjectChild> children = new();
 			foreach (PropertyDeclarationSyntax property in tds.ChildNodes().Where(sn => sn is PropertyDeclarationSyntax).Cast<PropertyDeclarationSyntax>())
 			{
 				string typeName = property.Type.ToString();
 				if (typeName is "FloatState" or "Matrix4x4State" or "QuaternionState" or "SpinorState" or "Vector2State" or "Vector3State" or "Vector4State")
-					states.Add(new(typeName, property.Identifier.ValueText));
+					states.Add(new(property.Identifier.ValueText));
 				else if (property.GetAttributeFromMember(_childAttributeTypeName.Type) != null)
 					children.Add(new(property.Identifier.ValueText));
 			}
