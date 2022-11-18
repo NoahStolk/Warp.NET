@@ -2,6 +2,12 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## TODO
+
+### Fixed
+
+- Fixed not always generating required types.
+
 ## 0.1.1
 
 ### Added
