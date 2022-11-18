@@ -45,25 +45,21 @@ public class ContentGenerator : ISourceGenerator
 		if (gameNamespace == null)
 			return;
 
+		// These files must always be generated.
 		string? contentRootDirectory = Path.GetDirectoryName(context.AdditionalFiles.FirstOrDefault(at => Path.GetFileName(at.Path) == "Content")?.Path);
-		if (contentRootDirectory == null)
-			return;
-
-		List<string> shaderPaths = GetFiles(contentRootDirectory, "Shaders", "*.vert");
-		List<string> texturePaths = GetFiles(contentRootDirectory, "Textures", "*.tga");
-		List<string> modelPaths = GetFiles(contentRootDirectory, "Models", "*.obj");
-		List<string> soundPaths = GetFiles(contentRootDirectory, "Sounds", "*.wav");
-
-		CreateFile(context, gameNamespace, "Shaders", $"{Constants.RootNamespace}.Content.Shader", shaderPaths);
-		CreateFile(context, gameNamespace, "Textures", $"{Constants.RootNamespace}.Content.Texture", texturePaths);
-		CreateFile(context, gameNamespace, "Models", $"{Constants.RootNamespace}.Content.Model", modelPaths);
-		CreateFile(context, gameNamespace, "Sounds", $"{Constants.RootNamespace}.Content.Sound", soundPaths);
+		CreateFile(context, gameNamespace, "Shaders", $"{Constants.RootNamespace}.Content.Shader", GetFiles(contentRootDirectory, "Shaders", "*.vert"));
+		CreateFile(context, gameNamespace, "Textures", $"{Constants.RootNamespace}.Content.Texture", GetFiles(contentRootDirectory, "Textures", "*.tga"));
+		CreateFile(context, gameNamespace, "Models", $"{Constants.RootNamespace}.Content.Model", GetFiles(contentRootDirectory, "Models", "*.obj"));
+		CreateFile(context, gameNamespace, "Sounds", $"{Constants.RootNamespace}.Content.Sound", GetFiles(contentRootDirectory, "Sounds", "*.wav"));
 	}
 
-	private static List<string> GetFiles(string basePath, string folderName, string searchPattern)
+	private static List<string> GetFiles(string? contentRootDirectory, string contentFolderName, string contentFileSearchPattern)
 	{
-		string path = Path.Combine(basePath, folderName);
-		return Directory.Exists(path) ? Directory.GetFiles(path, searchPattern, SearchOption.AllDirectories).Where(FileNameUtils.PathIsValid).ToList() : new();
+		if (contentRootDirectory == null)
+			return new();
+
+		string path = Path.Combine(contentRootDirectory, contentFolderName);
+		return Directory.Exists(path) ? Directory.GetFiles(path, contentFileSearchPattern, SearchOption.AllDirectories).Where(FileNameUtils.PathIsValid).ToList() : new();
 	}
 
 	private static void CreateFile(GeneratorExecutionContext context, string gameNamespace, string className, string contentTypeName, List<string> filePaths)

@@ -55,26 +55,27 @@ public class ShaderUniformGenerator : ISourceGenerator
 			return;
 
 		string? contentRootDirectory = Path.GetDirectoryName(context.AdditionalFiles.FirstOrDefault(at => Path.GetFileName(at.Path) == "Content")?.Path);
-		if (contentRootDirectory == null)
-			return;
-
-		string shadersDirectory = Path.Combine(contentRootDirectory, "Shaders");
-
+		string? shadersDirectory = contentRootDirectory == null ? null : Path.Combine(contentRootDirectory, "Shaders");
 		List<string> shaderNames = GetShaderNames(shadersDirectory);
-		foreach (string shaderName in shaderNames)
-		{
-			List<ShaderUniform> vertUniforms = GetUniformsFromGlslFile(Path.Combine(shadersDirectory, $"{shaderName}.vert"));
-			List<ShaderUniform> geomUniforms = GetUniformsFromGlslFile(Path.Combine(shadersDirectory, $"{shaderName}.geom"));
-			List<ShaderUniform> fragUniforms = GetUniformsFromGlslFile(Path.Combine(shadersDirectory, $"{shaderName}.frag"));
 
-			// Generate the class, even if there are no uniforms.
-			CreateFile(context, gameNamespace, shaderName, vertUniforms.Concat(geomUniforms).Concat(fragUniforms).Distinct().ToList());
+		if (shadersDirectory != null)
+		{
+			foreach (string shaderName in shaderNames)
+			{
+				List<ShaderUniform> vertUniforms = GetUniformsFromGlslFile(Path.Combine(shadersDirectory, $"{shaderName}.vert"));
+				List<ShaderUniform> geomUniforms = GetUniformsFromGlslFile(Path.Combine(shadersDirectory, $"{shaderName}.geom"));
+				List<ShaderUniform> fragUniforms = GetUniformsFromGlslFile(Path.Combine(shadersDirectory, $"{shaderName}.frag"));
+
+				// Generate the class, even if there are no uniforms.
+				CreateShaderUniformsFile(context, gameNamespace, shaderName, vertUniforms.Concat(geomUniforms).Concat(fragUniforms).Distinct().ToList());
+			}
 		}
 
-		CreateInitializationFile(context, gameNamespace, shaderNames);
+		// This file must always be generated.
+		CreateInitializerFile(context, gameNamespace, shaderNames);
 	}
 
-	private static List<string> GetShaderNames(string shadersDirectory)
+	private static List<string> GetShaderNames(string? shadersDirectory)
 	{
 		return !Directory.Exists(shadersDirectory) ? new() : Directory.GetFiles(shadersDirectory, "*.*", SearchOption.AllDirectories)
 			.Where(FileNameUtils.PathIsValid)
@@ -92,7 +93,7 @@ public class ShaderUniformGenerator : ISourceGenerator
 		return File.ReadAllLines(filePath).Select(GlslUtils.GetFromGlslLine).Where(su => su != null).ToList()!;
 	}
 
-	private static void CreateFile(GeneratorExecutionContext context, string gameNamespace, string shaderName, List<ShaderUniform> uniformNames)
+	private static void CreateShaderUniformsFile(GeneratorExecutionContext context, string gameNamespace, string shaderName, List<ShaderUniform> uniformNames)
 	{
 		string className = $"{shaderName}Uniforms";
 		string sourceBuilder = _template
@@ -104,7 +105,7 @@ public class ShaderUniformGenerator : ISourceGenerator
 		context.AddSource(className, SourceBuilderUtils.Build(sourceBuilder));
 	}
 
-	private static void CreateInitializationFile(GeneratorExecutionContext context, string gameNamespace, List<string> shaderNames)
+	private static void CreateInitializerFile(GeneratorExecutionContext context, string gameNamespace, List<string> shaderNames)
 	{
 		string sourceBuilder = _initializationTemplate
 			.Replace(_namespacePlaceholder, gameNamespace)
