@@ -4,9 +4,21 @@ This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## TODO
 
+### Added
+
+- Added `Warp.NET.RenderImpl.Ui` library which contains a basic implementation of UI rendering, including shaders and fonts.
+
+### Changed
+
+- The base class `GameBase` is no longer added to the generated game code and now needs to be defined explicitly. This allows for different game base classes.
+
 ### Fixed
 
 - Added missing using to generated game class.
+
+### Removed
+
+- Removed `IBounds.Move` static method.
 
 ## 0.1.3
 

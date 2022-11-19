@@ -27,7 +27,7 @@ public class GameGenerator : IIncrementalGenerator
 
 		namespace {{_namespace}};
 
-		public partial class Game : GameBase, IGameBase<Game>
+		public partial class Game : IGameBase<Game>
 		{
 			private static Game? _self;
 
