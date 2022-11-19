@@ -23,6 +23,7 @@ public class GameGenerator : IIncrementalGenerator
 		using System;
 		using System.Collections.Generic;
 		using System.Text;
+		using Warp.NET;
 
 		namespace {{_namespace}};
 

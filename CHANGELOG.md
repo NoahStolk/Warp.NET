@@ -2,6 +2,12 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## TODO
+
+### Fixed
+
+- Added missing using to generated game class.
+
 ## 0.1.3
 
 ### Added
