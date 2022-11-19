@@ -6,6 +6,7 @@ using Warp.NET.Extensions;
 using Warp.NET.Numerics;
 using Warp.NET.RenderImpl.Ui;
 using Warp.NET.RenderImpl.Ui.Rendering;
+using Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 

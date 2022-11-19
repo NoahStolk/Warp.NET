@@ -3,7 +3,7 @@ using Warp.NET.Extensions;
 using Warp.NET.Numerics;
 using Warp.NET.Ui;
 
-namespace Warp.NET.RenderImpl.Ui.Rendering;
+namespace Warp.NET.RenderImpl.Ui.Rendering.Scissors;
 
 public record Scissor(int X, int Y, uint Width, uint Height)
 {

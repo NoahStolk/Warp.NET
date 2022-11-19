@@ -1,4 +1,4 @@
-namespace Warp.NET.RenderImpl.Ui.Rendering;
+namespace Warp.NET.RenderImpl.Ui.Rendering.Scissors;
 
 public static class ScissorScheduler
 {

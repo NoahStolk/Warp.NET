@@ -1,6 +1,7 @@
 using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.RenderImpl.Ui.Components.Styles;
 using Warp.NET.RenderImpl.Ui.Rendering;
+using Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 using Warp.NET.Ui;
 
 namespace Warp.NET.Editor.Layouts;

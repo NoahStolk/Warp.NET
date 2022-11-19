@@ -2,7 +2,7 @@ using System.Numerics;
 using Warp.NET.Numerics;
 using Warp.NET.Ui;
 
-namespace Warp.NET.RenderImpl.Ui.Rendering;
+namespace Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 
 public sealed record Rectangle : IBounds
 {

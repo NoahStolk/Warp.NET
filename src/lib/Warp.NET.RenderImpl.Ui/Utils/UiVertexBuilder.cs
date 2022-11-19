@@ -1,4 +1,4 @@
-namespace Warp.NET.RenderImpl.Ui.Rendering;
+namespace Warp.NET.RenderImpl.Ui.Utils;
 
 public static class UiVertexBuilder
 {

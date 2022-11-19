@@ -1,7 +1,7 @@
 using System.Numerics;
 using Warp.NET.Numerics;
 
-namespace Warp.NET.RenderImpl.Ui.Rendering;
+namespace Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 
 public static class CoordinateSystem
 {

@@ -1,6 +1,7 @@
 using Silk.NET.OpenGL;
 using System.Numerics;
 using Warp.NET.Numerics;
+using Warp.NET.RenderImpl.Ui.Rendering.Scissors;
 using Warp.NET.Text;
 
 namespace Warp.NET.RenderImpl.Ui.Rendering.Renderers;

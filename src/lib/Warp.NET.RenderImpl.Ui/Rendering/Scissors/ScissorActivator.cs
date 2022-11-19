@@ -1,6 +1,6 @@
 using Silk.NET.OpenGL;
 
-namespace Warp.NET.RenderImpl.Ui.Rendering;
+namespace Warp.NET.RenderImpl.Ui.Rendering.Scissors;
 
 /// <summary>
 /// Responsible for setting the scissor test during rendering.
