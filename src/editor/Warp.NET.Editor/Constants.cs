@@ -1,4 +1,3 @@
-using Warp.NET.RenderImpl.Ui.Rendering;
 using Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 
 namespace Warp.NET.Editor;
@@ -10,5 +9,5 @@ public static class Constants
 
 	public static Grid GridDefault { get; } = new(InitialWindowWidth, InitialWindowHeight);
 
-	public static Rectangle RectangleFull { get; } = new(0, 0, 1, 1, GridDefault);
+	public static Rectangle RectangleFull { get; } = new(Fraction.F00_01, Fraction.F00_01, Fraction.F01_01, Fraction.F01_01, GridDefault);
 }

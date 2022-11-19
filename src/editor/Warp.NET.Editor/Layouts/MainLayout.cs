@@ -1,6 +1,5 @@
 using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.RenderImpl.Ui.Components.Styles;
-using Warp.NET.RenderImpl.Ui.Rendering;
 using Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 using Warp.NET.Ui;
 
@@ -11,7 +10,7 @@ public class MainLayout : Layout
 	public MainLayout()
 		: base(Constants.RectangleFull)
 	{
-		Button button = new(new Rectangle(0.1f, 0.1f, 0.1f, 0.1f, Constants.GridDefault), () => {}, ButtonStyle.Default);
+		Button button = new(new Rectangle(Fraction.F01_10, Fraction.F01_10, Fraction.F01_10, Fraction.F01_10, Constants.GridDefault), () => {}, ButtonStyle.Default);
 		NestingContext.Add(button);
 	}
 }

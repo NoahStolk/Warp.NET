@@ -1,4 +1,3 @@
-using System.Numerics;
 using Warp.NET.Numerics;
 using Warp.NET.Ui;
 
@@ -6,17 +5,12 @@ namespace Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 
 public sealed record Rectangle : IBounds
 {
-	public Rectangle(Vector2 position, Vector2 size, Grid grid)
-		: this(position.X, position.Y, size.X, size.Y, grid)
+	public Rectangle(Fraction x, Fraction y, Fraction width, Fraction height, Grid grid)
 	{
-	}
-
-	public Rectangle(float x, float y, float width, float height, Grid grid)
-	{
-		X1 = (int)(x * grid.Width);
-		Y1 = (int)(y * grid.Height);
-		X2 = X1 + (int)(width * grid.Width);
-		Y2 = Y1 + (int)(height * grid.Height);
+		X1 = (int)(x.ToFloat() * grid.PixelWidth);
+		Y1 = (int)(y.ToFloat() * grid.PixelHeight);
+		X2 = X1 + (int)(width.ToFloat() * grid.PixelWidth);
+		Y2 = Y1 + (int)(height.ToFloat() * grid.PixelHeight);
 	}
 
 	public int X1 { get; }

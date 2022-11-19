@@ -36,13 +36,13 @@ This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Renamed `Color.Transparent` to `Color.Invisible`.
 - Changed `DebugStack.Add` signatures.
 
-### Removed
-
-- Removed `GenerateMenuAttribute` and generating menus; use `GenerateSingletonAttribute` instead.
-
 ### Fixed
 
 - `MonoSpaceFont.GetTextureOffset` now returns null when the character does not exist in the charset.
+
+### Removed
+
+- Removed `GenerateMenuAttribute` and generating menus; use `GenerateSingletonAttribute` instead.
 
 ## 0.1.2
 
