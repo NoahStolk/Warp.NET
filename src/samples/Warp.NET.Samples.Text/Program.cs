@@ -1,4 +1,5 @@
 using Warp.NET;
+using Warp.NET.Content.Conversion;
 using Warp.NET.Samples.Text;
 
 const int initialWindowWidth = 1024;
@@ -13,7 +14,17 @@ const string? contentRootDirectory = null;
 #endif
 
 GameParameters gameParameters = new("2D sample: Text", initialWindowWidth, initialWindowHeight, false);
-Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Charsets, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
+
+Bootstrapper.CreateWindow(gameParameters);
+
+DecompiledContentFile decompiledContentFile = Bootstrapper.GetDecompiledContent(contentRootDirectory, "c");
+Charsets.Initialize(decompiledContentFile.Charsets);
+Shaders.Initialize(decompiledContentFile.Shaders);
+Textures.Initialize(decompiledContentFile.Textures);
+
+ShaderUniformInitializer.Initialize();
+
+Game game = Bootstrapper.CreateGame<Game>(gameParameters);
 game.Run();
 
 static void OnChangeWindowSize(int width, int height)
