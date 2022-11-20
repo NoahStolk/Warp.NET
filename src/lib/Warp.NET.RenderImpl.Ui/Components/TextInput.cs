@@ -46,7 +46,7 @@ public class TextInput : AbstractTextInput
 		Vector2i<int> center = Bounds.TopLeft + Bounds.Size / 2;
 
 		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, center + parentPosition, Depth, IsSelected ? TextInputStyle.ActiveBorderColor : TextInputStyle.BorderColor);
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale - borderVec, center + parentPosition + borderVec / 2, Depth + 1, Hover ? TextInputStyle.HoverBackgroundColor : TextInputStyle.BackgroundColor);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale - borderVec, center + parentPosition, Depth + 1, Hover ? TextInputStyle.HoverBackgroundColor : TextInputStyle.BackgroundColor);
 
 		MonoSpaceFontRenderer fontRenderer = RenderImplUiBase.Game.GetFontRenderer(TextInputStyle.FontSize);
 
