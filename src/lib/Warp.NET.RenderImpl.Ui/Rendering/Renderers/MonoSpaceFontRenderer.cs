@@ -9,13 +9,11 @@ namespace Warp.NET.RenderImpl.Ui.Rendering.Renderers;
 public class MonoSpaceFontRenderer
 {
 	private readonly uint _vao;
-	private readonly MonoSpaceFont _font;
-
 	private readonly List<MonoSpaceText> _collection = new();
 
 	public unsafe MonoSpaceFontRenderer(MonoSpaceFont font)
 	{
-		_font = font;
+		Font = font;
 
 		_vao = Gl.GenVertexArray();
 		Gl.BindVertexArray(_vao);
@@ -23,8 +21,8 @@ public class MonoSpaceFontRenderer
 		uint vbo = Gl.GenBuffer();
 		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, vbo);
 
-		fixed (float* v = &_font.Vertices.ToArray()[0])
-			Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)_font.Vertices.Length * sizeof(float), v, BufferUsageARB.StaticDraw);
+		fixed (float* v = &Font.Vertices.ToArray()[0])
+			Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)Font.Vertices.Length * sizeof(float), v, BufferUsageARB.StaticDraw);
 
 		Gl.EnableVertexAttribArray(0);
 		Gl.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), (void*)0);
@@ -36,6 +34,8 @@ public class MonoSpaceFontRenderer
 		Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
 	}
 
+	public MonoSpaceFont Font { get; }
+
 	public void Schedule(Vector2i<int> scale, Vector2i<int> position, float depth, Color color, string text, TextAlign textAlign)
 	{
 		_collection.Add(new(scale, position, depth, color, text, textAlign, ScissorScheduler.CurrentScissor));
@@ -43,7 +43,7 @@ public class MonoSpaceFontRenderer
 
 	public void Render()
 	{
-		_font.Texture.Use();
+		Font.Texture.Use();
 
 		Gl.BindVertexArray(_vao);
 
@@ -51,13 +51,13 @@ public class MonoSpaceFontRenderer
 		{
 			ScissorActivator.SetScissor(mst.Scissor);
 
-			int charHeight = _font.Texture.Height;
-			int charWidth = _font.Texture.Width / _font.CharAmount;
+			int charHeight = Font.Texture.Height;
+			int charWidth = Font.Texture.Width / Font.CharAmount;
 			int scaledCharWidth = mst.Scale.X * charWidth;
 			int scaledCharHeight = mst.Scale.Y * charHeight;
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scaledCharWidth, scaledCharHeight, 1);
 
-			Vector2i<int> textSize = _font.MeasureText(mst.Text) * mst.Scale;
+			Vector2i<int> textSize = Font.MeasureText(mst.Text) * mst.Scale;
 			Vector2i<int> relativePosition = mst.TextAlign switch
 			{
 				TextAlign.Middle => new Vector2i<int>(scaledCharWidth / 2, scaledCharHeight / 2) - textSize / 2,
@@ -70,7 +70,7 @@ public class MonoSpaceFontRenderer
 			Shader.SetVector4(FontUniforms.Color, mst.Color);
 			foreach (char c in mst.Text)
 			{
-				float? offset = _font.GetTextureOffset(c);
+				float? offset = Font.GetTextureOffset(c);
 				if (offset.HasValue)
 				{
 					Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(mst.Position.X + relativePosition.X, mst.Position.Y + relativePosition.Y, mst.Depth);
@@ -79,7 +79,7 @@ public class MonoSpaceFontRenderer
 					Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
 				}
 
-				_font.AdvancePosition(c, ref relativePosition, originX, scaledCharWidth, scaledCharHeight);
+				Font.AdvancePosition(c, ref relativePosition, originX, scaledCharWidth, scaledCharHeight);
 			}
 		}
 
