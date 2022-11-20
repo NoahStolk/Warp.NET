@@ -18,3 +18,10 @@ jobs:
         run: dotnet build Warp.NET.sln -c Release
       - name: Test
         run: dotnet test Warp.NET.sln -c Release --no-build
+      - name: Pack (temp)
+        run: |
+          dotnet pack src/lib/Warp.NET.RenderImpl.Ui -c Release --no-build -o .
+      - name: Push (temp)
+        run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${NUGET_SECRET} -n --skip-duplicate
+        env:
+          NUGET_SECRET: ${{ secrets.NUGET_SECRET }}
