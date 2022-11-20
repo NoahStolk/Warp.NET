@@ -2,6 +2,22 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.5
+
+### Added
+
+- Added `MonoSpaceFontRenderer.Font` property.
+- Added `MonoSpaceFont.CharWidth` property.
+
+### Changed
+
+- Rewrote the `Bootstrapper` class:
+  - There are now 3 methods:
+    - `CreateWindow`
+    - `GetDecompiledContent`
+    - `CreateGame`
+  - The shader uniform and content type parameters have been removed from `CreateGame`. The shader uniforms and content containers now need to be initialized manually using the `GetDecompiledContent` method. This allows for multiple content files and flexible content initialization.
+
 ## 0.1.4
 
 ### Added
