@@ -1,9 +1,12 @@
 using System.Numerics;
+using Warp.NET.Numerics;
 
 namespace Warp.NET.RenderImpl.Ui.Rendering;
 
 public static class ViewportState
 {
+	public static Viewport Viewport { get; private set; }
+
 	public static Vector2 Offset { get; private set; }
 
 	public static Vector2 Scale { get; private set; }
@@ -18,6 +21,7 @@ public static class ViewportState
 		Vector2 size = new(adjustedWidth, height); // Fix viewport to maintain aspect ratio
 		Scale = size / new Vector2(gameParameters.InitialWindowWidth, gameParameters.InitialWindowHeight);
 
-		Gl.Viewport((int)Offset.X, (int)Offset.Y, (uint)size.X, (uint)size.Y);
+		Viewport = new((int)Offset.X, (int)Offset.Y, (int)size.X, (int)size.Y);
+		Gl.Viewport(Viewport.X, Viewport.Y, (uint)Viewport.Width, (uint)Viewport.Height);
 	}
 }
