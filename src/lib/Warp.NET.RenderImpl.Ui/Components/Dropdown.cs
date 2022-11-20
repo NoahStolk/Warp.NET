@@ -1,4 +1,5 @@
 using Warp.NET.Numerics;
+using Warp.NET.RenderImpl.Ui.Components.Styles;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -7,13 +8,16 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Dropdown : AbstractDropdown
 {
-	private readonly string _text;
-
-	public Dropdown(IBounds bounds, string text)
+	public Dropdown(IBounds bounds, string text, DropdownStyle dropdownStyle)
 		: base(bounds)
 	{
-		_text = text;
+		Text = text;
+		DropdownStyle = dropdownStyle;
 	}
+
+	public string Text { get; set; }
+
+	public DropdownStyle DropdownStyle { get; set; }
 
 	public override void Render(Vector2i<int> parentPosition)
 	{
@@ -27,6 +31,6 @@ public class Dropdown : AbstractDropdown
 		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size - borderVec * 2, parentPosition + center, Depth + 1, Hover ? Color.Gray(0.5f) : Color.Black);
 
 		Vector2i<int> textPosition = new Vector2i<int>(Bounds.X1 + Bounds.X2, Bounds.Y1 + Bounds.Y2) / 2;
-		RenderImplUiBase.Game.MonoSpaceFontRenderer.Schedule(new(1), parentPosition + textPosition, Depth + 2, Color.White, _text, TextAlign.Middle);
+		RenderImplUiBase.Game.GetFontRenderer(DropdownStyle.FontSize).Schedule(new(1), parentPosition + textPosition, Depth + 2, Color.White, Text, TextAlign.Middle);
 	}
 }

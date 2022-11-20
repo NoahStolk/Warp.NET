@@ -15,6 +15,7 @@ public class TextButton : Button
 	}
 
 	public string Text { get; set; }
+
 	public TextButtonStyle TextButtonStyle { get; set; }
 
 	public override void Render(Vector2i<int> parentPosition)
@@ -33,6 +34,6 @@ public class TextButton : Button
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
 
-		RenderImplUiBase.Game.MonoSpaceFontRenderer.Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, TextButtonStyle.TextColor, Text, TextButtonStyle.TextAlign);
+		RenderImplUiBase.Game.GetFontRenderer(TextButtonStyle.FontSize).Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, TextButtonStyle.TextColor, Text, TextButtonStyle.TextAlign);
 	}
 }
