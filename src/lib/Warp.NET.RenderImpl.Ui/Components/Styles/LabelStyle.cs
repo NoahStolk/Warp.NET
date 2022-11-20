@@ -4,4 +4,4 @@ using Warp.NET.Text;
 
 namespace Warp.NET.RenderImpl.Ui.Components.Styles;
 
-public record TextButtonStyle(Color TextColor, TextAlign TextAlign, FontSize FontSize);
+public record LabelStyle(Color TextColor, TextAlign TextAlign, FontSize FontSize);

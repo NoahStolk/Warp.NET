@@ -1,4 +1,5 @@
 using Warp.NET.Numerics;
+using Warp.NET.RenderImpl.Ui.Components.Styles;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -7,17 +8,19 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class DropdownEntry : AbstractDropdownEntry
 {
-	private readonly string _text;
-	private readonly TextAlign _textAlign;
-
-	public DropdownEntry(IBounds bounds, AbstractDropdown parent, Action onClick, string text, TextAlign textAlign = TextAlign.Left)
+	public DropdownEntry(IBounds bounds, AbstractDropdown parent, Action onClick, string text, DropdownEntryStyle dropdownEntryStyle)
 		: base(bounds, parent, onClick)
 	{
-		_text = text;
-		_textAlign = textAlign;
-		Depth = 102;
+		Text = text;
+		DropdownEntryStyle = dropdownEntryStyle;
+
+		// Depth = 102;
 		IsActive = false;
 	}
+
+	public string Text { get; set; }
+
+	public DropdownEntryStyle DropdownEntryStyle { get; set; }
 
 	public override void Render(Vector2i<int> parentPosition)
 	{
@@ -31,13 +34,13 @@ public class DropdownEntry : AbstractDropdownEntry
 		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size - borderVec * 2, parentPosition + center, Depth + 1, Hover && !IsDisabled ? Color.Gray(0.5f) : Color.Black);
 
 		int padding = (int)MathF.Round(Bounds.Size.Y / 4f);
-		Vector2i<int> textPosition = _textAlign switch
+		Vector2i<int> textPosition = DropdownEntryStyle.TextAlign switch
 		{
 			TextAlign.Middle => new Vector2i<int>(Bounds.X1 + Bounds.X2, Bounds.Y1 + Bounds.Y2) / 2,
 			TextAlign.Left => new(Bounds.X1 + padding, Bounds.Y1 + padding),
 			TextAlign.Right => new(Bounds.X2 - padding, Bounds.Y1 + padding),
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
-		RenderImplUiBase.Game.MonoSpaceFontRenderer.Schedule(new(1), parentPosition + textPosition, Depth + 2, Color.White, _text, _textAlign);
+		RenderImplUiBase.Game.GetFontRenderer(DropdownEntryStyle.FontSize).Schedule(new(1), parentPosition + textPosition, Depth + 2, Color.White, Text, DropdownEntryStyle.TextAlign);
 	}
 }

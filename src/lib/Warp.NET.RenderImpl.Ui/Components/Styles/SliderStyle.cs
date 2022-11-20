@@ -4,4 +4,4 @@ using Warp.NET.Text;
 
 namespace Warp.NET.RenderImpl.Ui.Components.Styles;
 
-public record TextButtonStyle(Color TextColor, TextAlign TextAlign, FontSize FontSize);
+public record SliderStyle(Color TextColor, int BorderSize, TextAlign TextAlign, FontSize FontSize);

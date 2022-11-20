@@ -1,4 +1,5 @@
 using Warp.NET.Numerics;
+using Warp.NET.RenderImpl.Ui.Components.Styles;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -7,22 +8,20 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Label : AbstractLabel
 {
-	private readonly Color _textColor;
-	private readonly TextAlign _textAlign;
-
-	public Label(IBounds bounds, Color textColor, string text, TextAlign textAlign)
+	public Label(IBounds bounds, string text, LabelStyle labelStyle)
 		: base(bounds, text)
 	{
-		_textColor = textColor;
-		_textAlign = textAlign;
+		LabelStyle = labelStyle;
 	}
+
+	public LabelStyle LabelStyle { get; set; }
 
 	public override void Render(Vector2i<int> parentPosition)
 	{
 		base.Render(parentPosition);
 
 		int padding = (int)MathF.Round((Bounds.Y2 - Bounds.Y1) / 4f);
-		Vector2i<int> textPosition = _textAlign switch
+		Vector2i<int> textPosition = LabelStyle.TextAlign switch
 		{
 			TextAlign.Middle => new Vector2i<int>(Bounds.X1 + Bounds.X2, Bounds.Y1 + Bounds.Y2) / 2,
 			TextAlign.Left => new(Bounds.X1 + padding, Bounds.Y1 + padding),
@@ -30,6 +29,6 @@ public class Label : AbstractLabel
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
 
-		RenderImplUiBase.Game.MonoSpaceFontRenderer.Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, _textColor, Text, _textAlign);
+		RenderImplUiBase.Game.GetFontRenderer(LabelStyle.FontSize).Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, LabelStyle.TextColor, Text, LabelStyle.TextAlign);
 	}
 }
