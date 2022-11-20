@@ -16,6 +16,7 @@ public class MonoSpaceFont
 		_lineBreak = lineBreak;
 
 		CharAmount = charset.Characters.Length;
+		CharWidth = Texture.Width / CharAmount;
 		CharVertexWidth = 1.0f / CharAmount;
 
 		Vertices = ImmutableArray.Create(stackalloc float[24]
@@ -32,6 +33,7 @@ public class MonoSpaceFont
 
 	public Texture Texture { get; }
 	public int CharAmount { get; }
+	public int CharWidth { get; }
 	public float CharVertexWidth { get; }
 
 	public ImmutableArray<float> Vertices { get; }
@@ -65,8 +67,7 @@ public class MonoSpaceFont
 			}
 		}
 
-		int charWidth = Texture.Width / CharAmount;
-		return new Vector2i<int>(maxWidth, height) * new Vector2i<int>(charWidth, Texture.Height);
+		return new Vector2i<int>(maxWidth, height) * new Vector2i<int>(CharWidth, Texture.Height);
 	}
 
 	public void AdvancePosition(char c, ref Vector2i<int> relativePosition, int xOrigin, int charWidth, int charHeight)
