@@ -52,7 +52,7 @@ public class MonoSpaceFontRenderer
 			ScissorActivator.SetScissor(mst.Scissor);
 
 			int charHeight = Font.Texture.Height;
-			int charWidth = Font.Texture.Width / Font.CharAmount;
+			int charWidth = Font.CharWidth;
 			int scaledCharWidth = mst.Scale.X * charWidth;
 			int scaledCharHeight = mst.Scale.Y * charHeight;
 			Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scaledCharWidth, scaledCharHeight, 1);
