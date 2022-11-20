@@ -18,9 +18,9 @@ public class DropdownEntry : AbstractDropdownEntry
 		IsActive = false;
 	}
 
-	public string Text { get; }
+	public string Text { get; set; }
 
-	public DropdownEntryStyle DropdownEntryStyle { get; }
+	public DropdownEntryStyle DropdownEntryStyle { get; set; }
 
 	public override void Render(Vector2i<int> parentPosition)
 	{

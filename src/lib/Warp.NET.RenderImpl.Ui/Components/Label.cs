@@ -14,7 +14,7 @@ public class Label : AbstractLabel
 		LabelStyle = labelStyle;
 	}
 
-	public LabelStyle LabelStyle { get; }
+	public LabelStyle LabelStyle { get; set; }
 
 	public override void Render(Vector2i<int> parentPosition)
 	{
