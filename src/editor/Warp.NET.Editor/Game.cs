@@ -16,7 +16,6 @@ namespace Warp.NET.Editor;
 public sealed partial class Game : RenderImplUiGameBase
 {
 	private readonly Matrix4x4 _projectionMatrix;
-
 	private readonly MainLayout _mainLayout = new();
 
 	private Game(GameParameters gameParameters)
@@ -40,8 +39,8 @@ public sealed partial class Game : RenderImplUiGameBase
 	{
 		base.PrepareRender();
 
-		MonoSpaceFontRenderer.Schedule(new(2), Constants.GridDefault.Get(Fraction.F01_02, Fraction.F01_08), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
-		MonoSpaceFontRenderer.Schedule(new(1), Constants.GridDefault.Get(Fraction.F00_01, Fraction.F04_05), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
+		MonoSpaceFontRenderer32.Schedule(new(2), Constants.GridDefault.Get(Fraction.F01_02, Fraction.F01_08), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
+		MonoSpaceFontRenderer12.Schedule(new(1), Constants.GridDefault.Get(Fraction.F00_01, Fraction.F04_05), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
 		CircleRenderer.Schedule(ViewportState.MousePosition.RoundToVector2Int32(), 12, 0, Color.Red);
 
 		_mainLayout.NestingContext.Render(default);
@@ -59,7 +58,12 @@ public sealed partial class Game : RenderImplUiGameBase
 
 		RenderImplUiShaders.Font.Use();
 		Shader.SetMatrix4x4(FontUniforms.Projection, _projectionMatrix);
-		MonoSpaceFontRenderer.Render();
+		MonoSpaceFontRenderer8.Render();
+		MonoSpaceFontRenderer12.Render();
+		MonoSpaceFontRenderer16.Render();
+		MonoSpaceFontRenderer24.Render();
+		MonoSpaceFontRenderer32.Render();
+		MonoSpaceFontRenderer64.Render();
 
 		RenderImplUiShaders.Sprite.Use();
 		Shader.SetMatrix4x4(SpriteUniforms.Projection, _projectionMatrix);
