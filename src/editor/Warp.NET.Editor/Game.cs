@@ -2,17 +2,18 @@ using Silk.NET.OpenGL;
 using System.Numerics;
 using Warp.NET.Debugging;
 using Warp.NET.Editor.Layouts;
-using Warp.NET.Editor.Rendering;
-using Warp.NET.Editor.Rendering.Renderers;
 using Warp.NET.Extensions;
 using Warp.NET.Numerics;
+using Warp.NET.RenderImpl.Ui;
+using Warp.NET.RenderImpl.Ui.Rendering;
+using Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 
 namespace Warp.NET.Editor;
 
 [GenerateGame]
-public sealed partial class Game
+public sealed partial class Game : RenderImplUiGameBase
 {
 	private readonly Matrix4x4 _projectionMatrix;
 
@@ -25,11 +26,6 @@ public sealed partial class Game
 
 		DebugStack.DisplaySetting = DebugStackDisplaySetting.Simple;
 	}
-
-	public MonoSpaceFontRenderer MonoSpaceFontRenderer { get; } = new(new(Textures.Spleen6x12, Charsets.Ascii_32_126));
-	public SpriteRenderer SpriteRenderer { get; } = new();
-	public RectangleRenderer RectangleRenderer { get; } = new();
-	public CircleRenderer CircleRenderer { get; } = new();
 
 	protected override void Update()
 	{
@@ -44,8 +40,8 @@ public sealed partial class Game
 	{
 		base.PrepareRender();
 
-		MonoSpaceFontRenderer.Schedule(new(2), CoordinateSystem.Get(0.5f, 0.125f), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
-		MonoSpaceFontRenderer.Schedule(new(1), CoordinateSystem.Get(0, 0.8f), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
+		MonoSpaceFontRenderer.Schedule(new(2), Constants.GridDefault.Get(Fraction.F01_02, Fraction.F01_08), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
+		MonoSpaceFontRenderer.Schedule(new(1), Constants.GridDefault.Get(Fraction.F00_01, Fraction.F04_05), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
 		CircleRenderer.Schedule(ViewportState.MousePosition.RoundToVector2Int32(), 12, 0, Color.Red);
 
 		_mainLayout.NestingContext.Render(default);
@@ -56,16 +52,16 @@ public sealed partial class Game
 		Gl.ClearColor(0, 0, 0, 1);
 		Gl.Clear(ClearBufferMask.ColorBufferBit);
 
-		Shaders.Ui.Use();
+		RenderImplUiShaders.Ui.Use();
 		Shader.SetMatrix4x4(UiUniforms.Projection, _projectionMatrix);
 		RectangleRenderer.Render();
 		CircleRenderer.Render();
 
-		Shaders.Font.Use();
+		RenderImplUiShaders.Font.Use();
 		Shader.SetMatrix4x4(FontUniforms.Projection, _projectionMatrix);
 		MonoSpaceFontRenderer.Render();
 
-		Shaders.Sprite.Use();
+		RenderImplUiShaders.Sprite.Use();
 		Shader.SetMatrix4x4(SpriteUniforms.Projection, _projectionMatrix);
 		SpriteRenderer.Render();
 	}

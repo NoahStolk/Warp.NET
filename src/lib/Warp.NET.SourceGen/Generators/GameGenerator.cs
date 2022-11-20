@@ -23,10 +23,11 @@ public class GameGenerator : IIncrementalGenerator
 		using System;
 		using System.Collections.Generic;
 		using System.Text;
+		using Warp.NET;
 
 		namespace {{_namespace}};
 
-		public partial class Game : GameBase, IGameBase<Game>
+		public partial class Game : IGameBase<Game>
 		{
 			private static Game? _self;
 

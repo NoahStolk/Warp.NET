@@ -23,6 +23,4 @@ public interface IBounds
 	bool IntersectsOrContains(IBounds other);
 
 	bool IntersectsOrContains(int x1, int y1, int x2, int y2);
-
-	static abstract IBounds Move(IBounds original, Vector2i<int> offset);
 }

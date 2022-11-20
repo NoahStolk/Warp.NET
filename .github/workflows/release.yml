@@ -22,6 +22,7 @@ jobs:
         run: |
           dotnet pack src/lib/Warp.NET -c Release --no-build -o .
           dotnet pack src/lib/Warp.NET.SourceGen -c Release --no-build -o .
+          dotnet pack src/lib/Warp.NET.RenderImpl.Ui -c Release --no-build -o .
       - name: Push
         run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${NUGET_SECRET} -n --skip-duplicate
         env:

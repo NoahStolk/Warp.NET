@@ -3,7 +3,7 @@ using Silk.NET.OpenGL;
 namespace Warp.NET.Samples.Window;
 
 [GenerateGame]
-public sealed partial class Game
+public sealed partial class Game : GameBase
 {
 	private Game(GameParameters gameParameters)
 		: base(gameParameters)

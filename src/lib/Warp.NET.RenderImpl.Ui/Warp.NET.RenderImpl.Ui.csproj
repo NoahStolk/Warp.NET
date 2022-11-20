@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Package information">
+    <PackageId>NoahStolk.Warp.NET.RenderImpl.Ui</PackageId>
+    <Version>0.1.4-alpha.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup Label="Dependencies">
+    <ProjectReference Include="..\Warp.NET\Warp.NET.csproj" />
+    <ProjectReference Include="..\Warp.NET.SourceGen\Warp.NET.SourceGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup Label="Content">
+    <AdditionalFiles Include="Content\Content" />
+  </ItemGroup>
+
+</Project>

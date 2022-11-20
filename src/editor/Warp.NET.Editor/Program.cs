@@ -1,8 +1,9 @@
 using Warp.NET;
 using Warp.NET.Editor;
-using Warp.NET.Editor.Rendering;
-
-OnChangeWindowSize = ViewportState.OnChangeWindowSize;
+using Warp.NET.RenderImpl.Ui;
+using Warp.NET.RenderImpl.Ui.Rendering;
+using Models = Warp.NET.Editor.Models;
+using Sounds = Warp.NET.Editor.Sounds;
 
 #if DEBUG
 const string? contentRootDirectory = @"..\..\..\Content";
@@ -11,5 +12,9 @@ const string? contentRootDirectory = null;
 #endif
 
 GameParameters gameParameters = new("Warp.NET Editor", Constants.InitialWindowWidth, Constants.InitialWindowHeight, false);
-Game game = Bootstrapper.CreateGame<Game, ShaderUniformInitializer, Charsets, Models, Shaders, Sounds, Textures>(gameParameters, contentRootDirectory, "c");
+
+OnChangeWindowSize = (w, h) => ViewportState.OnChangeWindowSize(w, h, gameParameters);
+
+Game game = Bootstrapper.CreateGame<Game, RenderImplUiShaderUniformInitializer, RenderImplUiCharsets, Models, RenderImplUiShaders, Sounds, RenderImplUiTextures>(gameParameters, contentRootDirectory, "c");
+RenderImplUiBase.Game = game;
 game.Run();

@@ -2,6 +2,24 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.4
+
+### Added
+
+- Added `Warp.NET.RenderImpl.Ui` library which contains a basic implementation of UI rendering, including shaders and fonts.
+
+### Changed
+
+- The base class `GameBase` is no longer added to the generated game code and now needs to be defined explicitly. This allows for different game base classes.
+
+### Fixed
+
+- Added missing using to generated game class.
+
+### Removed
+
+- Removed `IBounds.Move` static method.
+
 ## 0.1.3
 
 ### Added
@@ -18,13 +36,13 @@ This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Renamed `Color.Transparent` to `Color.Invisible`.
 - Changed `DebugStack.Add` signatures.
 
-### Removed
-
-- Removed `GenerateMenuAttribute` and generating menus; use `GenerateSingletonAttribute` instead.
-
 ### Fixed
 
 - `MonoSpaceFont.GetTextureOffset` now returns null when the character does not exist in the charset.
+
+### Removed
+
+- Removed `GenerateMenuAttribute` and generating menus; use `GenerateSingletonAttribute` instead.
 
 ## 0.1.2
 

@@ -6,7 +6,7 @@ using Warp.NET.Text;
 namespace Warp.NET.Samples.Text;
 
 [GenerateGame]
-public sealed partial class Game
+public sealed partial class Game : GameBase
 {
 	private readonly Matrix4x4 _projectionMatrix;
 	private readonly MonoSpaceFontRenderer _spleen6X12Renderer = new(new(Textures.Spleen6x12, Charsets.Ascii_32_126));
