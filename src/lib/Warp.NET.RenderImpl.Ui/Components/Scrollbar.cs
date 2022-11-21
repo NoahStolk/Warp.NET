@@ -25,11 +25,11 @@ public class Scrollbar : AbstractScrollbar
 		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, parentPosition + center, Depth, thumbColor);
 		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale - borderVec, parentPosition + center, Depth + 1, Hold ? Color.Gray(0.5f) : Hover ? Color.Gray(0.25f) : Color.Black);
 
+		// TODO: Refactor when easily testable using sample.
 		const int thumbPadding = 4;
 		Vector2i<int> thumbScale = new(scale.X - thumbPadding, (int)MathF.Ceiling(scale.Y * ThumbPercentageSize) - thumbPadding + 1); // + 1 needed for scaled UI for some reason.
-		float percentageForRendering = Math.Clamp(TopPercentage, 0, 1 - ThumbPercentageSize);
+		float percentageForRendering = Math.Clamp(TopPercentage, 0, 1 - ThumbPercentageSize) - 0.5f + ThumbPercentageSize / 2;
 
-		// TODO: Fix.
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(thumbScale, parentPosition + center + new Vector2i<int>(thumbPadding / 2, (int)MathF.Round(percentageForRendering * scale.Y) + thumbPadding / 2), Depth + 2, thumbColor);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(thumbScale, parentPosition + center + new Vector2i<int>(0, (int)MathF.Round(percentageForRendering * scale.Y)), Depth + 2, thumbColor);
 	}
 }
