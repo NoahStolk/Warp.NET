@@ -13,7 +13,7 @@ const string? contentRootDirectory = @"..\..\..\Content";
 const string? contentRootDirectory = null;
 #endif
 
-GameParameters gameParameters = new("2D sample: Text", initialWindowWidth, initialWindowHeight, false);
+GameParameters gameParameters = new("2D sample: Text", initialWindowWidth, initialWindowHeight, InitialWindowFullScreen: false);
 
 Bootstrapper.CreateWindow(gameParameters);
 

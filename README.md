@@ -46,9 +46,9 @@ Warp.NET automatically builds content files from a local path. These types of co
 | Sound    | .wav                | http://soundfile.sapp.org/doc/WaveFormat/         |
 | Texture  | .tga                | https://en.wikipedia.org/wiki/Truevision_TGA      |
 
-All these files are converted to one large binary file. Warp.NET only builds this content file when compiling in Debug mode. When distributing a game, copy the file to the Release output.
+All these files are converted to one large binary file using the `Bootstrapper` class. The `Bootstrapper` class will only build this content file when the original assets are present in the file system. It is common practice to always build the content file when running in Debug mode for a good development experience. When distributing a game, one can copy the file from the Debug output to the Release output.
 
-To gain access easily to the content files in code, Warp.NET contains a source generator project, which generates classes and properties based on the content files. In order for the source generator to find the right folder, add a _C# analyzer additional file_ named "Content" to the root of the content folder:
+To gain access easily to the content files in code, Warp.NET contains a source generator project, which, among other things, generates classes and properties based on the content files. In order for the source generator to find the right folder, add a _C# analyzer additional file_ named "Content" to the root of the content folder:
 
 ```
 <ItemGroup>
@@ -59,8 +59,41 @@ To gain access easily to the content files in code, Warp.NET contains a source g
 The directory should look something like this:
 
 - 📁 Content
-	- 📁 Meshes
+	- 📁 Models
 		- 📃 Cube.obj
 	- 📁 Textures
 		- 📃 Stone.tga
 	- 📃 Content
+
+### Common content initialization implementation
+
+```cs
+// Build the content file only in Debug mode, as the source files should only be present during development
+#if DEBUG
+const string? inputPathToContentRootDirectory = @"..\..\..\Content";
+#else
+const string? inputPathToContentRootDirectory = null;
+#endif
+
+// Build and decompile the content file
+// If the content root directory does not exist or is null, the file will not be generated
+// If the content file does not exist, an exception is thrown as the game will not be able to run without its assets
+DecompiledContentFile decompiledContentFile = Bootstrapper.GetDecompiledContent(inputPathToContentRootDirectory, outputPathForGeneratedContentFile);
+
+// Then assign the decompiled content to the properties in the classes
+// These classes and their properties are fully generated based on the path to the content root directory (which is located using the "Content" additional file)
+// If you add, rename, or remove an asset, the source generation will kick in and immediately update the properties
+Charsets.Initialize(decompiledContentFile.Charsets);
+Shaders.Initialize(decompiledContentFile.Shaders);
+Textures.Initialize(decompiledContentFile.Textures);
+
+// You can now refer to game assets using these properties
+// In the example directory listed above, there is a texture named "Stone.tga" in the "Textures" subdirectory
+// This means you can now refer to this asset using the Textures.Stone property
+
+// Strongly-typed shader uniforms are also generated for every shader in the generated Shaders class
+// For example, if you have a shader named "Sprite" containing a uniform named "spriteColor", you can refer to it using the SpriteUniforms.SpriteColor property which holds the uniform location value as a 32-bit integer
+ShaderUniformInitializer.Initialize();
+```
+
+You can use multiple content directories and files if needed (for example, from libraries or other assemblies). Each assembly will have its own generated types to access its content.
