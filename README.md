@@ -1,8 +1,5 @@
 # Warp.NET
 
-[![NuGet Version](https://img.shields.io/nuget/v/NoahStolk.Warp.NET.svg)](https://www.nuget.org/packages/NoahStolk.Warp.NET/)
-[![NuGet Version](https://img.shields.io/nuget/v/NoahStolk.Warp.NET.SourceGen.svg)](https://www.nuget.org/packages/NoahStolk.Warp.NET.SourceGen/)
-
 Warp.NET is a simplistic game engine using .NET 7 and OpenGL, aimed at 2D and 3D games for Windows, Mac, and Linux. It is currently in development.
 
 ## Key features
@@ -26,6 +23,16 @@ Warp.NET is a simplistic game engine using .NET 7 and OpenGL, aimed at 2D and 3D
 ## Purpose
 
 The purpose of the engine is to create a simple interface to OpenGL and OpenAL, while also providing the basics every game needs, such as creating a window, a reliable game loop, building and loading content, etc. Warp.NET does not make a difference between 2D and 3D games (neither does OpenGL).
+
+## NuGet packages
+
+The libraries are distributed as NuGet packages. Note that the engine is in development and there will be breaking changes. The development is a highly iterative process and things will change rapidly until the v1.0.0 release.
+
+| **Package**              | **Download**                                                                                                                                              | **Description**                                                  |
+|--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
+| `Warp.NET`               | [![NuGet Version](https://img.shields.io/nuget/v/NoahStolk.Warp.NET.svg)](https://www.nuget.org/packages/NoahStolk.Warp.NET/)                             | The main library                                                 |
+| `Warp.NET.SourceGen`     | [![NuGet Version](https://img.shields.io/nuget/v/NoahStolk.Warp.NET.SourceGen.svg)](https://www.nuget.org/packages/NoahStolk.Warp.NET.SourceGen/)         | Source generators for game projects                              |
+| `Warp.NET.RenderImpl.Ui` | [![NuGet Version](https://img.shields.io/nuget/v/NoahStolk.Warp.NET.RenderImpl.Ui.svg)](https://www.nuget.org/packages/NoahStolk.Warp.NET.RenderImpl.Ui/) | An optional library containing an implementation of UI rendering |
 
 ## Content
 

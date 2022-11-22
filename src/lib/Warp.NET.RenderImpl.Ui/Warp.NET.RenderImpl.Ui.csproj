@@ -2,7 +2,6 @@
 
   <PropertyGroup Label="Package information">
     <PackageId>NoahStolk.Warp.NET.RenderImpl.Ui</PackageId>
-    <Version>0.1.5-alpha.0</Version>
   </PropertyGroup>
 
   <ItemGroup Label="Dependencies">

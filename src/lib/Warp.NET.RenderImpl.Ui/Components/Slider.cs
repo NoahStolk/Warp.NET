@@ -20,14 +20,11 @@ public class Slider : AbstractSlider
 		base.Render(parentPosition);
 
 		Vector2i<int> borderVec = new(SliderStyle.BorderSize);
-		Vector2i<int> scale = new(Bounds.X2 - Bounds.X1, Bounds.Y2 - Bounds.Y1);
-		Vector2i<int> topLeft = new(Bounds.X1, Bounds.Y1);
-		Vector2i<int> center = topLeft + scale / 2;
+		Vector2i<int> center = Bounds.TopLeft + Bounds.Size / 2;
 
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, parentPosition + center, Depth, Color.White);
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale - borderVec, parentPosition + center, Depth + 1, Hold ? Color.Gray(0.5f) : Hover ? Color.Gray(0.25f) : Color.Black);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size, parentPosition + center, Depth, Color.White);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size - borderVec, parentPosition + center, Depth + 1, Hold ? Color.Gray(0.5f) : Hover ? Color.Gray(0.25f) : Color.Black);
 
-		Vector2i<int> centerPosition = new Vector2i<int>(Bounds.X1 + Bounds.X2, Bounds.Y1 + Bounds.Y2) / 2;
-		RenderImplUiBase.Game.GetFontRenderer(SliderStyle.FontSize).Schedule(Vector2i<int>.One, parentPosition + centerPosition, Depth + 3, SliderStyle.TextColor, CurrentValue.ToString("0.00"), SliderStyle.TextAlign);
+		RenderImplUiBase.Game.GetFontRenderer(SliderStyle.FontSize).Schedule(Vector2i<int>.One, parentPosition + center, Depth + 3, SliderStyle.TextColor, CurrentValue.ToString("0.00"), SliderStyle.TextAlign);
 	}
 }
