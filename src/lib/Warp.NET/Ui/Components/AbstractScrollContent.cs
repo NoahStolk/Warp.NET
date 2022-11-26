@@ -19,6 +19,8 @@ public abstract class AbstractScrollContent<TSelf, TParent> : AbstractComponent
 
 	protected virtual float ScrollPercentageMultiplier => 0.05f;
 
+	public abstract void SetContent();
+
 	public void SetScrollOffset(Vector2i<int> scrollOffset)
 	{
 		NestingContext.ScrollOffset = Vector2i<int>.Clamp(scrollOffset, new(0, -ContentHeightInPixels + Bounds.Size.Y), default);

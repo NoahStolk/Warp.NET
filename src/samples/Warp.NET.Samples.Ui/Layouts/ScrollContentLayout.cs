@@ -58,7 +58,7 @@ public class ScrollContentLayout : Layout
 
 		public override int ContentHeightInPixels => (int)_textButtons.Sum(tb => tb.Bounds.Height * CurrentWindowState.Height);
 
-		public void SetContent()
+		public override void SetContent()
 		{
 			foreach (TextButton component in _textButtons)
 				NestingContext.Remove(component);
