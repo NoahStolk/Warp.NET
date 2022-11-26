@@ -94,7 +94,12 @@ public class NestingContext
 		if (!component.IsActive)
 			return false;
 
-		Vector2i<int> parentTopLeft = new Vector2i<int>(Bounds.X1, Bounds.Y1) + ScrollOffset;
-		return Bounds.IntersectsOrContains(component.Bounds.X1 + parentTopLeft.X, component.Bounds.Y1 + parentTopLeft.Y, component.Bounds.X2 + parentTopLeft.X, component.Bounds.Y2 + parentTopLeft.Y);
+		Bounds boundsWithScrollOffset = component.Bounds with
+		{
+			X = component.Bounds.X + ScrollOffset.X / (float)Graphics.CurrentWindowState.Height,
+			Y = component.Bounds.Y + ScrollOffset.Y / (float)Graphics.CurrentWindowState.Height,
+		};
+
+		return Bounds.IntersectsOrContains(boundsWithScrollOffset);
 	}
 }

@@ -17,11 +17,11 @@ public abstract class AbstractComponent
 
 	public virtual void Update(Vector2i<int> parentPosition)
 	{
-		NestingContext.Update(parentPosition + Bounds.TopLeft);
+		NestingContext.Update(parentPosition);
 	}
 
 	public virtual void Render(Vector2i<int> parentPosition)
 	{
-		NestingContext.Render(parentPosition + Bounds.TopLeft);
+		NestingContext.Render(parentPosition);
 	}
 }

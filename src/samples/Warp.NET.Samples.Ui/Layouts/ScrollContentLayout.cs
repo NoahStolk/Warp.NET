@@ -61,12 +61,14 @@ public class ScrollContentLayout : Layout
 		private const int _buttonCount = 25;
 		private const float _buttonHeight = 0.2f;
 
+		private readonly List<TextButton> _textButtons = new();
+
 		public CustomScrollContent(Bounds bounds, AbstractScrollViewer<CustomScrollViewer, CustomScrollContent> parent)
 			: base(bounds, parent)
 		{
 		}
 
-		public override int ContentHeightInPixels => (int)(_buttonCount * _buttonHeight * CurrentWindowState.Height);
+		public override int ContentHeightInPixels => (int)_textButtons.Sum(tb => tb.Bounds.Height * CurrentWindowState.Height);
 
 		public override void Render(Vector2i<int> parentPosition)
 		{
@@ -76,14 +78,20 @@ public class ScrollContentLayout : Layout
 			Vector2i<int> topLeft = Bounds.TopLeft;
 			Vector2i<int> center = topLeft + scale / 2;
 
-			RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, parentPosition + center, Depth, Color.Purple);
+			RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, parentPosition + center, Depth, new(127, 0, 127, 127));
 		}
 
 		public void SetContent()
 		{
+			foreach (TextButton component in _textButtons)
+				NestingContext.Remove(component);
+
+			_textButtons.Clear();
+
 			for (int i = 0; i < _buttonCount; i++)
 			{
 				TextButton button = new(Bounds.CreateNested(0, i * _buttonHeight, 1, _buttonHeight), () => {}, ButtonStyle.Default, TextButtonStyle.Default, i.ToString());
+				_textButtons.Add(button);
 				NestingContext.Add(button);
 			}
 		}

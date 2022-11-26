@@ -2,31 +2,12 @@ using Warp.NET.Numerics;
 
 namespace Warp.NET.Ui;
 
-public sealed record Bounds
+public sealed record Bounds(float X, float Y, float Width, float Height)
 {
-	private readonly float _x;
-	private readonly float _y;
-	private readonly float _width;
-	private readonly float _height;
-
-	public Bounds(float x, float y, float width, float height)
-	{
-		// if (x < 0 || y < 0 || width < 0 || height < 0 || x > 1 || y > 1 || width > 1 || height > 1)
-		// 	throw new ArgumentException("All parameters must be between 0 and 1.");
-		//
-		// if (x + width > 1 || y + height > 1)
-		// 	throw new ArgumentException("Rectangle is out of bounds.");
-
-		_x = x;
-		_y = y;
-		_width = width;
-		_height = height;
-	}
-
-	public int X1 => (int)(_x * Graphics.CurrentWindowState.Width);
-	public int Y1 => (int)(_y * Graphics.CurrentWindowState.Height);
-	public int X2 => X1 + (int)(_width * Graphics.CurrentWindowState.Width);
-	public int Y2 => Y1 + (int)(_height * Graphics.CurrentWindowState.Height);
+	public int X1 => (int)(X * Graphics.CurrentWindowState.Width);
+	public int Y1 => (int)(Y * Graphics.CurrentWindowState.Height);
+	public int X2 => X1 + (int)(Width * Graphics.CurrentWindowState.Width);
+	public int Y2 => Y1 + (int)(Height * Graphics.CurrentWindowState.Height);
 	public Vector2i<int> TopLeft => new(X1, Y1);
 	public Vector2i<int> Size => new(X2 - X1, Y2 - Y1);
 
@@ -57,11 +38,11 @@ public sealed record Bounds
 
 	public Bounds CreateNested(float x, float y, float width, float height)
 	{
-		float nestedX = x * _width;
-		float nestedY = y * _height;
-		float nestedWidth = width * _width;
-		float nestedHeight = height * _height;
-		return new(_x + nestedX, _y + nestedY, nestedWidth, nestedHeight);
+		float nestedX = x * Width;
+		float nestedY = y * Height;
+		float nestedWidth = width * Width;
+		float nestedHeight = height * Height;
+		return new(X + nestedX, Y + nestedY, nestedWidth, nestedHeight);
 	}
 
 	public override string ToString()
