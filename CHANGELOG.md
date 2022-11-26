@@ -2,6 +2,29 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.6
+
+### Added
+
+- Added `ScrollViewer` component to `RenderImpl.Ui`.
+- Added `Graphics.SetWindowSizeLimits`.
+- Added `Bounds` class.
+
+### Changed
+
+- Changed the way UI positioning is resolved. Use `Bounds.CreateNested` for nested components.
+
+### Removed
+
+- Removed `IBounds`.
+- Removed `GameParameters`.
+- Removed `Fraction`.
+- Removed `Grid`.
+- Removed `Rectangle`; use `Bounds` instead.
+- Removed `ViewportState`.
+- Removed `Bootstrapper.CreateWindow`; call `Graphics.CreateWindow` instead.
+- Removed `GameBase.InitialWindowTitle`, `GameBase.InitialWindowWidth`, `GameBase.InitialWindowHeight`, `GameBase.InitialWindowFullScreen`; use `Graphics.CurrentWindowState` instead.
+
 ## 0.1.5
 
 ### Added
