@@ -6,10 +6,10 @@ using Warp.NET.Ui.Components;
 namespace Warp.NET.RenderImpl.Ui.Components;
 
 public abstract class ScrollContent<TSelf, TParent> : AbstractScrollContent<TSelf, TParent>
-	where TSelf : AbstractScrollContent<TSelf, TParent>
+	where TSelf : AbstractScrollContent<TSelf, TParent>, IScrollContent<TSelf, TParent>
 	where TParent : AbstractScrollViewer<TParent, TSelf>
 {
-	protected ScrollContent(Bounds bounds, AbstractScrollViewer<TParent, TSelf> parent)
+	protected ScrollContent(Bounds bounds, TParent parent)
 		: base(bounds, parent)
 	{
 	}
