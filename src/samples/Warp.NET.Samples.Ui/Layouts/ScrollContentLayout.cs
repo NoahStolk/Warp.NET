@@ -1,5 +1,4 @@
 using Warp.NET.Numerics;
-using Warp.NET.RenderImpl.Ui;
 using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.RenderImpl.Ui.Components.Styles;
 using Warp.NET.Ui;
@@ -13,7 +12,7 @@ public class ScrollContentLayout : Layout
 	{
 		Label titleLabel = new(new(0.45f, 0.2f, 0.1f, 0.1f), "Scroll Content Layout", LabelStyle.Default with { TextColor = Color.Green });
 		TextButton backButton = new(new(0.1f, 0.3f, 0.1f, 0.1f), () => Game.Self.ActiveLayout = Game.Self.MainLayout, ButtonStyle.Default, TextButtonStyle.Default, "Back");
-		CustomScrollViewer scrollViewer = new(new(0.5f, 0.3f, 0.3f, 0.5f));
+		CustomScrollViewer scrollViewer = new(new(0.35f, 0.3f, 0.3f, 0.5f));
 
 		NestingContext.Add(titleLabel);
 		NestingContext.Add(backButton);
@@ -43,22 +42,11 @@ public class ScrollContentLayout : Layout
 			SetThumbPercentageSize();
 			SetScrollPercentage(0);
 		}
-
-		public override void Render(Vector2i<int> parentPosition)
-		{
-			base.Render(parentPosition);
-
-			Vector2i<int> scale = Bounds.Size;
-			Vector2i<int> topLeft = Bounds.TopLeft;
-			Vector2i<int> center = topLeft + scale / 2;
-
-			RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, parentPosition + center, Depth - 4, Color.HalfTransparentWhite);
-		}
 	}
 
 	private sealed class CustomScrollContent : ScrollContent<CustomScrollContent, CustomScrollViewer>
 	{
-		private const int _buttonCount = 25;
+		private const int _buttonCount = 10;
 		private const float _buttonHeight = 0.2f;
 
 		private readonly List<TextButton> _textButtons = new();
@@ -70,17 +58,6 @@ public class ScrollContentLayout : Layout
 
 		public override int ContentHeightInPixels => (int)_textButtons.Sum(tb => tb.Bounds.Height * CurrentWindowState.Height);
 
-		public override void Render(Vector2i<int> parentPosition)
-		{
-			base.Render(parentPosition);
-
-			Vector2i<int> scale = Bounds.Size;
-			Vector2i<int> topLeft = Bounds.TopLeft;
-			Vector2i<int> center = topLeft + scale / 2;
-
-			RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, parentPosition + center, Depth, new(127, 0, 127, 127));
-		}
-
 		public void SetContent()
 		{
 			foreach (TextButton component in _textButtons)
@@ -90,7 +67,10 @@ public class ScrollContentLayout : Layout
 
 			for (int i = 0; i < _buttonCount; i++)
 			{
-				TextButton button = new(Bounds.CreateNested(0, i * _buttonHeight, 1, _buttonHeight), () => {}, ButtonStyle.Default, TextButtonStyle.Default, i.ToString());
+				TextButton button = new(Bounds.CreateNested(0, i * _buttonHeight, 1, _buttonHeight), () => {}, ButtonStyle.Default, TextButtonStyle.Default, $"Button {i}")
+				{
+					Depth = Depth + 1,
+				};
 				_textButtons.Add(button);
 				NestingContext.Add(button);
 			}

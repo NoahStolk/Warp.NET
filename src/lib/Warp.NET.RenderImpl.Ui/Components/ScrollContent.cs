@@ -20,8 +20,6 @@ public abstract class ScrollContent<TSelf, TParent> : AbstractScrollContent<TSel
 
 		base.Render(parentPosition);
 
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size, parentPosition + Bounds.TopLeft + Bounds.Size / 2, Depth, Color.Black);
-
 		ScissorScheduler.UnsetScissor();
 	}
 }
