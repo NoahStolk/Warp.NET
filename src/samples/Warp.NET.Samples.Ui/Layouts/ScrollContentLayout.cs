@@ -2,7 +2,6 @@ using Warp.NET.Numerics;
 using Warp.NET.RenderImpl.Ui;
 using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.RenderImpl.Ui.Components.Styles;
-using Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
 
@@ -12,9 +11,9 @@ public class ScrollContentLayout : Layout
 {
 	public ScrollContentLayout()
 	{
-		Label titleLabel = new(new Bounds(0.45f, 0.2f, 0.1f, 0.1f), "Scroll Content Layout", LabelStyle.Default with { TextColor = Color.Green });
-		TextButton backButton = new(new Bounds(0.1f, 0.3f, 0.1f, 0.1f), () => Game.Self.ActiveLayout = Game.Self.MainLayout, ButtonStyle.Default, TextButtonStyle.Default, "Back");
-		CustomScrollViewer scrollViewer = new(new Bounds(0.5f, 0.3f, 0.3f, 0.5f));
+		Label titleLabel = new(new(0.45f, 0.2f, 0.1f, 0.1f), "Scroll Content Layout", LabelStyle.Default with { TextColor = Color.Green });
+		TextButton backButton = new(new(0.1f, 0.3f, 0.1f, 0.1f), () => Game.Self.ActiveLayout = Game.Self.MainLayout, ButtonStyle.Default, TextButtonStyle.Default, "Back");
+		CustomScrollViewer scrollViewer = new(new(0.5f, 0.3f, 0.3f, 0.5f));
 
 		NestingContext.Add(titleLabel);
 		NestingContext.Add(backButton);
@@ -28,8 +27,8 @@ public class ScrollContentLayout : Layout
 		public CustomScrollViewer(Bounds bounds)
 			: base(bounds)
 		{
-			Content = new(new Rectangle(0, 0, 0.1f, 0.3f), this);
-			Scrollbar = new Scrollbar(new Rectangle(0.1f, 0, 0.01f, 0.3f), SetScrollPercentage);
+			Content = new(Bounds.CreateNested(0, 0, 0.95f, 1), this);
+			Scrollbar = new Scrollbar(Bounds.CreateNested(0.95f, 0, 0.05f, 1), SetScrollPercentage);
 
 			NestingContext.Add(Content);
 			NestingContext.Add(Scrollbar);
@@ -62,12 +61,9 @@ public class ScrollContentLayout : Layout
 		private const int _buttonCount = 25;
 		private const float _buttonHeight = 0.2f;
 
-		private readonly Bounds _bounds;
-
 		public CustomScrollContent(Bounds bounds, AbstractScrollViewer<CustomScrollViewer, CustomScrollContent> parent)
 			: base(bounds, parent)
 		{
-			_bounds = bounds;
 		}
 
 		public override int ContentHeightInPixels => (int)(_buttonCount * _buttonHeight * CurrentWindowState.Height);
@@ -87,7 +83,7 @@ public class ScrollContentLayout : Layout
 		{
 			for (int i = 0; i < _buttonCount; i++)
 			{
-				TextButton button = new(new Rectangle(0, i * _buttonHeight, 0.1f, _buttonHeight), () => {}, ButtonStyle.Default, TextButtonStyle.Default, i.ToString());
+				TextButton button = new(Bounds.CreateNested(0, i * _buttonHeight, 1, _buttonHeight), () => {}, ButtonStyle.Default, TextButtonStyle.Default, i.ToString());
 				NestingContext.Add(button);
 			}
 		}

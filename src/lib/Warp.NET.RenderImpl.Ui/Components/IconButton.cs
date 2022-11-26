@@ -11,7 +11,7 @@ public class IconButton : Button
 	private readonly Texture _texture;
 	private readonly Vector2 _textureSize;
 
-	public IconButton(IBounds bounds, Action onClick, ButtonStyle buttonStyle, Texture texture)
+	public IconButton(Bounds bounds, Action onClick, ButtonStyle buttonStyle, Texture texture)
 		: base(bounds, onClick, buttonStyle)
 	{
 		_texture = texture;

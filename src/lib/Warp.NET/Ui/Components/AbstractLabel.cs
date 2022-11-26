@@ -2,7 +2,7 @@ namespace Warp.NET.Ui.Components;
 
 public abstract class AbstractLabel : AbstractComponent
 {
-	protected AbstractLabel(IBounds bounds, string text)
+	protected AbstractLabel(Bounds bounds, string text)
 		: base(bounds)
 	{
 		Text = text;

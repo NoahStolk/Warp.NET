@@ -11,7 +11,7 @@ public abstract class AbstractScrollbar : AbstractComponent
 
 	private readonly Action<float> _onChange;
 
-	protected AbstractScrollbar(IBounds bounds, Action<float> onChange)
+	protected AbstractScrollbar(Bounds bounds, Action<float> onChange)
 		: base(bounds)
 	{
 		_onChange = onChange;

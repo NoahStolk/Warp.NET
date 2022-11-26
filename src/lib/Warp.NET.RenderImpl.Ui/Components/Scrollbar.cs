@@ -6,7 +6,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Scrollbar : AbstractScrollbar
 {
-	public Scrollbar(IBounds bounds, Action<float> onChange)
+	public Scrollbar(Bounds bounds, Action<float> onChange)
 		: base(bounds, onChange)
 	{
 	}

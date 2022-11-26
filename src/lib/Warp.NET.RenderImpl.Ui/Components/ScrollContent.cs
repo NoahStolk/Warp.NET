@@ -9,7 +9,7 @@ public abstract class ScrollContent<TSelf, TParent> : AbstractScrollContent<TSel
 	where TSelf : AbstractScrollContent<TSelf, TParent>
 	where TParent : AbstractScrollViewer<TParent, TSelf>
 {
-	protected ScrollContent(IBounds bounds, AbstractScrollViewer<TParent, TSelf> parent)
+	protected ScrollContent(Bounds bounds, AbstractScrollViewer<TParent, TSelf> parent)
 		: base(bounds, parent)
 	{
 	}

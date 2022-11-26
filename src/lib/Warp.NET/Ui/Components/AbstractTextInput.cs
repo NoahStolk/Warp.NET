@@ -8,7 +8,7 @@ public abstract class AbstractTextInput : AbstractComponent
 	private readonly Action<string>? _onDeselect;
 
 	protected AbstractTextInput(
-		IBounds bounds,
+		Bounds bounds,
 		bool isNumeric,
 		Action<string>? onEnter = null,
 		Action<string>? onDeselect = null,

@@ -8,7 +8,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Label : AbstractLabel
 {
-	public Label(IBounds bounds, string text, LabelStyle labelStyle)
+	public Label(Bounds bounds, string text, LabelStyle labelStyle)
 		: base(bounds, text)
 	{
 		LabelStyle = labelStyle;

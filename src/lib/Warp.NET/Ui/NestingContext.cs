@@ -15,7 +15,7 @@ public class NestingContext
 	private readonly List<AbstractComponent> _toAdd = new();
 	private readonly List<AbstractComponent> _toRemove = new();
 
-	public NestingContext(IBounds bounds)
+	public NestingContext(Bounds bounds)
 	{
 		Bounds = bounds;
 	}
@@ -28,7 +28,7 @@ public class NestingContext
 
 	public Vector2i<int> ScrollOffset { get; set; }
 
-	public IBounds Bounds { get; }
+	public Bounds Bounds { get; }
 
 	public void Add(AbstractComponent component)
 	{

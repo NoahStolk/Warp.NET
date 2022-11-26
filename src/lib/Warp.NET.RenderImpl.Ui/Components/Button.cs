@@ -7,7 +7,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Button : AbstractButton
 {
-	public Button(IBounds bounds, Action onClick, ButtonStyle buttonStyle)
+	public Button(Bounds bounds, Action onClick, ButtonStyle buttonStyle)
 		: base(bounds, onClick)
 	{
 		ButtonStyle = buttonStyle;

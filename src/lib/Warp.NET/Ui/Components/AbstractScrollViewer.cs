@@ -4,7 +4,7 @@ public abstract class AbstractScrollViewer<TSelf, TContent> : AbstractComponent
 	where TSelf : AbstractScrollViewer<TSelf, TContent>
 	where TContent : AbstractScrollContent<TContent, TSelf>
 {
-	protected AbstractScrollViewer(IBounds bounds)
+	protected AbstractScrollViewer(Bounds bounds)
 		: base(bounds)
 	{
 	}

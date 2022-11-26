@@ -5,7 +5,6 @@ using Warp.NET.Editor.Layouts;
 using Warp.NET.Extensions;
 using Warp.NET.Numerics;
 using Warp.NET.RenderImpl.Ui;
-using Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 using Warp.NET.RenderImpl.Ui.Utils;
 using Warp.NET.Text;
 using Warp.NET.Ui;
@@ -35,8 +34,8 @@ public sealed partial class Game : RenderImplUiGameBase
 	{
 		base.PrepareRender();
 
-		MonoSpaceFontRenderer32.Schedule(new(2), WindowPosition.Get(Fraction.F01_02, Fraction.F01_08), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
-		MonoSpaceFontRenderer12.Schedule(new(1), WindowPosition.Get(Fraction.F00_01, Fraction.F04_05), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
+		MonoSpaceFontRenderer32.Schedule(new(2), WindowPosition.Get(0.5f, 0.125f), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
+		MonoSpaceFontRenderer12.Schedule(new(1), WindowPosition.Get(0, 0.8f), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
 		CircleRenderer.Schedule(Input.GetMousePosition().RoundToVector2Int32(), 12, 0, Color.Red);
 
 		_mainLayout.NestingContext.Render(default);

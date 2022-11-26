@@ -4,7 +4,7 @@ public class Layout : ILayout
 {
 	public Layout()
 	{
-		NestingContext = new(new ScreenBounds());
+		NestingContext = new(new(0, 0, 1, 1));
 	}
 
 	public NestingContext NestingContext { get; }

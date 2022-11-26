@@ -14,7 +14,7 @@ public class TextInput : AbstractTextInput
 	private TextInputStyle _textInputStyle;
 
 	public TextInput(
-		IBounds bounds,
+		Bounds bounds,
 		bool isNumeric,
 		Action<string>? onEnter,
 		Action<string>? onDeselect,

@@ -7,7 +7,7 @@ public abstract class AbstractCheckbox : AbstractComponent
 {
 	private readonly Action<bool> _onClick;
 
-	protected AbstractCheckbox(IBounds bounds, Action<bool> onClick)
+	protected AbstractCheckbox(Bounds bounds, Action<bool> onClick)
 		: base(bounds)
 	{
 		_onClick = onClick;

@@ -8,7 +8,7 @@ public abstract class AbstractSlider : AbstractComponent
 	private readonly Action<float> _onChange;
 	private readonly bool _applyInstantly;
 
-	protected AbstractSlider(IBounds bounds, Action<float> onChange, bool applyInstantly, float min, float max, float step, float defaultValue)
+	protected AbstractSlider(Bounds bounds, Action<float> onChange, bool applyInstantly, float min, float max, float step, float defaultValue)
 		: base(bounds)
 	{
 		_onChange = onChange;

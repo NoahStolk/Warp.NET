@@ -7,7 +7,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Slider : AbstractSlider
 {
-	public Slider(IBounds bounds, Action<float> onChange, bool applyInstantly, float min, float max, float step, float defaultValue, SliderStyle sliderStyle)
+	public Slider(Bounds bounds, Action<float> onChange, bool applyInstantly, float min, float max, float step, float defaultValue, SliderStyle sliderStyle)
 		: base(bounds, onChange, applyInstantly, min, max, step, defaultValue)
 	{
 		SliderStyle = sliderStyle;

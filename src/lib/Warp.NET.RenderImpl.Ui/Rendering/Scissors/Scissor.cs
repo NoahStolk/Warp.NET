@@ -6,7 +6,7 @@ namespace Warp.NET.RenderImpl.Ui.Rendering.Scissors;
 
 public record Scissor(int X, int Y, uint Width, uint Height)
 {
-	public static Scissor Create(IBounds bounds, Vector2i<int> parentPosition)
+	public static Scissor Create(Bounds bounds, Vector2i<int> parentPosition)
 	{
 		return Create(bounds.X1, bounds.Y1, bounds.Size.X, bounds.Size.Y, parentPosition);
 	}

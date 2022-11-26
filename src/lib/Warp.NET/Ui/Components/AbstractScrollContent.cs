@@ -9,7 +9,7 @@ public abstract class AbstractScrollContent<TSelf, TParent> : AbstractComponent
 {
 	private readonly AbstractScrollViewer<TParent, TSelf> _parent;
 
-	protected AbstractScrollContent(IBounds bounds, AbstractScrollViewer<TParent, TSelf> parent)
+	protected AbstractScrollContent(Bounds bounds, AbstractScrollViewer<TParent, TSelf> parent)
 		: base(bounds)
 	{
 		_parent = parent;

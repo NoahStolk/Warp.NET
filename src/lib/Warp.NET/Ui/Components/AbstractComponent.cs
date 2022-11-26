@@ -4,13 +4,13 @@ namespace Warp.NET.Ui.Components;
 
 public abstract class AbstractComponent
 {
-	protected AbstractComponent(IBounds bounds)
+	protected AbstractComponent(Bounds bounds)
 	{
 		Bounds = bounds;
 		NestingContext = new(bounds);
 	}
 
-	public IBounds Bounds { get; set; }
+	public Bounds Bounds { get; set; }
 	public bool IsActive { get; set; } = true;
 	public int Depth { get; set; }
 	public NestingContext NestingContext { get; }
