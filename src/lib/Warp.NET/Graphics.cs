@@ -7,6 +7,8 @@ namespace Warp.NET;
 
 public static class Graphics
 {
+	private static bool _windowIsCreated;
+
 	private static bool _windowIsActive = true;
 	private static Glfw? _glfw;
 	private static GL? _gl;
@@ -18,8 +20,9 @@ public static class Graphics
 	public static Action<int, int>? OnChangeWindowSize { get; set; }
 
 	public static unsafe WindowHandle* Window { get; private set; }
-	public static int WindowWidth { get; set; }
-	public static int WindowHeight { get; set; }
+
+	public static WindowState InitialWindowState { get; private set; }
+	public static WindowState CurrentWindowState { get; private set; }
 	public static bool WindowIsActive
 	{
 		get => _windowIsActive;
@@ -30,22 +33,20 @@ public static class Graphics
 		}
 	}
 
-	public static string WindowTitle { get; set; } = string.Empty;
-
 	public static int PrimaryMonitorWidth { get; private set; }
 	public static int PrimaryMonitorHeight { get; private set; }
 
-	public static void CreateWindowFull(string title)
-		=> CreateWindow(title, PrimaryMonitorWidth, PrimaryMonitorHeight, true);
-
-	public static void CreateWindow(string title, int width, int height)
-		=> CreateWindow(title, width, height, false);
-
-	private static unsafe void CreateWindow(string title, int width, int height, bool isFullScreen)
+	public static unsafe void CreateWindow(WindowState initialWindowState)
 	{
-		WindowWidth = isFullScreen ? PrimaryMonitorWidth : width;
-		WindowHeight = isFullScreen ? PrimaryMonitorHeight : height;
-		WindowTitle = title;
+		if (_windowIsCreated)
+			throw new InvalidOperationException("Window is already created. Cannot create window again.");
+
+		InitialWindowState = initialWindowState;
+		CurrentWindowState = initialWindowState with
+		{
+			Width = InitialWindowState.IsFullScreen ? PrimaryMonitorWidth : InitialWindowState.Width,
+			Height = InitialWindowState.IsFullScreen ? PrimaryMonitorHeight : InitialWindowState.Height,
+		};
 
 		_glfw = Glfw.GetApi();
 		_glfw.Init();
@@ -73,7 +74,7 @@ public static class Graphics
 			PrimaryMonitorHeight = primaryMonitorHeight;
 		}
 
-		Window = _glfw.CreateWindow(width, height, title, isFullScreen ? primaryMonitor : (Monitor*)0, (WindowHandle*)0);
+		Window = _glfw.CreateWindow(CurrentWindowState.Width, CurrentWindowState.Height, CurrentWindowState.Title, CurrentWindowState.IsFullScreen ? primaryMonitor : (Monitor*)0, (WindowHandle*)0);
 		CheckGlfwError(_glfw);
 		if (Window == (WindowHandle*)0)
 			throw new InvalidOperationException("Could not create window.");
@@ -84,23 +85,28 @@ public static class Graphics
 		_glfw.SetFramebufferSizeCallback(Window, (_, w, h) => SetWindowSize(w, h));
 		_glfw.SetWindowFocusCallback(Window, (_, focusing) => WindowIsActive = focusing);
 
-		int x = (PrimaryMonitorWidth - width) / 2;
-		int y = (PrimaryMonitorHeight - height) / 2;
+		int x = (PrimaryMonitorWidth - CurrentWindowState.Width) / 2;
+		int y = (PrimaryMonitorHeight - CurrentWindowState.Height) / 2;
 
 		_glfw.SetWindowPos(Window, x, y);
 
 		_glfw.MakeContextCurrent(Window);
 		_gl = GL.GetApi(_glfw.GetProcAddress);
 
-		SetWindowSize(WindowWidth, WindowHeight);
+		SetWindowSize(CurrentWindowState.Width, CurrentWindowState.Height);
 
 		_glfw.SwapInterval(0); // Turns VSync off.
+
+		_windowIsCreated = true;
 	}
 
 	private static void SetWindowSize(int width, int height)
 	{
-		WindowWidth = width;
-		WindowHeight = height;
+		CurrentWindowState = CurrentWindowState with
+		{
+			Width = width,
+			Height = height,
+		};
 		OnChangeWindowSize?.Invoke(width, height);
 	}
 

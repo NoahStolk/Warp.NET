@@ -8,9 +8,8 @@ namespace Warp.NET.Samples.Ui.Layouts;
 public class MainLayout : Layout
 {
 	public MainLayout()
-		: base(Constants.RectangleFull)
 	{
-		Button button = new(new Rectangle(Fraction.F01_10, Fraction.F01_10, Fraction.F01_10, Fraction.F01_10, Constants.GridDefault), () => {}, ButtonStyle.Default);
+		Button button = new(new Rectangle(Fraction.F01_10, Fraction.F01_10, Fraction.F01_10, Fraction.F01_10), () => {}, ButtonStyle.Default);
 		NestingContext.Add(button);
 	}
 }

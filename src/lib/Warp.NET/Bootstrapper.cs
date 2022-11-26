@@ -8,18 +8,6 @@ namespace Warp.NET;
 public static class Bootstrapper
 {
 	/// <summary>
-	/// Creates a window.
-	/// </summary>
-	/// <param name="gameParameters">The game parameters.</param>
-	public static void CreateWindow(GameParameters gameParameters)
-	{
-		if (gameParameters.InitialWindowFullScreen)
-			Graphics.CreateWindowFull(gameParameters.InitialWindowTitle);
-		else
-			Graphics.CreateWindow(gameParameters.InitialWindowTitle, gameParameters.InitialWindowWidth, gameParameters.InitialWindowHeight);
-	}
-
-	/// <summary>
 	/// Generates the content file from <paramref name="contentRootDirectory"/> if specified, then reads the content file from <paramref name="contentFilePath"/> and returns the decompiled content.
 	/// </summary>
 	/// <param name="contentRootDirectory">The content root directory to generate a content file from. If the directory does not exist, or is <see langword="null" />, the file will not be generated.</param>
@@ -39,13 +27,12 @@ public static class Bootstrapper
 	/// <summary>
 	/// Instantiates the game class.
 	/// </summary>
-	/// <param name="gameParameters">The game parameters.</param>
 	/// <typeparam name="TGame">The game type which must derive from <see cref="GameBase"/> and implement <see cref="IGameBase{TSelf}"/>.</typeparam>
 	/// <returns>The game instance.</returns>
-	public static TGame CreateGame<TGame>(GameParameters gameParameters)
+	public static TGame CreateGame<TGame>()
 		where TGame : GameBase, IGameBase<TGame>
 	{
-		TGame game = TGame.Construct(gameParameters);
+		TGame game = TGame.Construct();
 		WarpBase.Game = game;
 		TGame.Self = game;
 		return game;

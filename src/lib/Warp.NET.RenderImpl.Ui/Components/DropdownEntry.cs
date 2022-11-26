@@ -13,8 +13,6 @@ public class DropdownEntry : AbstractDropdownEntry
 	{
 		Text = text;
 		DropdownEntryStyle = dropdownEntryStyle;
-
-		// Depth = 102;
 		IsActive = false;
 	}
 

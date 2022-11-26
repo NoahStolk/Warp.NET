@@ -2,9 +2,9 @@ namespace Warp.NET.Ui;
 
 public class Layout : ILayout
 {
-	public Layout(IBounds bounds)
+	public Layout()
 	{
-		NestingContext = new(bounds);
+		NestingContext = new(new ScreenBounds());
 	}
 
 	public NestingContext NestingContext { get; }

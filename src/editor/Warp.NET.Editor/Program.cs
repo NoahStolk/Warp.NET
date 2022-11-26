@@ -1,14 +1,10 @@
-using System.Numerics;
 using Warp.NET;
 using Warp.NET.Content.Conversion;
 using Warp.NET.Editor;
 using Warp.NET.RenderImpl.Ui;
-using Warp.NET.RenderImpl.Ui.Rendering;
 
-GameParameters gameParameters = new("Warp.NET Editor", Constants.InitialWindowWidth, Constants.InitialWindowHeight, false);
-
-Graphics.OnChangeWindowSize = (w, h) => OnChangeWindowSize(w, h, gameParameters);
-Bootstrapper.CreateWindow(gameParameters);
+Graphics.OnChangeWindowSize = OnChangeWindowSize;
+CreateWindow(new("Warp.NET Editor", 1920, 1080, false));
 
 #if DEBUG
 const string? contentRootDirectory = @"..\..\..\..\..\lib\Warp.NET.RenderImpl.Ui\Content";
@@ -23,18 +19,11 @@ RenderImplUiTextures.Initialize(decompiledContentFile.Textures);
 
 RenderImplUiShaderUniformInitializer.Initialize();
 
-Game game = Bootstrapper.CreateGame<Game>(gameParameters);
+Game game = Bootstrapper.CreateGame<Game>();
 RenderImplUiBase.Game = game;
 game.Run();
 
-static void OnChangeWindowSize(int width, int height, GameParameters gameParameters)
+static void OnChangeWindowSize(int width, int height)
 {
-	float originalAspectRatio = gameParameters.InitialWindowWidth / (float)gameParameters.InitialWindowHeight;
-	float adjustedWidth = height * originalAspectRatio; // Adjusted for aspect ratio
-	ViewportState.Offset = new((width - adjustedWidth) / 2, 0);
-	Vector2 size = new(adjustedWidth, height); // Fix viewport to maintain aspect ratio
-	ViewportState.Scale = size / new Vector2(gameParameters.InitialWindowWidth, gameParameters.InitialWindowHeight);
-
-	ViewportState.Viewport = new((int)ViewportState.Offset.X, (int)ViewportState.Offset.Y, (int)size.X, (int)size.Y);
-	Gl.Viewport(ViewportState.Viewport.X, ViewportState.Viewport.Y, (uint)ViewportState.Viewport.Width, (uint)ViewportState.Viewport.Height);
+	Gl.Viewport(0, 0, (uint)width, (uint)height);
 }
