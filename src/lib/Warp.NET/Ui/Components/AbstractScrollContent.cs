@@ -9,7 +9,7 @@ public abstract class AbstractScrollContent<TSelf, TParent> : AbstractComponent
 {
 	private readonly AbstractScrollViewer<TParent, TSelf> _parent;
 
-	protected AbstractScrollContent(IBounds bounds, AbstractScrollViewer<TParent, TSelf> parent)
+	protected AbstractScrollContent(Bounds bounds, AbstractScrollViewer<TParent, TSelf> parent)
 		: base(bounds)
 	{
 		_parent = parent;
@@ -18,6 +18,8 @@ public abstract class AbstractScrollContent<TSelf, TParent> : AbstractComponent
 	public abstract int ContentHeightInPixels { get; }
 
 	protected virtual float ScrollPercentageMultiplier => 0.05f;
+
+	public abstract void SetContent();
 
 	public void SetScrollOffset(Vector2i<int> scrollOffset)
 	{

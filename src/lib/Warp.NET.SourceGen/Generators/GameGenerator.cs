@@ -49,9 +49,9 @@ public class GameGenerator : IIncrementalGenerator
 
 			{{_singletonProperties}}
 
-			public static Game Construct(GameParameters gameParameters)
+			public static Game Construct()
 			{
-				return new(gameParameters);
+				return new();
 			}
 
 			protected override void HandleAdds({{Constants.RootNamespace}}.GameObjects.IGameObject gameObject)

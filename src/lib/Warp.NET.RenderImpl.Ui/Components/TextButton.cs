@@ -7,7 +7,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class TextButton : Button
 {
-	public TextButton(IBounds bounds, Action onClick, ButtonStyle buttonStyle, TextButtonStyle textButtonStyle, string text)
+	public TextButton(Bounds bounds, Action onClick, ButtonStyle buttonStyle, TextButtonStyle textButtonStyle, string text)
 		: base(bounds, onClick, buttonStyle)
 	{
 		TextButtonStyle = textButtonStyle;

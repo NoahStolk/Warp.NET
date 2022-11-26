@@ -18,7 +18,7 @@ public static class MouseUiContext
 		IsActive = false;
 	}
 
-	public static bool Contains(Vector2i<int> parentPosition, IBounds bounds)
+	public static bool Contains(Vector2i<int> parentPosition, Bounds bounds)
 	{
 		if (!IsActive || !bounds.Contains(MousePosition.RoundToVector2Int32() - parentPosition))
 			return false;

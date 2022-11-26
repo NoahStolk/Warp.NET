@@ -7,7 +7,7 @@ public abstract class AbstractButton : AbstractComponent
 {
 	private readonly Action _onClick;
 
-	protected AbstractButton(IBounds bounds, Action onClick)
+	protected AbstractButton(Bounds bounds, Action onClick)
 		: base(bounds)
 	{
 		_onClick = onClick;

@@ -7,7 +7,7 @@ public abstract class AbstractDropdown : AbstractComponent
 {
 	private readonly List<AbstractDropdownEntry> _children = new();
 
-	protected AbstractDropdown(IBounds bounds)
+	protected AbstractDropdown(Bounds bounds)
 		: base(bounds)
 	{
 	}

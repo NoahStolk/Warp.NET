@@ -4,7 +4,7 @@ public abstract class AbstractScrollViewer<TSelf, TContent> : AbstractComponent
 	where TSelf : AbstractScrollViewer<TSelf, TContent>
 	where TContent : AbstractScrollContent<TContent, TSelf>
 {
-	protected AbstractScrollViewer(IBounds bounds)
+	protected AbstractScrollViewer(Bounds bounds)
 		: base(bounds)
 	{
 	}
@@ -12,7 +12,12 @@ public abstract class AbstractScrollViewer<TSelf, TContent> : AbstractComponent
 	public abstract AbstractScrollbar Scrollbar { get; }
 	public abstract TContent Content { get; }
 
-	public abstract void InitializeContent();
+	public virtual void InitializeContent()
+	{
+		Content.SetContent();
+		SetThumbPercentageSize();
+		SetScrollPercentage(0);
+	}
 
 	public void SetThumbPercentageSize()
 	{

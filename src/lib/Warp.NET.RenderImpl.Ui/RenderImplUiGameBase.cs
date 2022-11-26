@@ -5,11 +5,6 @@ namespace Warp.NET.RenderImpl.Ui;
 
 public abstract class RenderImplUiGameBase : GameBase
 {
-	protected RenderImplUiGameBase(GameParameters gameParameters)
-		: base(gameParameters)
-	{
-	}
-
 	public virtual MonoSpaceFontRenderer MonoSpaceFontRenderer8 { get; } = new(new(Textures.Spleen5x8, Charsets.Ascii_32_126));
 	public virtual MonoSpaceFontRenderer MonoSpaceFontRenderer12 { get; } = new(new(Textures.Spleen6x12, Charsets.Ascii_32_126));
 	public virtual MonoSpaceFontRenderer MonoSpaceFontRenderer16 { get; } = new(new(Textures.Spleen8x16, Charsets.Ascii_32_126));

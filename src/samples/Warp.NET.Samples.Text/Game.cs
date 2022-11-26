@@ -12,10 +12,9 @@ public sealed partial class Game : GameBase
 	private readonly MonoSpaceFontRenderer _spleen6X12Renderer = new(new(Textures.Spleen6x12, Charsets.Ascii_32_126));
 	private readonly MonoSpaceFontRenderer _spleen16X32Renderer = new(new(Textures.Spleen16x32, Charsets.Ascii_32_126));
 
-	private Game(GameParameters gameParameters)
-		: base(gameParameters)
+	private Game()
 	{
-		_projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowWidth, InitialWindowHeight, 0, 0, 1);
+		_projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowState.Width, InitialWindowState.Height, 0, 0, 1);
 	}
 
 	protected override void PrepareRender()

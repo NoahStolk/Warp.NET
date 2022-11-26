@@ -8,13 +8,11 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class DropdownEntry : AbstractDropdownEntry
 {
-	public DropdownEntry(IBounds bounds, AbstractDropdown parent, Action onClick, string text, DropdownEntryStyle dropdownEntryStyle)
+	public DropdownEntry(Bounds bounds, AbstractDropdown parent, Action onClick, string text, DropdownEntryStyle dropdownEntryStyle)
 		: base(bounds, parent, onClick)
 	{
 		Text = text;
 		DropdownEntryStyle = dropdownEntryStyle;
-
-		// Depth = 102;
 		IsActive = false;
 	}
 

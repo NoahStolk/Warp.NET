@@ -8,7 +8,7 @@ public abstract class AbstractDropdownEntry : AbstractComponent
 	private readonly AbstractDropdown _parent;
 	private readonly Action _onClick;
 
-	protected AbstractDropdownEntry(IBounds bounds, AbstractDropdown parent, Action onClick)
+	protected AbstractDropdownEntry(Bounds bounds, AbstractDropdown parent, Action onClick)
 		: base(bounds)
 	{
 		_parent = parent;

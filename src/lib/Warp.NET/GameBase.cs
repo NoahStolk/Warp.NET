@@ -27,13 +27,8 @@ public abstract class GameBase
 	private int _updates;
 	private int _renders;
 
-	protected GameBase(GameParameters gameParameters)
+	protected GameBase()
 	{
-		InitialWindowTitle = gameParameters.InitialWindowTitle;
-		InitialWindowWidth = gameParameters.InitialWindowWidth;
-		InitialWindowHeight = gameParameters.InitialWindowHeight;
-		InitialWindowFullScreen = gameParameters.InitialWindowFullScreen;
-
 		UpdateRate = 60;
 		MainLoopRate = 300;
 	}
@@ -57,11 +52,6 @@ public abstract class GameBase
 			_mainLoopLength = 1 / _mainLoopRate;
 		}
 	}
-
-	public string InitialWindowTitle { get; }
-	public int InitialWindowWidth { get; }
-	public int InitialWindowHeight { get; }
-	public bool InitialWindowFullScreen { get; }
 
 	/// <summary>
 	/// Represents the delta time in seconds.

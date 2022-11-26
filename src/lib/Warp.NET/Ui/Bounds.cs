@@ -1,25 +1,14 @@
 using Warp.NET.Numerics;
-using Warp.NET.Ui;
 
-namespace Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
+namespace Warp.NET.Ui;
 
-public sealed record Rectangle : IBounds
+public sealed record Bounds(float X, float Y, float Width, float Height)
 {
-	public Rectangle(Fraction x, Fraction y, Fraction width, Fraction height, Grid grid)
-	{
-		X1 = (int)(x.ToFloat() * grid.PixelWidth);
-		Y1 = (int)(y.ToFloat() * grid.PixelHeight);
-		X2 = X1 + (int)(width.ToFloat() * grid.PixelWidth);
-		Y2 = Y1 + (int)(height.ToFloat() * grid.PixelHeight);
-	}
-
-	public int X1 { get; }
-	public int Y1 { get; }
-	public int X2 { get; }
-	public int Y2 { get; }
-
+	public int X1 => (int)(X * Graphics.CurrentWindowState.Width);
+	public int Y1 => (int)(Y * Graphics.CurrentWindowState.Height);
+	public int X2 => X1 + (int)(Width * Graphics.CurrentWindowState.Width);
+	public int Y2 => Y1 + (int)(Height * Graphics.CurrentWindowState.Height);
 	public Vector2i<int> TopLeft => new(X1, Y1);
-
 	public Vector2i<int> Size => new(X2 - X1, Y2 - Y1);
 
 	public bool Contains(int x, int y)
@@ -32,7 +21,7 @@ public sealed record Rectangle : IBounds
 		return Contains(position.X, position.Y);
 	}
 
-	public bool IntersectsOrContains(IBounds other)
+	public bool IntersectsOrContains(Bounds other)
 	{
 		return IntersectsOrContains(other.X1, other.Y1, other.X2, other.Y2);
 	}
@@ -45,6 +34,15 @@ public sealed record Rectangle : IBounds
 		Vector2i<int> d = new(x2, y2);
 
 		return Contains(a) || Contains(b) || Contains(c) || Contains(d);
+	}
+
+	public Bounds CreateNested(float x, float y, float width, float height)
+	{
+		float nestedX = x * Width;
+		float nestedY = y * Height;
+		float nestedWidth = width * Width;
+		float nestedHeight = height * Height;
+		return new(X + nestedX, Y + nestedY, nestedWidth, nestedHeight);
 	}
 
 	public override string ToString()

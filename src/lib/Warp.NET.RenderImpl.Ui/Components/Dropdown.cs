@@ -8,7 +8,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Dropdown : AbstractDropdown
 {
-	public Dropdown(IBounds bounds, string text, DropdownStyle dropdownStyle)
+	public Dropdown(Bounds bounds, string text, DropdownStyle dropdownStyle)
 		: base(bounds)
 	{
 		Text = text;

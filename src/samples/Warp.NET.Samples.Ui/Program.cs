@@ -1,10 +1,13 @@
 using Warp.NET;
 using Warp.NET.Content.Conversion;
-using Warp.NET.Editor;
+using Warp.NET.Debugging;
 using Warp.NET.RenderImpl.Ui;
+using Warp.NET.Samples.Ui;
 
+DebugStack.DisplaySetting = DebugStackDisplaySetting.Simple;
 Graphics.OnChangeWindowSize = OnChangeWindowSize;
-CreateWindow(new("Warp.NET Editor", 1920, 1080, false));
+CreateWindow(new("Warp.NET.Samples.Ui", 1920, 1080, false));
+SetWindowSizeLimits(1024, 768, -1, -1);
 
 #if DEBUG
 const string? contentRootDirectory = @"..\..\..\..\..\lib\Warp.NET.RenderImpl.Ui\Content";
@@ -12,10 +15,10 @@ const string? contentRootDirectory = @"..\..\..\..\..\lib\Warp.NET.RenderImpl.Ui
 const string? contentRootDirectory = null;
 #endif
 
-DecompiledContentFile decompiledContentFile = Bootstrapper.GetDecompiledContent(contentRootDirectory, "render-impl-ui-content");
-RenderImplUiCharsets.Initialize(decompiledContentFile.Charsets);
-RenderImplUiShaders.Initialize(decompiledContentFile.Shaders);
-RenderImplUiTextures.Initialize(decompiledContentFile.Textures);
+DecompiledContentFile renderImplUiContent = Bootstrapper.GetDecompiledContent(contentRootDirectory, "render-impl-ui");
+RenderImplUiCharsets.Initialize(renderImplUiContent.Charsets);
+RenderImplUiShaders.Initialize(renderImplUiContent.Shaders);
+RenderImplUiTextures.Initialize(renderImplUiContent.Textures);
 
 RenderImplUiShaderUniformInitializer.Initialize();
 
