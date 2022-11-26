@@ -12,9 +12,9 @@ public class ScrollContentLayout : Layout
 {
 	public ScrollContentLayout()
 	{
-		Label titleLabel = new(new Rectangle(0.45f, 0.2f, 0.1f, 0.1f), "Scroll Content Layout", LabelStyle.Default with { TextColor = Color.Green });
-		TextButton backButton = new(new Rectangle(0.1f, 0.3f, 0.1f, 0.1f), () => Game.Self.ActiveLayout = Game.Self.MainLayout, ButtonStyle.Default, TextButtonStyle.Default, "Back");
-		CustomScrollViewer scrollViewer = new(new Rectangle(0.5f, 0.3f, 0.3f, 0.5f));
+		Label titleLabel = new(new Bounds(0.45f, 0.2f, 0.1f, 0.1f), "Scroll Content Layout", LabelStyle.Default with { TextColor = Color.Green });
+		TextButton backButton = new(new Bounds(0.1f, 0.3f, 0.1f, 0.1f), () => Game.Self.ActiveLayout = Game.Self.MainLayout, ButtonStyle.Default, TextButtonStyle.Default, "Back");
+		CustomScrollViewer scrollViewer = new(new Bounds(0.5f, 0.3f, 0.3f, 0.5f));
 
 		NestingContext.Add(titleLabel);
 		NestingContext.Add(backButton);
@@ -25,7 +25,7 @@ public class ScrollContentLayout : Layout
 
 	private sealed class CustomScrollViewer : AbstractScrollViewer<CustomScrollViewer, CustomScrollContent>
 	{
-		public CustomScrollViewer(IBounds bounds)
+		public CustomScrollViewer(Bounds bounds)
 			: base(bounds)
 		{
 			Content = new(new Rectangle(0, 0, 0.1f, 0.3f), this);
@@ -60,11 +60,14 @@ public class ScrollContentLayout : Layout
 	private sealed class CustomScrollContent : ScrollContent<CustomScrollContent, CustomScrollViewer>
 	{
 		private const int _buttonCount = 25;
-		private const float _buttonHeight = 0.02f;
+		private const float _buttonHeight = 0.2f;
 
-		public CustomScrollContent(IBounds bounds, AbstractScrollViewer<CustomScrollViewer, CustomScrollContent> parent)
+		private readonly Bounds _bounds;
+
+		public CustomScrollContent(Bounds bounds, AbstractScrollViewer<CustomScrollViewer, CustomScrollContent> parent)
 			: base(bounds, parent)
 		{
+			_bounds = bounds;
 		}
 
 		public override int ContentHeightInPixels => (int)(_buttonCount * _buttonHeight * CurrentWindowState.Height);
@@ -77,7 +80,7 @@ public class ScrollContentLayout : Layout
 			Vector2i<int> topLeft = Bounds.TopLeft;
 			Vector2i<int> center = topLeft + scale / 2;
 
-			RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, parentPosition + center, Depth - 3, Color.Purple);
+			RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, parentPosition + center, Depth, Color.Purple);
 		}
 
 		public void SetContent()

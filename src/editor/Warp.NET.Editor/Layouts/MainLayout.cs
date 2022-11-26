@@ -9,7 +9,7 @@ public class MainLayout : Layout
 {
 	public MainLayout()
 	{
-		Button button = new(new Rectangle(Fraction.F01_10, Fraction.F01_10, Fraction.F01_10, Fraction.F01_10), () => {}, ButtonStyle.Default);
+		Button button = new(new Bounds(Fraction.F01_10, Fraction.F01_10, Fraction.F01_10, Fraction.F01_10), () => {}, ButtonStyle.Default);
 		NestingContext.Add(button);
 	}
 }

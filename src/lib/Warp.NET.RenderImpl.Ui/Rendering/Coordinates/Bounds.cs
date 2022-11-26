@@ -2,19 +2,19 @@ using Warp.NET.Ui;
 
 namespace Warp.NET.RenderImpl.Ui.Rendering.Coordinates;
 
-public sealed record Rectangle : IBounds
+public sealed record Bounds : IBounds
 {
 	private readonly float _x;
 	private readonly float _y;
 	private readonly float _width;
 	private readonly float _height;
 
-	public Rectangle(Fraction x, Fraction y, Fraction width, Fraction height)
+	public Bounds(Fraction x, Fraction y, Fraction width, Fraction height)
 		: this(x.ToFloat(), y.ToFloat(), width.ToFloat(), height.ToFloat())
 	{
 	}
 
-	public Rectangle(float x, float y, float width, float height)
+	public Bounds(float x, float y, float width, float height)
 	{
 		// if (x < 0 || y < 0 || width < 0 || height < 0 || x > 1 || y > 1 || width > 1 || height > 1)
 		// 	throw new ArgumentException("All parameters must be between 0 and 1.");
@@ -36,5 +36,14 @@ public sealed record Rectangle : IBounds
 	public override string ToString()
 	{
 		return $"{X1},{Y1}..{X2},{Y2}";
+	}
+
+	public static Bounds CreateNested(Bounds parent, float x, float y, float width, float height)
+	{
+		float nestedX = x * parent._width;
+		float nestedY = y * parent._height;
+		float nestedWidth = width * parent._width;
+		float nestedHeight = height * parent._height;
+		return new(parent._x + nestedX, parent._y + nestedY, nestedWidth, nestedHeight);
 	}
 }
