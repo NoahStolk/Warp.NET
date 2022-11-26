@@ -1,8 +1,10 @@
 using Warp.NET;
 using Warp.NET.Content.Conversion;
+using Warp.NET.Debugging;
 using Warp.NET.RenderImpl.Ui;
 using Warp.NET.Samples.Ui;
 
+DebugStack.DisplaySetting = DebugStackDisplaySetting.Simple;
 Graphics.OnChangeWindowSize = OnChangeWindowSize;
 CreateWindow(new("Warp.NET.Samples.Ui", 1920, 1080, false));
 

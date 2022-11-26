@@ -29,6 +29,6 @@ public class Label : AbstractLabel
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
 
-		RenderImplUiBase.Game.GetFontRenderer(LabelStyle.FontSize).Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, LabelStyle.TextColor, Text, LabelStyle.TextAlign);
+		RenderImplUiBase.Game.GetFontRenderer(LabelStyle.FontSize).Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth, LabelStyle.TextColor, Text, LabelStyle.TextAlign);
 	}
 }
