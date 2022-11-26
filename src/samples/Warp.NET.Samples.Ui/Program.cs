@@ -7,6 +7,7 @@ using Warp.NET.Samples.Ui;
 DebugStack.DisplaySetting = DebugStackDisplaySetting.Simple;
 Graphics.OnChangeWindowSize = OnChangeWindowSize;
 CreateWindow(new("Warp.NET.Samples.Ui", 1920, 1080, false));
+SetWindowSizeLimits(1024, 768, -1, -1);
 
 #if DEBUG
 const string? contentRootDirectory = @"..\..\..\..\..\lib\Warp.NET.RenderImpl.Ui\Content";

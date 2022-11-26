@@ -100,6 +100,11 @@ public static class Graphics
 		_windowIsCreated = true;
 	}
 
+	public static unsafe void SetWindowSizeLimits(int minWidth, int minHeight, int maxWidth, int maxHeight)
+	{
+		Glfw.SetWindowSizeLimits(Window, minWidth, minHeight, maxWidth, maxHeight);
+	}
+
 	private static void SetWindowSize(int width, int height)
 	{
 		CurrentWindowState = CurrentWindowState with
