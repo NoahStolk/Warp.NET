@@ -45,6 +45,13 @@ public sealed record Bounds(float X, float Y, float Width, float Height)
 		return new(X + nestedX, Y + nestedY, nestedWidth, nestedHeight);
 	}
 
+	public Vector2 CreateNested(float x, float y)
+	{
+		float nestedX = x * Width;
+		float nestedY = y * Height;
+		return new(X + nestedX, Y + nestedY);
+	}
+
 	public override string ToString()
 	{
 		return $"{X1},{Y1}..{X2},{Y2}";

@@ -7,12 +7,13 @@ public static class QuaternionExtensions
 	public static string ToString(this Quaternion quaternion, int digits)
 		=> $"{{{FormatUtils.FormatAxis(nameof(Quaternion.X), quaternion.X, digits)} {FormatUtils.FormatAxis(nameof(Quaternion.Y), quaternion.Y, digits)} {FormatUtils.FormatAxis(nameof(Quaternion.Z), quaternion.Z, digits)} {FormatUtils.FormatAxis(nameof(Quaternion.W), quaternion.W, digits)}}}";
 
-	public static void Randomize(this ref Quaternion quaternion, float randomizeAmount)
+	public static void Randomize(this ref Quaternion quaternion, float randomizeAmount, Random? random = null)
 	{
-		quaternion.X += RandomUtils.RandomFloat(-randomizeAmount, randomizeAmount);
-		quaternion.Y += RandomUtils.RandomFloat(-randomizeAmount, randomizeAmount);
-		quaternion.Z += RandomUtils.RandomFloat(-randomizeAmount, randomizeAmount);
-		quaternion.W += RandomUtils.RandomFloat(-randomizeAmount, randomizeAmount);
+		random ??= Random.Shared;
+		quaternion.X += random.RandomFloat(-randomizeAmount, randomizeAmount);
+		quaternion.Y += random.RandomFloat(-randomizeAmount, randomizeAmount);
+		quaternion.Z += random.RandomFloat(-randomizeAmount, randomizeAmount);
+		quaternion.W += random.RandomFloat(-randomizeAmount, randomizeAmount);
 	}
 
 	public static bool ContainsNaN(this Quaternion quaternion)

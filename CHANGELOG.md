@@ -2,6 +2,21 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## TODO
+
+### Added
+
+- Added `Bounds.CreateNested(float x, float y)` overload.
+- Added optional `Random` argument to `QuaternionExtensions.Randomize` method.
+
+### Fixed
+
+- Fixed not returning in `Label.Render` when `Text` was empty.
+
+### Removed
+
+- Removed `RandomUtils`; use `Random.Shared` with `RandomExtensions` instead.
+
 ## 0.1.6
 
 ### Added

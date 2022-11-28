@@ -20,6 +20,9 @@ public class Label : AbstractLabel
 	{
 		base.Render(parentPosition);
 
+		if (Text.Length == 0)
+			return;
+
 		int padding = (int)MathF.Round((Bounds.Y2 - Bounds.Y1) / 4f);
 		Vector2i<int> textPosition = LabelStyle.TextAlign switch
 		{
