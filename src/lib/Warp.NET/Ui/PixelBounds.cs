@@ -14,22 +14,22 @@ public sealed record PixelBounds(int X, int Y, int Width, int Height) : IBounds
 	public int X2 => X + Width;
 	public int Y2 => Y + Height;
 
-	public IBounds CreateNested(int x, int y, int width, int height)
+	public IBounds CreateNested(int xInPixels, int yInPixels, int widthInPixels, int heightInPixels)
 	{
-		return new PixelBounds(X + x, Y + y, width, height);
+		return new PixelBounds(X + xInPixels, Y + yInPixels, widthInPixels, heightInPixels);
 	}
 
-	public Vector2 CreateNested(int x, int y)
+	public Vector2 CreateNested(int xInPixels, int yInPixels)
 	{
-		return new(X + x, Y + y);
+		return new(X + xInPixels, Y + yInPixels);
 	}
 
-	public IBounds Move(int x, int y)
+	public IBounds Move(int xInPixels, int yInPixels)
 	{
 		return this with
 		{
-			X = X + x,
-			Y = Y + y,
+			X = X + xInPixels,
+			Y = Y + yInPixels,
 		};
 	}
 }

@@ -14,28 +14,28 @@ public sealed record NormalizedBounds(float X, float Y, float Width, float Heigh
 	public int X2 => X1 + (int)(Width * Graphics.CurrentWindowState.Width);
 	public int Y2 => Y1 + (int)(Height * Graphics.CurrentWindowState.Height);
 
-	public IBounds CreateNested(int x, int y, int width, int height)
+	public IBounds CreateNested(int xInPixels, int yInPixels, int widthInPixels, int heightInPixels)
 	{
-		float nestedX = (int)(x / (float)Graphics.CurrentWindowState.Width) * Width;
-		float nestedY = (int)(y / (float)Graphics.CurrentWindowState.Height) * Height;
-		float nestedWidth = (int)(width / (float)Graphics.CurrentWindowState.Width) * Width;
-		float nestedHeight = (int)(height / (float)Graphics.CurrentWindowState.Height) * Height;
+		float nestedX = (int)(xInPixels / (float)Graphics.CurrentWindowState.Width) * Width;
+		float nestedY = (int)(yInPixels / (float)Graphics.CurrentWindowState.Height) * Height;
+		float nestedWidth = (int)(widthInPixels / (float)Graphics.CurrentWindowState.Width) * Width;
+		float nestedHeight = (int)(heightInPixels / (float)Graphics.CurrentWindowState.Height) * Height;
 		return new NormalizedBounds(X + nestedX, Y + nestedY, nestedWidth, nestedHeight);
 	}
 
-	public Vector2 CreateNested(int x, int y)
+	public Vector2 CreateNested(int xInPixels, int yInPixels)
 	{
-		float nestedX = (int)(x / (float)Graphics.CurrentWindowState.Width) * Width;
-		float nestedY = (int)(y / (float)Graphics.CurrentWindowState.Height) * Height;
+		float nestedX = (int)(xInPixels / (float)Graphics.CurrentWindowState.Width) * Width;
+		float nestedY = (int)(yInPixels / (float)Graphics.CurrentWindowState.Height) * Height;
 		return new(X + nestedX, Y + nestedY);
 	}
 
-	public IBounds Move(int x, int y)
+	public IBounds Move(int xInPixels, int yInPixels)
 	{
 		return this with
 		{
-			X = X + (int)(x / (float)Graphics.CurrentWindowState.Width),
-			Y = Y + (int)(y / (float)Graphics.CurrentWindowState.Height),
+			X = X + (int)(xInPixels / (float)Graphics.CurrentWindowState.Width),
+			Y = Y + (int)(yInPixels / (float)Graphics.CurrentWindowState.Height),
 		};
 	}
 }
