@@ -7,7 +7,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class TextButton : Button
 {
-	public TextButton(Bounds bounds, Action onClick, ButtonStyle buttonStyle, TextButtonStyle textButtonStyle, string text)
+	public TextButton(IBounds bounds, Action onClick, ButtonStyle buttonStyle, TextButtonStyle textButtonStyle, string text)
 		: base(bounds, onClick, buttonStyle)
 	{
 		TextButtonStyle = textButtonStyle;
@@ -18,9 +18,9 @@ public class TextButton : Button
 
 	public TextButtonStyle TextButtonStyle { get; set; }
 
-	public override void Render(Vector2i<int> parentPosition)
+	public override void Render(Vector2i<int> scrollOffset)
 	{
-		base.Render(parentPosition);
+		base.Render(scrollOffset);
 
 		if (Text.Length == 0)
 			return;
@@ -34,6 +34,6 @@ public class TextButton : Button
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
 
-		RenderImplUiBase.Game.GetFontRenderer(TextButtonStyle.FontSize).Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth + 2, TextButtonStyle.TextColor, Text, TextButtonStyle.TextAlign);
+		RenderImplUiBase.Game.GetFontRenderer(TextButtonStyle.FontSize).Schedule(Vector2i<int>.One, scrollOffset + textPosition, Depth + 2, TextButtonStyle.TextColor, Text, TextButtonStyle.TextAlign);
 	}
 }

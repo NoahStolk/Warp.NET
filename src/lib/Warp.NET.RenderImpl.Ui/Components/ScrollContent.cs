@@ -1,4 +1,5 @@
 using Warp.NET.Numerics;
+using Warp.NET.RenderImpl.Ui.Rendering;
 using Warp.NET.RenderImpl.Ui.Rendering.Scissors;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -9,16 +10,16 @@ public abstract class ScrollContent<TSelf, TParent> : AbstractScrollContent<TSel
 	where TSelf : AbstractScrollContent<TSelf, TParent>, IScrollContent<TSelf, TParent>
 	where TParent : AbstractScrollViewer<TParent, TSelf>
 {
-	protected ScrollContent(Bounds bounds, TParent parent)
+	protected ScrollContent(IBounds bounds, TParent parent)
 		: base(bounds, parent)
 	{
 	}
 
-	public override void Render(Vector2i<int> parentPosition)
+	public override void Render(Vector2i<int> scrollOffset)
 	{
-		ScissorScheduler.SetScissor(Scissor.Create(Bounds, parentPosition));
+		ScissorScheduler.SetScissor(Scissor.Create(Bounds, scrollOffset, ViewportState.Offset, ViewportState.Scale));
 
-		base.Render(parentPosition);
+		base.Render(scrollOffset);
 
 		ScissorScheduler.UnsetScissor();
 	}

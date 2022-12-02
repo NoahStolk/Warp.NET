@@ -8,7 +8,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Label : AbstractLabel
 {
-	public Label(Bounds bounds, string text, LabelStyle labelStyle)
+	public Label(IBounds bounds, string text, LabelStyle labelStyle)
 		: base(bounds, text)
 	{
 		LabelStyle = labelStyle;
@@ -16,9 +16,9 @@ public class Label : AbstractLabel
 
 	public LabelStyle LabelStyle { get; set; }
 
-	public override void Render(Vector2i<int> parentPosition)
+	public override void Render(Vector2i<int> scrollOffset)
 	{
-		base.Render(parentPosition);
+		base.Render(scrollOffset);
 
 		if (Text.Length == 0)
 			return;
@@ -32,6 +32,6 @@ public class Label : AbstractLabel
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
 
-		RenderImplUiBase.Game.GetFontRenderer(LabelStyle.FontSize).Schedule(Vector2i<int>.One, parentPosition + textPosition, Depth, LabelStyle.TextColor, Text, LabelStyle.TextAlign);
+		RenderImplUiBase.Game.GetFontRenderer(LabelStyle.FontSize).Schedule(Vector2i<int>.One, scrollOffset + textPosition, Depth, LabelStyle.TextColor, Text, LabelStyle.TextAlign);
 	}
 }

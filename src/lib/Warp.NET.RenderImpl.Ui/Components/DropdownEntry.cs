@@ -8,7 +8,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class DropdownEntry : AbstractDropdownEntry
 {
-	public DropdownEntry(Bounds bounds, AbstractDropdown parent, Action onClick, string text, DropdownEntryStyle dropdownEntryStyle)
+	public DropdownEntry(IBounds bounds, AbstractDropdown parent, Action onClick, string text, DropdownEntryStyle dropdownEntryStyle)
 		: base(bounds, parent, onClick)
 	{
 		Text = text;
@@ -20,16 +20,16 @@ public class DropdownEntry : AbstractDropdownEntry
 
 	public DropdownEntryStyle DropdownEntryStyle { get; set; }
 
-	public override void Render(Vector2i<int> parentPosition)
+	public override void Render(Vector2i<int> scrollOffset)
 	{
-		base.Render(parentPosition);
+		base.Render(scrollOffset);
 
 		Vector2i<int> borderVec = new(1);
 		Vector2i<int> scale = Bounds.Size;
 		Vector2i<int> topLeft = Bounds.TopLeft;
 		Vector2i<int> center = topLeft + scale / 2;
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size, parentPosition + center, Depth, Color.White);
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size - borderVec * 2, parentPosition + center, Depth + 1, Hover && !IsDisabled ? Color.Gray(0.5f) : Color.Black);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size, scrollOffset + center, Depth, Color.White);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size - borderVec * 2, scrollOffset + center, Depth + 1, Hover && !IsDisabled ? Color.Gray(0.5f) : Color.Black);
 
 		int padding = (int)MathF.Round(Bounds.Size.Y / 4f);
 		Vector2i<int> textPosition = DropdownEntryStyle.TextAlign switch
@@ -39,6 +39,6 @@ public class DropdownEntry : AbstractDropdownEntry
 			TextAlign.Right => new(Bounds.X2 - padding, Bounds.Y1 + padding),
 			_ => throw new InvalidOperationException("Invalid text align."),
 		};
-		RenderImplUiBase.Game.GetFontRenderer(DropdownEntryStyle.FontSize).Schedule(new(1), parentPosition + textPosition, Depth + 2, Color.White, Text, DropdownEntryStyle.TextAlign);
+		RenderImplUiBase.Game.GetFontRenderer(DropdownEntryStyle.FontSize).Schedule(new(1), scrollOffset + textPosition, Depth + 2, Color.White, Text, DropdownEntryStyle.TextAlign);
 	}
 }

@@ -11,7 +11,7 @@ public abstract class AbstractScrollbar : AbstractComponent
 
 	private readonly Action<float> _onChange;
 
-	protected AbstractScrollbar(Bounds bounds, Action<float> onChange)
+	protected AbstractScrollbar(IBounds bounds, Action<float> onChange)
 		: base(bounds)
 	{
 		_onChange = onChange;
@@ -29,18 +29,18 @@ public abstract class AbstractScrollbar : AbstractComponent
 
 	protected bool Hover { get; private set; }
 
-	private float TranslatedMousePosition(Vector2i<int> parentPosition)
-		=> MouseUiContext.MousePosition.Y - Bounds.Y1 - parentPosition.Y;
+	private float TranslatedMousePosition(Vector2i<int> scrollOffset)
+		=> MouseUiContext.MousePosition.Y - Bounds.Y1 - scrollOffset.Y;
 
-	public override void Update(Vector2i<int> parentPosition)
+	public override void Update(Vector2i<int> scrollOffset)
 	{
-		base.Update(parentPosition);
+		base.Update(scrollOffset);
 
-		Hover = MouseUiContext.Contains(parentPosition, Bounds);
+		Hover = MouseUiContext.Contains(scrollOffset, Bounds);
 
 		if (Hover && Input.IsButtonPressed(MouseButton.Left))
 		{
-			float mousePos = TranslatedMousePosition(parentPosition);
+			float mousePos = TranslatedMousePosition(scrollOffset);
 			if (mousePos > TopPercentage * Bounds.Size.Y)
 			{
 				if (mousePos < (TopPercentage + ThumbPercentageSize) * Bounds.Size.Y)
@@ -80,7 +80,7 @@ public abstract class AbstractScrollbar : AbstractComponent
 		void UpdateValue()
 		{
 			float size = Bounds.Size.Y;
-			float yDiff = TranslatedMousePosition(parentPosition) - _holdStartMouseY;
+			float yDiff = TranslatedMousePosition(scrollOffset) - _holdStartMouseY;
 			TopPercentage = (_oldTopPercentage * size + yDiff) / size;
 		}
 	}

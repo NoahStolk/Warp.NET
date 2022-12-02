@@ -8,7 +8,7 @@ public class MainLayout : Layout
 {
 	public MainLayout()
 	{
-		Button button = new(new(0.1f, 0.1f, 0.1f, 0.1f), () => {}, ButtonStyle.Default);
+		Button button = new(new NormalizedBounds(0.1f, 0.1f, 0.1f, 0.1f), () => {}, ButtonStyle.Default);
 		NestingContext.Add(button);
 	}
 }

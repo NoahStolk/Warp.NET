@@ -9,9 +9,9 @@ public class ScrollContentLayout : Layout
 {
 	public ScrollContentLayout()
 	{
-		Label titleLabel = new(new(0.45f, 0.2f, 0.1f, 0.1f), "Scroll Content Layout", LabelStyle.Default with { TextColor = Color.Green });
-		TextButton backButton = new(new(0.1f, 0.3f, 0.1f, 0.1f), () => Game.Self.ActiveLayout = Game.Self.MainLayout, ButtonStyle.Default, TextButtonStyle.Default, "Back");
-		ScrollViewer<CustomScrollContent> scrollViewer = new(new(0.35f, 0.3f, 0.3f, 0.5f));
+		Label titleLabel = new(new NormalizedBounds(0.45f, 0.2f, 0.1f, 0.1f), "Scroll Content Layout", LabelStyle.Default with { TextColor = Color.Green });
+		TextButton backButton = new(new NormalizedBounds(0.1f, 0.3f, 0.1f, 0.1f), () => Game.Self.ActiveLayout = Game.Self.MainLayout, ButtonStyle.Default, TextButtonStyle.Default, "Back");
+		ScrollViewer<CustomScrollContent> scrollViewer = new(new NormalizedBounds(0.35f, 0.3f, 0.3f, 0.5f), 16);
 
 		NestingContext.Add(titleLabel);
 		NestingContext.Add(backButton);
@@ -27,14 +27,14 @@ public class ScrollContentLayout : Layout
 
 		private readonly List<TextButton> _textButtons = new();
 
-		private CustomScrollContent(Bounds bounds, ScrollViewer<CustomScrollContent> parent)
+		private CustomScrollContent(IBounds bounds, ScrollViewer<CustomScrollContent> parent)
 			: base(bounds, parent)
 		{
 		}
 
-		public override int ContentHeightInPixels => (int)_textButtons.Sum(tb => tb.Bounds.Height * CurrentWindowState.Height);
+		public override int ContentHeightInPixels => _textButtons.Sum(tb => tb.Bounds.Size.Y);
 
-		public static CustomScrollContent Construct(Bounds bounds, ScrollViewer<CustomScrollContent> parent)
+		public static CustomScrollContent Construct(IBounds bounds, ScrollViewer<CustomScrollContent> parent)
 		{
 			return new(bounds, parent);
 		}
@@ -48,7 +48,8 @@ public class ScrollContentLayout : Layout
 
 			for (int i = 0; i < _buttonCount; i++)
 			{
-				TextButton button = new(Bounds.CreateNested(0, i * _buttonHeight, 1, _buttonHeight), () => {}, ButtonStyle.Default, TextButtonStyle.Default, $"Button {i}")
+				int height = (int)(_buttonHeight * CurrentWindowState.Height);
+				TextButton button = new(Bounds.CreateNested(0, i * height, 1, height), () => {}, ButtonStyle.Default, TextButtonStyle.Default, $"Button {i}")
 				{
 					Depth = Depth + 1,
 				};

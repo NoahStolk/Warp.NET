@@ -8,7 +8,7 @@ public abstract class AbstractTextInput : AbstractComponent
 	private readonly Action<string>? _onDeselect;
 
 	protected AbstractTextInput(
-		Bounds bounds,
+		IBounds bounds,
 		bool isNumeric,
 		Action<string>? onEnter = null,
 		Action<string>? onDeselect = null,
@@ -25,14 +25,14 @@ public abstract class AbstractTextInput : AbstractComponent
 
 	protected bool Hover { get; private set; }
 
-	protected int CharWidth { get; set; }
-	protected int TextRenderingHorizontalOffset { get; set; }
+	protected abstract int CharWidth { get; }
+	protected abstract int TextRenderingHorizontalOffset { get; }
 
-	public override void Update(Vector2i<int> parentPosition)
+	public override void Update(Vector2i<int> scrollOffset)
 	{
-		base.Update(parentPosition);
+		base.Update(scrollOffset);
 
-		Hover = MouseUiContext.Contains(parentPosition, Bounds);
+		Hover = MouseUiContext.Contains(scrollOffset, Bounds);
 
 		if (Input.IsButtonPressed(MouseButton.Left))
 		{
@@ -47,7 +47,7 @@ public abstract class AbstractTextInput : AbstractComponent
 			}
 			else
 			{
-				int absoluteMousePositionX = (int)MouseUiContext.MousePosition.X - parentPosition.X - Bounds.X1;
+				int absoluteMousePositionX = (int)MouseUiContext.MousePosition.X - scrollOffset.X - Bounds.X1;
 				KeyboardInput.CursorPositionStart = GetIndexFromAbsoluteMousePositionX(absoluteMousePositionX);
 				KeyboardInput.CursorPositionEnd = KeyboardInput.CursorPositionStart;
 				KeyboardInput.CursorTimer = 0;
@@ -62,7 +62,7 @@ public abstract class AbstractTextInput : AbstractComponent
 
 		if (Input.IsButtonHeld(MouseButton.Left))
 		{
-			int absoluteMousePositionX = (int)MouseUiContext.MousePosition.X - parentPosition.X - Bounds.X1;
+			int absoluteMousePositionX = (int)MouseUiContext.MousePosition.X - scrollOffset.X - Bounds.X1;
 			KeyboardInput.CursorPositionEnd = GetIndexFromAbsoluteMousePositionX(absoluteMousePositionX);
 		}
 

@@ -2,16 +2,25 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## TODO
+## 0.1.7
 
 ### Added
 
 - Added `Bounds.CreateNested(float x, float y)` overload.
 - Added optional `Random` argument to `QuaternionExtensions.Randomize` method.
+- Re-added `IBounds`.
+- Re-added `ViewportState`.
+- Added `PixelBounds`.
+
+### Changed
+
+- Changed `ScrollViewer` constructor and added `scrollbarWidth` parameter.
+- Renamed `Bounds` to `NormalizedBounds`.
 
 ### Fixed
 
 - Fixed not returning in `Label.Render` when `Text` was empty.
+- Fixed not setting `CharWidth` and `TextRenderingHorizontalOffset` in `AbstractTextInput`. The properties are now abstract.
 
 ### Removed
 

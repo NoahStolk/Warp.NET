@@ -7,7 +7,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Slider : AbstractSlider
 {
-	public Slider(Bounds bounds, Action<float> onChange, bool applyInstantly, float min, float max, float step, float defaultValue, SliderStyle sliderStyle)
+	public Slider(IBounds bounds, Action<float> onChange, bool applyInstantly, float min, float max, float step, float defaultValue, SliderStyle sliderStyle)
 		: base(bounds, onChange, applyInstantly, min, max, step, defaultValue)
 	{
 		SliderStyle = sliderStyle;
@@ -15,16 +15,15 @@ public class Slider : AbstractSlider
 
 	public SliderStyle SliderStyle { get; set; }
 
-	public override void Render(Vector2i<int> parentPosition)
+	public override void Render(Vector2i<int> scrollOffset)
 	{
-		base.Render(parentPosition);
+		base.Render(scrollOffset);
 
 		Vector2i<int> borderVec = new(SliderStyle.BorderSize);
-		Vector2i<int> center = Bounds.TopLeft + Bounds.Size / 2;
 
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size, parentPosition + center, Depth, Color.White);
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size - borderVec, parentPosition + center, Depth + 1, Hold ? Color.Gray(0.5f) : Hover ? Color.Gray(0.25f) : Color.Black);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size, scrollOffset + Bounds.Center, Depth, Color.White);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(Bounds.Size - borderVec, scrollOffset + Bounds.Center, Depth + 1, Hold ? Color.Gray(0.5f) : Hover ? Color.Gray(0.25f) : Color.Black);
 
-		RenderImplUiBase.Game.GetFontRenderer(SliderStyle.FontSize).Schedule(Vector2i<int>.One, parentPosition + center, Depth + 3, SliderStyle.TextColor, CurrentValue.ToString("0.00"), SliderStyle.TextAlign);
+		RenderImplUiBase.Game.GetFontRenderer(SliderStyle.FontSize).Schedule(Vector2i<int>.One, scrollOffset + Bounds.Center, Depth + 3, SliderStyle.TextColor, CurrentValue.ToString("0.00"), SliderStyle.TextAlign);
 	}
 }

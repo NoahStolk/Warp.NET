@@ -18,9 +18,9 @@ public static class MouseUiContext
 		IsActive = false;
 	}
 
-	public static bool Contains(Vector2i<int> parentPosition, Bounds bounds)
+	public static bool Contains(Vector2i<int> scrollOffset, IBounds bounds)
 	{
-		if (!IsActive || !bounds.Contains(MousePosition.RoundToVector2Int32() - parentPosition))
+		if (!IsActive || !bounds.Contains(MousePosition.RoundToVector2Int32() - scrollOffset))
 			return false;
 
 		Deactivate();

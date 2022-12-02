@@ -15,7 +15,7 @@ public class NestingContext
 	private readonly List<AbstractComponent> _toAdd = new();
 	private readonly List<AbstractComponent> _toRemove = new();
 
-	public NestingContext(Bounds bounds)
+	public NestingContext(IBounds bounds)
 	{
 		Bounds = bounds;
 	}
@@ -28,7 +28,7 @@ public class NestingContext
 
 	public Vector2i<int> ScrollOffset { get; set; }
 
-	public Bounds Bounds { get; }
+	public IBounds Bounds { get; }
 
 	public void Add(AbstractComponent component)
 	{
@@ -67,7 +67,7 @@ public class NestingContext
 		_orderedComponents = _orderedComponents.OrderBy(c => c.Depth).ToList();
 	}
 
-	public void Update(Vector2i<int> parentPosition)
+	public void Update(Vector2i<int> scrollOffset)
 	{
 		UpdateQueue();
 
@@ -75,17 +75,17 @@ public class NestingContext
 		{
 			AbstractComponent component = _orderedComponents[i];
 			if (IsInParent(component))
-				component.Update(parentPosition + ScrollOffset);
+				component.Update(scrollOffset + ScrollOffset);
 		}
 	}
 
-	public void Render(Vector2i<int> parentPosition)
+	public void Render(Vector2i<int> scrollOffset)
 	{
 		for (int i = 0; i < _orderedComponents.Count; i++)
 		{
 			AbstractComponent component = _orderedComponents[i];
 			if (IsInParent(component))
-				component.Render(parentPosition + ScrollOffset);
+				component.Render(scrollOffset + ScrollOffset);
 		}
 	}
 
@@ -94,12 +94,7 @@ public class NestingContext
 		if (!component.IsActive)
 			return false;
 
-		Bounds boundsWithScrollOffset = component.Bounds with
-		{
-			X = component.Bounds.X + ScrollOffset.X / (float)Graphics.CurrentWindowState.Height,
-			Y = component.Bounds.Y + ScrollOffset.Y / (float)Graphics.CurrentWindowState.Height,
-		};
-
+		IBounds boundsWithScrollOffset = component.Bounds.Move(ScrollOffset.X, ScrollOffset.Y);
 		return Bounds.IntersectsOrContains(boundsWithScrollOffset);
 	}
 }
