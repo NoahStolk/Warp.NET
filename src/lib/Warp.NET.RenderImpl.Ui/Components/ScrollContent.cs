@@ -1,4 +1,5 @@
 using Warp.NET.Numerics;
+using Warp.NET.RenderImpl.Ui.Rendering;
 using Warp.NET.RenderImpl.Ui.Rendering.Scissors;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -16,7 +17,7 @@ public abstract class ScrollContent<TSelf, TParent> : AbstractScrollContent<TSel
 
 	public override void Render(Vector2i<int> scrollOffset)
 	{
-		ScissorScheduler.SetScissor(Scissor.Create(Bounds, scrollOffset));
+		ScissorScheduler.SetScissor(Scissor.Create(Bounds, scrollOffset, ViewportState.Offset, ViewportState.Scale));
 
 		base.Render(scrollOffset);
 
