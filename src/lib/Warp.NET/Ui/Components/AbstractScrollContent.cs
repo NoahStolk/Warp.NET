@@ -9,7 +9,7 @@ public abstract class AbstractScrollContent<TSelf, TParent> : AbstractComponent
 {
 	private readonly AbstractScrollViewer<TParent, TSelf> _parent;
 
-	protected AbstractScrollContent(Bounds bounds, AbstractScrollViewer<TParent, TSelf> parent)
+	protected AbstractScrollContent(IBounds bounds, AbstractScrollViewer<TParent, TSelf> parent)
 		: base(bounds)
 	{
 		_parent = parent;
@@ -26,13 +26,13 @@ public abstract class AbstractScrollContent<TSelf, TParent> : AbstractComponent
 		NestingContext.ScrollOffset = Vector2i<int>.Clamp(scrollOffset, new(0, -ContentHeightInPixels + Bounds.Size.Y), default);
 	}
 
-	public override void Update(Vector2i<int> parentPosition)
+	public override void Update(Vector2i<int> scrollOffset)
 	{
 		bool wasActive = MouseUiContext.IsActive;
 
-		base.Update(parentPosition);
+		base.Update(scrollOffset);
 
-		bool hoverWithoutBlock = wasActive && Bounds.Contains(MouseUiContext.MousePosition.RoundToVector2Int32() - parentPosition);
+		bool hoverWithoutBlock = wasActive && Bounds.Contains(MouseUiContext.MousePosition.RoundToVector2Int32() - scrollOffset);
 		if (!hoverWithoutBlock)
 			return;
 

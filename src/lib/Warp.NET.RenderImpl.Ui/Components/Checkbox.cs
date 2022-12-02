@@ -11,9 +11,9 @@ public class Checkbox : AbstractCheckbox
 	{
 	}
 
-	public override void Render(Vector2i<int> parentPosition)
+	public override void Render(Vector2i<int> scrollOffset)
 	{
-		base.Render(parentPosition);
+		base.Render(scrollOffset);
 
 		const int margin = 8;
 		const int border = 4;
@@ -27,10 +27,10 @@ public class Checkbox : AbstractCheckbox
 		Vector2i<int> center = topLeft + fullScale / 2;
 		Vector2i<int> scale = fullScale - marginVec;
 
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale + borderVec, parentPosition + center, Depth, Color.White);
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, parentPosition + center, Depth + 1, Hover ? Color.Gray(0.25f) : Color.Black);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale + borderVec, scrollOffset + center, Depth, Color.White);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, scrollOffset + center, Depth + 1, Hover ? Color.Gray(0.25f) : Color.Black);
 
 		if (CurrentValue)
-			RenderImplUiBase.Game.RectangleRenderer.Schedule(scale - borderTickVec, parentPosition + center, Depth + 2, Color.Gray(0.75f));
+			RenderImplUiBase.Game.RectangleRenderer.Schedule(scale - borderTickVec, scrollOffset + center, Depth + 2, Color.Gray(0.75f));
 	}
 }

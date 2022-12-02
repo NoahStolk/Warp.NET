@@ -7,5 +7,5 @@ public interface IScrollContent<out TSelf, in TParent>
 	where TSelf : AbstractScrollContent<TSelf, TParent>, IScrollContent<TSelf, TParent>
 	where TParent : AbstractScrollViewer<TParent, TSelf>
 {
-	static abstract TSelf Construct(Bounds bounds, TParent parent);
+	static abstract TSelf Construct(IBounds bounds, TParent parent);
 }

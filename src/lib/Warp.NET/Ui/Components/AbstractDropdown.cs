@@ -7,7 +7,7 @@ public abstract class AbstractDropdown : AbstractComponent
 {
 	private readonly List<AbstractDropdownEntry> _children = new();
 
-	protected AbstractDropdown(Bounds bounds)
+	protected AbstractDropdown(IBounds bounds)
 		: base(bounds)
 	{
 	}
@@ -16,11 +16,11 @@ public abstract class AbstractDropdown : AbstractComponent
 
 	protected bool Hover { get; private set; }
 
-	public override void Update(Vector2i<int> parentPosition)
+	public override void Update(Vector2i<int> scrollOffset)
 	{
-		base.Update(parentPosition);
+		base.Update(scrollOffset);
 
-		Hover = MouseUiContext.Contains(parentPosition, Bounds);
+		Hover = MouseUiContext.Contains(scrollOffset, Bounds);
 		if (!Input.IsButtonPressed(MouseButton.Left))
 			return;
 

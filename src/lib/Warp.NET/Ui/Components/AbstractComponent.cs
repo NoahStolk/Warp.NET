@@ -4,24 +4,24 @@ namespace Warp.NET.Ui.Components;
 
 public abstract class AbstractComponent
 {
-	protected AbstractComponent(Bounds bounds)
+	protected AbstractComponent(IBounds bounds)
 	{
 		Bounds = bounds;
 		NestingContext = new(bounds);
 	}
 
-	public Bounds Bounds { get; set; }
+	public IBounds Bounds { get; set; }
 	public bool IsActive { get; set; } = true;
 	public int Depth { get; set; }
 	public NestingContext NestingContext { get; }
 
-	public virtual void Update(Vector2i<int> parentPosition)
+	public virtual void Update(Vector2i<int> scrollOffset)
 	{
-		NestingContext.Update(parentPosition);
+		NestingContext.Update(scrollOffset);
 	}
 
-	public virtual void Render(Vector2i<int> parentPosition)
+	public virtual void Render(Vector2i<int> scrollOffset)
 	{
-		NestingContext.Render(parentPosition);
+		NestingContext.Render(scrollOffset);
 	}
 }

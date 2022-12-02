@@ -7,7 +7,7 @@ public abstract class AbstractButton : AbstractComponent
 {
 	private readonly Action _onClick;
 
-	protected AbstractButton(Bounds bounds, Action onClick)
+	protected AbstractButton(IBounds bounds, Action onClick)
 		: base(bounds)
 	{
 		_onClick = onClick;
@@ -17,11 +17,11 @@ public abstract class AbstractButton : AbstractComponent
 
 	public bool IsDisabled { get; set; }
 
-	public override void Update(Vector2i<int> parentPosition)
+	public override void Update(Vector2i<int> scrollOffset)
 	{
-		base.Update(parentPosition);
+		base.Update(scrollOffset);
 
-		Hover = MouseUiContext.Contains(parentPosition, Bounds);
+		Hover = MouseUiContext.Contains(scrollOffset, Bounds);
 
 		if (Hover && !IsDisabled && Input.IsButtonPressed(MouseButton.Left))
 			_onClick();

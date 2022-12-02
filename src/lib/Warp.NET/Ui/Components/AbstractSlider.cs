@@ -8,7 +8,7 @@ public abstract class AbstractSlider : AbstractComponent
 	private readonly Action<float> _onChange;
 	private readonly bool _applyInstantly;
 
-	protected AbstractSlider(Bounds bounds, Action<float> onChange, bool applyInstantly, float min, float max, float step, float defaultValue)
+	protected AbstractSlider(IBounds bounds, Action<float> onChange, bool applyInstantly, float min, float max, float step, float defaultValue)
 		: base(bounds)
 	{
 		_onChange = onChange;
@@ -30,11 +30,11 @@ public abstract class AbstractSlider : AbstractComponent
 
 	protected bool Hover { get; private set; }
 
-	public override void Update(Vector2i<int> parentPosition)
+	public override void Update(Vector2i<int> scrollOffset)
 	{
-		base.Update(parentPosition);
+		base.Update(scrollOffset);
 
-		Hover = MouseUiContext.Contains(parentPosition, Bounds);
+		Hover = MouseUiContext.Contains(scrollOffset, Bounds);
 
 		if (Hover && Input.IsButtonPressed(MouseButton.Left))
 		{
@@ -59,7 +59,7 @@ public abstract class AbstractSlider : AbstractComponent
 
 		void UpdateValue()
 		{
-			float percentage = (MouseUiContext.MousePosition.X - parentPosition.X - Bounds.X1) / (Bounds.X2 - Bounds.X1);
+			float percentage = (MouseUiContext.MousePosition.X - scrollOffset.X - Bounds.X1) / (Bounds.X2 - Bounds.X1);
 			float realValue = Math.Clamp(percentage * (Max - Min) + Min, Min, Max);
 			CurrentValue = MathF.Round(realValue / Step) * Step;
 		}

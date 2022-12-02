@@ -9,16 +9,16 @@ public abstract class ScrollContent<TSelf, TParent> : AbstractScrollContent<TSel
 	where TSelf : AbstractScrollContent<TSelf, TParent>, IScrollContent<TSelf, TParent>
 	where TParent : AbstractScrollViewer<TParent, TSelf>
 {
-	protected ScrollContent(Bounds bounds, TParent parent)
+	protected ScrollContent(IBounds bounds, TParent parent)
 		: base(bounds, parent)
 	{
 	}
 
-	public override void Render(Vector2i<int> parentPosition)
+	public override void Render(Vector2i<int> scrollOffset)
 	{
-		ScissorScheduler.SetScissor(Scissor.Create(Bounds, parentPosition));
+		ScissorScheduler.SetScissor(Scissor.Create(Bounds, scrollOffset));
 
-		base.Render(parentPosition);
+		base.Render(scrollOffset);
 
 		ScissorScheduler.UnsetScissor();
 	}

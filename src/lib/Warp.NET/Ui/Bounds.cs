@@ -1,59 +1,42 @@
-using Warp.NET.Numerics;
-
 namespace Warp.NET.Ui;
 
-public sealed record Bounds(float X, float Y, float Width, float Height)
+/// <summary>
+/// An implementation of <see cref="IBounds"/> which uses normalized coordinates. This results in rendering stretched across the entire window.
+/// </summary>
+/// <param name="X">The normalized X coordinate, between 0 and 1.</param>
+/// <param name="Y">The normalized Y coordinate, between 0 and 1.</param>
+/// <param name="Width">The normalized width, between 0 and 1.</param>
+/// <param name="Height">The normalized height, between 0 and 1.</param>
+// TODO: Rename to NormalizedBounds.
+public sealed record Bounds(float X, float Y, float Width, float Height) : IBounds
 {
 	public int X1 => (int)(X * Graphics.CurrentWindowState.Width);
 	public int Y1 => (int)(Y * Graphics.CurrentWindowState.Height);
 	public int X2 => X1 + (int)(Width * Graphics.CurrentWindowState.Width);
 	public int Y2 => Y1 + (int)(Height * Graphics.CurrentWindowState.Height);
-	public Vector2i<int> TopLeft => new(X1, Y1);
-	public Vector2i<int> Size => new(X2 - X1, Y2 - Y1);
 
-	public bool Contains(int x, int y)
+	public IBounds CreateNested(int x, int y, int width, int height)
 	{
-		return x >= X1 && x <= X2 && y >= Y1 && y <= Y2;
+		float nestedX = (int)(x / (float)Graphics.CurrentWindowState.Width) * Width;
+		float nestedY = (int)(y / (float)Graphics.CurrentWindowState.Height) * Height;
+		float nestedWidth = (int)(width / (float)Graphics.CurrentWindowState.Width) * Width;
+		float nestedHeight = (int)(height / (float)Graphics.CurrentWindowState.Height) * Height;
+		return new Bounds(X + nestedX, Y + nestedY, nestedWidth, nestedHeight);
 	}
 
-	public bool Contains(Vector2i<int> position)
+	public Vector2 CreateNested(int x, int y)
 	{
-		return Contains(position.X, position.Y);
-	}
-
-	public bool IntersectsOrContains(Bounds other)
-	{
-		return IntersectsOrContains(other.X1, other.Y1, other.X2, other.Y2);
-	}
-
-	public bool IntersectsOrContains(int x1, int y1, int x2, int y2)
-	{
-		Vector2i<int> a = new(x1, y1);
-		Vector2i<int> b = new(x2, y1);
-		Vector2i<int> c = new(x1, y2);
-		Vector2i<int> d = new(x2, y2);
-
-		return Contains(a) || Contains(b) || Contains(c) || Contains(d);
-	}
-
-	public Bounds CreateNested(float x, float y, float width, float height)
-	{
-		float nestedX = x * Width;
-		float nestedY = y * Height;
-		float nestedWidth = width * Width;
-		float nestedHeight = height * Height;
-		return new(X + nestedX, Y + nestedY, nestedWidth, nestedHeight);
-	}
-
-	public Vector2 CreateNested(float x, float y)
-	{
-		float nestedX = x * Width;
-		float nestedY = y * Height;
+		float nestedX = (int)(x / (float)Graphics.CurrentWindowState.Width) * Width;
+		float nestedY = (int)(y / (float)Graphics.CurrentWindowState.Height) * Height;
 		return new(X + nestedX, Y + nestedY);
 	}
 
-	public override string ToString()
+	public IBounds Move(int x, int y)
 	{
-		return $"{X1},{Y1}..{X2},{Y2}";
+		return this with
+		{
+			X = X + (int)(x / (float)Graphics.CurrentWindowState.Width),
+			Y = Y + (int)(y / (float)Graphics.CurrentWindowState.Height),
+		};
 	}
 }

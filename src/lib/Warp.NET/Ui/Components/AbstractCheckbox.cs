@@ -7,7 +7,7 @@ public abstract class AbstractCheckbox : AbstractComponent
 {
 	private readonly Action<bool> _onClick;
 
-	protected AbstractCheckbox(Bounds bounds, Action<bool> onClick)
+	protected AbstractCheckbox(IBounds bounds, Action<bool> onClick)
 		: base(bounds)
 	{
 		_onClick = onClick;
@@ -19,11 +19,11 @@ public abstract class AbstractCheckbox : AbstractComponent
 
 	public bool IsDisabled { get; set; }
 
-	public override void Update(Vector2i<int> parentPosition)
+	public override void Update(Vector2i<int> scrollOffset)
 	{
-		base.Update(parentPosition);
+		base.Update(scrollOffset);
 
-		Hover = MouseUiContext.Contains(parentPosition, Bounds);
+		Hover = MouseUiContext.Contains(scrollOffset, Bounds);
 
 		if (Hover && !IsDisabled && Input.IsButtonPressed(MouseButton.Left))
 		{

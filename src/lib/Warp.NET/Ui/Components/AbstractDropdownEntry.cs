@@ -8,7 +8,7 @@ public abstract class AbstractDropdownEntry : AbstractComponent
 	private readonly AbstractDropdown _parent;
 	private readonly Action _onClick;
 
-	protected AbstractDropdownEntry(Bounds bounds, AbstractDropdown parent, Action onClick)
+	protected AbstractDropdownEntry(IBounds bounds, AbstractDropdown parent, Action onClick)
 		: base(bounds)
 	{
 		_parent = parent;
@@ -19,11 +19,11 @@ public abstract class AbstractDropdownEntry : AbstractComponent
 
 	public bool IsDisabled { get; set; }
 
-	public override void Update(Vector2i<int> parentPosition)
+	public override void Update(Vector2i<int> scrollOffset)
 	{
-		base.Update(parentPosition);
+		base.Update(scrollOffset);
 
-		Hover = MouseUiContext.Contains(parentPosition, Bounds);
+		Hover = MouseUiContext.Contains(scrollOffset, Bounds);
 
 		if (!Hover || IsDisabled || !Input.IsButtonPressed(MouseButton.Left))
 			return;
