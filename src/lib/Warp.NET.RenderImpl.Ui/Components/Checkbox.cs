@@ -6,7 +6,7 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class Checkbox : AbstractCheckbox
 {
-	public Checkbox(Bounds bounds, Action<bool> onClick)
+	public Checkbox(NormalizedBounds bounds, Action<bool> onClick)
 		: base(bounds, onClick)
 	{
 	}

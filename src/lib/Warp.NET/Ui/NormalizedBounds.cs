@@ -7,8 +7,7 @@ namespace Warp.NET.Ui;
 /// <param name="Y">The normalized Y coordinate, between 0 and 1.</param>
 /// <param name="Width">The normalized width, between 0 and 1.</param>
 /// <param name="Height">The normalized height, between 0 and 1.</param>
-// TODO: Rename to NormalizedBounds.
-public sealed record Bounds(float X, float Y, float Width, float Height) : IBounds
+public sealed record NormalizedBounds(float X, float Y, float Width, float Height) : IBounds
 {
 	public int X1 => (int)(X * Graphics.CurrentWindowState.Width);
 	public int Y1 => (int)(Y * Graphics.CurrentWindowState.Height);
@@ -21,7 +20,7 @@ public sealed record Bounds(float X, float Y, float Width, float Height) : IBoun
 		float nestedY = (int)(y / (float)Graphics.CurrentWindowState.Height) * Height;
 		float nestedWidth = (int)(width / (float)Graphics.CurrentWindowState.Width) * Width;
 		float nestedHeight = (int)(height / (float)Graphics.CurrentWindowState.Height) * Height;
-		return new Bounds(X + nestedX, Y + nestedY, nestedWidth, nestedHeight);
+		return new NormalizedBounds(X + nestedX, Y + nestedY, nestedWidth, nestedHeight);
 	}
 
 	public Vector2 CreateNested(int x, int y)
