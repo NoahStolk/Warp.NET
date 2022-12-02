@@ -11,8 +11,6 @@ public class TextInput : AbstractTextInput
 {
 	private const float _cursorTimerSwitch = 0.45f;
 
-	private TextInputStyle _textInputStyle;
-
 	public TextInput(
 		IBounds bounds,
 		bool isNumeric,
@@ -22,19 +20,14 @@ public class TextInput : AbstractTextInput
 		TextInputStyle textInputStyle)
 		: base(bounds, isNumeric, onEnter, onDeselect, onInput)
 	{
-		_textInputStyle = textInputStyle;
+		TextInputStyle = textInputStyle;
 	}
 
-	public TextInputStyle TextInputStyle
-	{
-		get => _textInputStyle;
-		set
-		{
-			CharWidth = RenderImplUiBase.Game.GetFontRenderer(value.FontSize).Font.CharWidth;
-			TextRenderingHorizontalOffset = value.TextRenderingHorizontalOffset;
-			_textInputStyle = value;
-		}
-	}
+	public TextInputStyle TextInputStyle { get; set; }
+
+	protected override int CharWidth => RenderImplUiBase.Game.GetFontRenderer(TextInputStyle.FontSize).Font.CharWidth;
+
+	protected override int TextRenderingHorizontalOffset => TextInputStyle.TextRenderingHorizontalOffset;
 
 	public override void Render(Vector2i<int> scrollOffset)
 	{

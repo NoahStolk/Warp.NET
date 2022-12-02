@@ -25,8 +25,8 @@ public abstract class AbstractTextInput : AbstractComponent
 
 	protected bool Hover { get; private set; }
 
-	protected int CharWidth { get; set; }
-	protected int TextRenderingHorizontalOffset { get; set; }
+	protected abstract int CharWidth { get; }
+	protected abstract int TextRenderingHorizontalOffset { get; }
 
 	public override void Update(Vector2i<int> scrollOffset)
 	{
