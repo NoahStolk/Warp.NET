@@ -13,7 +13,7 @@ public class NestingContextTests
 
 	public NestingContextTests()
 	{
-		_nc = new(new(0, 0, 0.1f, 0.1f));
+		_nc = new(new NormalizedBounds(0, 0, 0.1f, 0.1f));
 		_component1 = new();
 		_component2 = new();
 		_component3 = new();
@@ -85,7 +85,7 @@ public class NestingContextTests
 	private sealed class Component : AbstractComponent
 	{
 		public Component()
-			: base(new(0, 0, 0.1f, 0.1f))
+			: base(new NormalizedBounds(0, 0, 0.1f, 0.1f))
 		{
 		}
 	}
