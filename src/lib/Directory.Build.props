@@ -9,7 +9,7 @@
 		<Copyright>Copyright © Noah Stolk</Copyright>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/NoahStolk/Warp.NET</RepositoryUrl>
-		<Version>0.1.7</Version>
+		<Version>0.1.8</Version>
 	</PropertyGroup>
 
 </Project>

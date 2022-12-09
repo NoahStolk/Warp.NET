@@ -2,6 +2,12 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.8
+
+### Added
+
+- Added additional debug information to `NestingContext.UpdateQueue` exceptions.
+
 ## 0.1.7
 
 ### Added
