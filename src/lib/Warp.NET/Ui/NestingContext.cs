@@ -48,7 +48,7 @@ public class NestingContext
 		foreach (AbstractComponent component in _toAdd)
 		{
 			if (_orderedComponents.Contains(component))
-				throw new InvalidOperationException("Attempting to add an already existing component.");
+				throw new InvalidOperationException($"Attempting to add an already existing component: {component.GetDebugString()}");
 
 			_orderedComponents.Add(component);
 		}
@@ -56,7 +56,7 @@ public class NestingContext
 		foreach (AbstractComponent component in _toRemove)
 		{
 			if (_toAdd.Contains(component))
-				throw new InvalidOperationException("Attempting to add and remove the same component at the same time.");
+				throw new InvalidOperationException($"Attempting to add and remove the same component at the same time: {component.GetDebugString()}");
 
 			_orderedComponents.Remove(component);
 		}
