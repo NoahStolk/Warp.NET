@@ -17,6 +17,9 @@ public static class ContentFileWriter
 		using MemoryStream dataMemory = new();
 		using BinaryWriter dataWriter = new(dataMemory);
 
+		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".bin"))
+			Write<BlobContentConverter, BlobBinary>(path, tocEntries, dataWriter);
+
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".txt"))
 			Write<CharsetContentConverter, CharsetBinary>(path, tocEntries, dataWriter);
 

@@ -2,6 +2,12 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.9
+
+### Added
+
+- Added `Blob` content type.
+
 ## 0.1.8
 
 ### Added

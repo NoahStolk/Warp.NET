@@ -40,6 +40,7 @@ Warp.NET automatically builds content files from a local path. These types of co
 
 | **Name** | **Extension(s)**    | **Specification**                                 |
 |----------|---------------------|---------------------------------------------------|
+| Blob     | .bin                | Raw binary                                        |
 | Charset  | .txt                | Text file containing the charset on a single line |
 | Model    | .obj                | https://en.wikipedia.org/wiki/Wavefront_.obj_file |
 | Shader   | .vert, .geom, .frag | GLSL code                                         |
