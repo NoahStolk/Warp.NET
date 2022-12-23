@@ -2,6 +2,12 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.10
+
+### Added
+
+- Added color parameters to `IconButton` component.
+
 ## 0.1.9
 
 ### Added
