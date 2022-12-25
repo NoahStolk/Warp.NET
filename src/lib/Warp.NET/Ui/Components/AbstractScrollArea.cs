@@ -53,7 +53,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 		HandleScrollbar(scrollOffset);
 	}
 
-	private void UpdateScrollOffsetAndScrollbarPosition(Vector2i<int> newScrollOffset)
+	public void UpdateScrollOffsetAndScrollbarPosition(Vector2i<int> newScrollOffset)
 	{
 		// Update and clamp scroll offset.
 		NestingContext.ScrollOffset = Vector2i<int>.Clamp(newScrollOffset, new(0, -_contentHeight + Bounds.Size.Y), default);
