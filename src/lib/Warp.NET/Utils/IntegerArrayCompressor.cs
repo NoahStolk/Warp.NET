@@ -3,9 +3,16 @@ namespace Warp.NET.Utils;
 public static class IntegerArrayCompressor
 {
 	/// <summary>
+	/// <para>
 	/// Compresses the <paramref name="data"/> array of values into a compact byte array.
 	/// Only the required amount of bits is used. For example, if none of the values exceed 15, we can use 4-bit integers.
+	/// </para>
+	/// <para>
 	/// When using an amount of bits that is not divisible by 8, the last byte might be "incomplete" and the remaining bits within that byte will be set to 0.
+	/// </para>
+	/// <para>
+	/// When all the bytes are 0, the returned array will be empty.
+	/// </para>
 	/// </summary>
 	public static byte[] CompressData(byte[] data)
 	{
