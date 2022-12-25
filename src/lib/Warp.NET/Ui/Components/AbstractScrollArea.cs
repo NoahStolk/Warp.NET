@@ -1,25 +1,25 @@
 using Silk.NET.GLFW;
-using Warp.NET.Debugging;
 using Warp.NET.Extensions;
 using Warp.NET.Numerics;
 
 namespace Warp.NET.Ui.Components;
 
-public class AbstractScrollArea : AbstractComponent
+public abstract class AbstractScrollArea : AbstractComponent
 {
-	private const int _scrollMultiplierInPixels = 96;
-	private const int _scrollbarWidth = 32;
+	private readonly int _scrollAmountInPixels;
 
 	private int _holdStartMouseY;
 	private int _scrollbarStartYOld;
 
 	private int _contentHeight;
 
-	public AbstractScrollArea(IBounds bounds)
+	protected AbstractScrollArea(IBounds bounds, int scrollAmountInPixels, int scrollbarWidth)
 		: base(bounds)
 	{
-		ContentBounds = Bounds.CreateNested(0, 0, bounds.Size.X - _scrollbarWidth, bounds.Size.Y);
-		ScrollbarBounds = Bounds.CreateNested(bounds.Size.X - _scrollbarWidth, 0, _scrollbarWidth, bounds.Size.Y);
+		_scrollAmountInPixels = scrollAmountInPixels;
+
+		ContentBounds = Bounds.CreateNested(0, 0, bounds.Size.X - scrollbarWidth, bounds.Size.Y);
+		ScrollbarBounds = Bounds.CreateNested(bounds.Size.X - scrollbarWidth, 0, scrollbarWidth, bounds.Size.Y);
 	}
 
 	public bool ScrollbarHover { get; private set; }
@@ -70,7 +70,7 @@ public class AbstractScrollArea : AbstractComponent
 		int scroll = Input.GetScroll();
 		if (scroll != 0)
 		{
-			Vector2i<int> newOffset = new(0, NestingContext.ScrollOffset.Y + scroll * _scrollMultiplierInPixels);
+			Vector2i<int> newOffset = new(0, NestingContext.ScrollOffset.Y + scroll * _scrollAmountInPixels);
 			UpdateScrollOffset(newOffset);
 		}
 	}
@@ -92,12 +92,12 @@ public class AbstractScrollArea : AbstractComponent
 				}
 				else
 				{
-					UpdateScrollOffset(new(0, NestingContext.ScrollOffset.Y - _scrollMultiplierInPixels));
+					UpdateScrollOffset(new(0, NestingContext.ScrollOffset.Y - _scrollAmountInPixels));
 				}
 			}
 			else
 			{
-				UpdateScrollOffset(new(0, NestingContext.ScrollOffset.Y + _scrollMultiplierInPixels));
+				UpdateScrollOffset(new(0, NestingContext.ScrollOffset.Y + _scrollAmountInPixels));
 			}
 		}
 		else if (ScrollbarHold)

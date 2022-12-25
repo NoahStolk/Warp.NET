@@ -8,8 +8,8 @@ namespace Warp.NET.RenderImpl.Ui.Components;
 
 public class ScrollArea : AbstractScrollArea
 {
-	public ScrollArea(IBounds bounds)
-		: base(bounds)
+	public ScrollArea(IBounds bounds, int scrollAmountInPixels, int scrollbarWidth)
+		: base(bounds, scrollAmountInPixels, scrollbarWidth)
 	{
 	}
 
