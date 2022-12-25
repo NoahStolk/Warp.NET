@@ -13,7 +13,8 @@ public class ScrollContentLayout : Layout
 		TextButton backButton = new(new PixelBounds(256, 320, 256, 128), () => Game.Self.ActiveLayout = Game.Self.MainLayout, ButtonStyle.Default, TextButtonStyle.Default, "Back");
 
 		const int scrollbarWidth = 32;
-		ScrollArea scrollViewer = new(new PixelBounds(704, 384, 512 + scrollbarWidth, 512), 96, 32);
+		ScrollAreaStyle style = new(2, 2, Color.White, Color.Gray(0.75f), Color.Black, Color.Gray(0.5f), Color.Gray(0.25f));
+		ScrollArea scrollViewer = new(new PixelBounds(704, 384, 512 + scrollbarWidth, 512), 96, 32, style);
 
 		for (int i = 0; i < 20; i++)
 		{

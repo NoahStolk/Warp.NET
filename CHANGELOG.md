@@ -8,6 +8,7 @@ This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Added `AbstractScrollArea` which replaces the original scroll implementation and components. This is now a single component instead of three (viewer, content, scrollbar).
 - Added default rendering implementation `ScrollArea` for `AbstractScrollArea`.
+- Added `ScrollAreaStyle`.
 - Added `NestingContext.OnUpdateQueue` method which fires when components are added to or removed from the nesting context.
 
 ### Removed
