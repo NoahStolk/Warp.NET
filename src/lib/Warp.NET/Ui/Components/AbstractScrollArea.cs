@@ -33,7 +33,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 	public IBounds ContentBounds { get; }
 	public IBounds ScrollbarBounds { get; }
 
-	private void RecalculateHeight()
+	public void RecalculateHeight()
 	{
 		int min = NestingContext.OrderedComponents.Count == 0 ? 0 : NestingContext.OrderedComponents.Min(b => b.Bounds.Y1);
 		int max = NestingContext.OrderedComponents.Count == 0 ? 0 : NestingContext.OrderedComponents.Max(b => b.Bounds.Y2);
