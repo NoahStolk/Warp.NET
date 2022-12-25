@@ -40,10 +40,10 @@ public sealed partial class Game : RenderImplUiGameBase
 	{
 		base.PrepareRender();
 
-		MonoSpaceFontRenderer32.Schedule(new(2), WindowPosition.Get(0.50f, 0.10f), 0, Color.White, "Warp.NET.Samples.Ui", TextAlign.Middle);
-		MonoSpaceFontRenderer12.Schedule(new(1), WindowPosition.Get(0.50f, 0.14f), 0, Color.White, "This text is scheduled by the game itself, and is not part of the UI components.", TextAlign.Middle);
-		MonoSpaceFontRenderer12.Schedule(new(1), WindowPosition.Get(0.05f, 0.80f), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
 		CircleRenderer.Schedule(Input.GetMousePosition().RoundToVector2Int32(), 12, 0, Color.Red);
+		MonoSpaceFontRenderer32.Schedule(new(2), new(960, 128), 0, Color.White, "Warp.NET.Samples.Ui", TextAlign.Middle);
+		MonoSpaceFontRenderer12.Schedule(new(1), new(960, 160), 0, Color.White, "This text is scheduled by the game itself, and is not part of the UI components.", TextAlign.Middle);
+		MonoSpaceFontRenderer12.Schedule(new(1), new(64, 768), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
 
 		ActiveLayout.NestingContext.Render(default);
 	}
