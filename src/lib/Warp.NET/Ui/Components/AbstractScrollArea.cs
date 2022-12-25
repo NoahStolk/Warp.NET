@@ -39,6 +39,8 @@ public abstract class AbstractScrollArea : AbstractComponent
 		int max = NestingContext.OrderedComponents.Count == 0 ? 0 : NestingContext.OrderedComponents.Max(b => b.Bounds.Y2);
 		_contentHeight = max - min;
 		ScrollbarHeight = _contentHeight == 0 ? ScrollbarBounds.Size.Y : (int)(ContentBounds.Size.Y / (float)_contentHeight * ScrollbarBounds.Size.Y);
+
+		UpdateScrollOffsetAndScrollbarPosition(NestingContext.ScrollOffset);
 	}
 
 	public override void Update(Vector2i<int> scrollOffset)
@@ -51,10 +53,10 @@ public abstract class AbstractScrollArea : AbstractComponent
 		HandleScrollbar(scrollOffset);
 	}
 
-	private void UpdateScrollOffset(Vector2i<int> newOffset)
+	private void UpdateScrollOffsetAndScrollbarPosition(Vector2i<int> newScrollOffset)
 	{
 		// Clamp value.
-		NestingContext.ScrollOffset = Vector2i<int>.Clamp(newOffset, new(0, -_contentHeight + Bounds.Size.Y), default);
+		NestingContext.ScrollOffset = Vector2i<int>.Clamp(newScrollOffset, new(0, -_contentHeight + Bounds.Size.Y), default);
 
 		// Update scrollbar position.
 		ScrollbarStartY = (int)(NestingContext.ScrollOffset.Y / (float)-_contentHeight * ScrollbarBounds.Size.Y);
@@ -70,7 +72,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 		if (scroll != 0)
 		{
 			Vector2i<int> newOffset = new(0, NestingContext.ScrollOffset.Y + scroll * _scrollAmountInPixels);
-			UpdateScrollOffset(newOffset);
+			UpdateScrollOffsetAndScrollbarPosition(newOffset);
 		}
 	}
 
@@ -91,12 +93,12 @@ public abstract class AbstractScrollArea : AbstractComponent
 				}
 				else
 				{
-					UpdateScrollOffset(new(0, NestingContext.ScrollOffset.Y - _scrollAmountInPixels));
+					UpdateScrollOffsetAndScrollbarPosition(new(0, NestingContext.ScrollOffset.Y - _scrollAmountInPixels));
 				}
 			}
 			else
 			{
-				UpdateScrollOffset(new(0, NestingContext.ScrollOffset.Y + _scrollAmountInPixels));
+				UpdateScrollOffsetAndScrollbarPosition(new(0, NestingContext.ScrollOffset.Y + _scrollAmountInPixels));
 			}
 		}
 		else if (ScrollbarHold)
@@ -117,7 +119,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 		{
 			int yDiff = TranslatedMousePosition(scrollOffset.Y) - _holdStartMouseY;
 			float multiplier = _contentHeight / (float)ScrollbarBounds.Size.Y;
-			UpdateScrollOffset(new(0, (int)((-_scrollbarStartYOld - yDiff) * multiplier)));
+			UpdateScrollOffsetAndScrollbarPosition(new(0, (int)((-_scrollbarStartYOld - yDiff) * multiplier)));
 		}
 
 		int TranslatedMousePosition(int scrollOffsetY)
