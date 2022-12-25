@@ -30,6 +30,8 @@ public class NestingContext
 
 	public IBounds Bounds { get; }
 
+	public Action? OnUpdateQueue { get; set; }
+
 	public void Add(AbstractComponent component)
 	{
 		_toAdd.Add(component);
@@ -65,6 +67,8 @@ public class NestingContext
 		_toRemove.Clear();
 
 		_orderedComponents = _orderedComponents.OrderBy(c => c.Depth).ToList();
+
+		OnUpdateQueue?.Invoke();
 	}
 
 	public void Update(Vector2i<int> scrollOffset)

@@ -1,13 +1,18 @@
 using Warp.NET;
 using Warp.NET.Content.Conversion;
 using Warp.NET.Debugging;
+using Warp.NET.Numerics;
 using Warp.NET.RenderImpl.Ui;
+using Warp.NET.RenderImpl.Ui.Rendering;
 using Warp.NET.Samples.Ui;
+
+const int nativeWidth = 1920;
+const int nativeHeight = 1080;
 
 DebugStack.DisplaySetting = DebugStackDisplaySetting.Simple;
 Graphics.OnChangeWindowSize = OnChangeWindowSize;
-CreateWindow(new("Warp.NET.Samples.Ui", 1920, 1080, false));
-SetWindowSizeLimits(1024, 768, -1, -1);
+CreateWindow(new("Warp.NET.Samples.Ui", nativeWidth, nativeHeight, false));
+SetWindowSizeLimits(nativeWidth, nativeHeight, -1, -1);
 
 #if DEBUG
 const string? contentRootDirectory = @"..\..\..\..\..\lib\Warp.NET.RenderImpl.Ui\Content";
@@ -28,5 +33,19 @@ game.Run();
 
 static void OnChangeWindowSize(int width, int height)
 {
-	Gl.Viewport(0, 0, (uint)width, (uint)height);
+	const float originalAspectRatio = nativeWidth / (float)nativeHeight;
+	const float adjustedWidth = nativeHeight * originalAspectRatio; // Adjusted for aspect ratio
+
+	int leftOffset = (int)((width - adjustedWidth) / 2);
+	int bottomOffset = (height - nativeHeight) / 2;
+	ViewportState.Offset = new(leftOffset, bottomOffset);
+	ViewportState.Viewport = new(leftOffset, bottomOffset, (int)adjustedWidth, nativeHeight); // Fix viewport to maintain aspect ratio
+	ViewportState.Scale = new(ViewportState.Viewport.Width / (float)nativeWidth, ViewportState.Viewport.Height / (float)nativeHeight);
+
+	ActivateViewport(ViewportState.Viewport);
+
+	static void ActivateViewport(Viewport viewport)
+	{
+		Gl.Viewport(viewport.X, viewport.Y, (uint)viewport.Width, (uint)viewport.Height);
+	}
 }

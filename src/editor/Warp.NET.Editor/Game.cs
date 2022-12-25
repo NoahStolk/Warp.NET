@@ -34,8 +34,8 @@ public sealed partial class Game : RenderImplUiGameBase
 	{
 		base.PrepareRender();
 
-		MonoSpaceFontRenderer32.Schedule(new(2), WindowPosition.Get(0.5f, 0.125f), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
-		MonoSpaceFontRenderer12.Schedule(new(1), WindowPosition.Get(0, 0.8f), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
+		MonoSpaceFontRenderer32.Schedule(new(2), new(960, 128), 0, Color.White, "Warp.NET Editor", TextAlign.Middle);
+		MonoSpaceFontRenderer12.Schedule(new(1), new(64, 768), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
 		CircleRenderer.Schedule(Input.GetMousePosition().RoundToVector2Int32(), 12, 0, Color.Red);
 
 		_mainLayout.NestingContext.Render(default);

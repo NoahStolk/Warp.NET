@@ -4,7 +4,7 @@ using Warp.NET.Debugging;
 using Warp.NET.Extensions;
 using Warp.NET.Numerics;
 using Warp.NET.RenderImpl.Ui;
-using Warp.NET.RenderImpl.Ui.Utils;
+using Warp.NET.RenderImpl.Ui.Rendering;
 using Warp.NET.Samples.Ui.Layouts;
 using Warp.NET.Text;
 using Warp.NET.Ui;
@@ -14,9 +14,13 @@ namespace Warp.NET.Samples.Ui;
 [GenerateGame]
 public sealed partial class Game : RenderImplUiGameBase
 {
+	private readonly Matrix4x4 _projectionMatrix;
+
 	private Game()
 	{
 		ActiveLayout = MainLayout;
+
+		_projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, InitialWindowState.Width, InitialWindowState.Height, 0, -1024, 1024);
 
 		Gl.Enable(EnableCap.Blend);
 		Gl.Enable(EnableCap.CullFace);
@@ -31,7 +35,7 @@ public sealed partial class Game : RenderImplUiGameBase
 	{
 		base.Update();
 
-		MouseUiContext.Reset(Input.GetMousePosition());
+		MouseUiContext.Reset(ViewportState.MousePosition);
 
 		ActiveLayout.NestingContext.Update(default);
 	}
@@ -40,10 +44,10 @@ public sealed partial class Game : RenderImplUiGameBase
 	{
 		base.PrepareRender();
 
-		MonoSpaceFontRenderer32.Schedule(new(2), WindowPosition.Get(0.50f, 0.10f), 0, Color.White, "Warp.NET.Samples.Ui", TextAlign.Middle);
-		MonoSpaceFontRenderer12.Schedule(new(1), WindowPosition.Get(0.50f, 0.14f), 0, Color.White, "This text is scheduled by the game itself, and is not part of the UI components.", TextAlign.Middle);
-		MonoSpaceFontRenderer12.Schedule(new(1), WindowPosition.Get(0.05f, 0.80f), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
-		CircleRenderer.Schedule(Input.GetMousePosition().RoundToVector2Int32(), 12, 0, Color.Red);
+		MonoSpaceFontRenderer32.Schedule(new(2), new(960, 128), 0, Color.White, "Warp.NET.Samples.Ui", TextAlign.Middle);
+		MonoSpaceFontRenderer12.Schedule(new(1), new(960, 192), 0, Color.White, "This text is scheduled by the game itself, and is not part of the UI components.", TextAlign.Middle);
+		MonoSpaceFontRenderer12.Schedule(new(1), new(64, 768), 0, Color.Red, DebugStack.GetString(), TextAlign.Left);
+		CircleRenderer.Schedule(ViewportState.MousePosition.RoundToVector2Int32(), 12, 0, Color.Red);
 
 		ActiveLayout.NestingContext.Render(default);
 	}
@@ -53,15 +57,13 @@ public sealed partial class Game : RenderImplUiGameBase
 		Gl.ClearColor(0, 0, 0, 1);
 		Gl.Clear(ClearBufferMask.ColorBufferBit);
 
-		Matrix4x4 projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(0, CurrentWindowState.Width, CurrentWindowState.Height, 0, -1024, 1024);
-
 		RenderImplUiShaders.Ui.Use();
-		Shader.SetMatrix4x4(UiUniforms.Projection, projectionMatrix);
+		Shader.SetMatrix4x4(UiUniforms.Projection, _projectionMatrix);
 		RectangleRenderer.Render();
 		CircleRenderer.Render();
 
 		RenderImplUiShaders.Font.Use();
-		Shader.SetMatrix4x4(FontUniforms.Projection, projectionMatrix);
+		Shader.SetMatrix4x4(FontUniforms.Projection, _projectionMatrix);
 		MonoSpaceFontRenderer8.Render();
 		MonoSpaceFontRenderer12.Render();
 		MonoSpaceFontRenderer16.Render();
@@ -70,7 +72,7 @@ public sealed partial class Game : RenderImplUiGameBase
 		MonoSpaceFontRenderer64.Render();
 
 		RenderImplUiShaders.Sprite.Use();
-		Shader.SetMatrix4x4(SpriteUniforms.Projection, projectionMatrix);
+		Shader.SetMatrix4x4(SpriteUniforms.Projection, _projectionMatrix);
 		SpriteRenderer.Render();
 	}
 }
