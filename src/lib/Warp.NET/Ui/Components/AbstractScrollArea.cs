@@ -38,7 +38,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 		int min = NestingContext.OrderedComponents.Count == 0 ? 0 : NestingContext.OrderedComponents.Min(b => b.Bounds.Y1);
 		int max = NestingContext.OrderedComponents.Count == 0 ? 0 : NestingContext.OrderedComponents.Max(b => b.Bounds.Y2);
 		_contentHeight = max - min;
-		ScrollbarHeight = _contentHeight == 0 ? ScrollbarBounds.Size.Y : (int)(ContentBounds.Size.Y / (float)_contentHeight * ScrollbarBounds.Size.Y);
+		ScrollbarHeight = _contentHeight == 0 ? ScrollbarBounds.Size.Y : Math.Min((int)(ContentBounds.Size.Y / (float)_contentHeight * ScrollbarBounds.Size.Y), ContentBounds.Size.Y);
 
 		UpdateScrollOffsetAndScrollbarPosition(NestingContext.ScrollOffset);
 	}
