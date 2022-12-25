@@ -9,7 +9,7 @@ public class MainLayout : Layout
 {
 	public MainLayout()
 	{
-		Label titleLabel = new(new PixelBounds(960, 256, 128, 128), "Main Layout", LabelStyle.Default with { TextColor = Color.Yellow });
+		Label titleLabel = new(new PixelBounds(896, 256, 128, 128), "Main Layout", LabelStyle.Default with { TextColor = Color.Yellow });
 		TextButton scrollContentButton = new(new PixelBounds(256, 320, 256, 128), () => Game.Self.ActiveLayout = Game.Self.ScrollContentLayout, ButtonStyle.Default, TextButtonStyle.Default, "ScrollContent");
 
 		NestingContext.Add(titleLabel);

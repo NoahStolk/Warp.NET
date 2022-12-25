@@ -9,7 +9,7 @@ public class ScrollContentLayout : Layout
 {
 	public ScrollContentLayout()
 	{
-		Label titleLabel = new(new PixelBounds(960, 256, 128, 128), "Scroll Content Layout", LabelStyle.Default with { TextColor = Color.Green });
+		Label titleLabel = new(new PixelBounds(896, 256, 128, 128), "Scroll Content Layout", LabelStyle.Default with { TextColor = Color.Green });
 		TextButton backButton = new(new PixelBounds(256, 320, 256, 128), () => Game.Self.ActiveLayout = Game.Self.MainLayout, ButtonStyle.Default, TextButtonStyle.Default, "Back");
 
 		const int scrollbarWidth = 32;
