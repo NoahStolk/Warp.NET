@@ -20,6 +20,8 @@ public abstract class AbstractScrollArea : AbstractComponent
 
 		ContentBounds = Bounds.CreateNested(0, 0, bounds.Size.X - scrollbarWidth, bounds.Size.Y);
 		ScrollbarBounds = Bounds.CreateNested(bounds.Size.X - scrollbarWidth, 0, scrollbarWidth, bounds.Size.Y);
+
+		NestingContext.OnUpdateQueue = RecalculateHeight;
 	}
 
 	public bool ScrollbarHover { get; private set; }
@@ -31,7 +33,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 	public IBounds ContentBounds { get; }
 	public IBounds ScrollbarBounds { get; }
 
-	public void RecalculateHeight()
+	private void RecalculateHeight()
 	{
 		int min = NestingContext.OrderedComponents.Count == 0 ? 0 : NestingContext.OrderedComponents.Min(b => b.Bounds.Y1);
 		int max = NestingContext.OrderedComponents.Count == 0 ? 0 : NestingContext.OrderedComponents.Max(b => b.Bounds.Y2);
@@ -47,9 +49,6 @@ public abstract class AbstractScrollArea : AbstractComponent
 
 		HandleScrollWheel(scrollOffset, wasActive);
 		HandleScrollbar(scrollOffset);
-
-		// TODO: Don't calculate every update.
-		RecalculateHeight();
 	}
 
 	private void UpdateScrollOffset(Vector2i<int> newOffset)
