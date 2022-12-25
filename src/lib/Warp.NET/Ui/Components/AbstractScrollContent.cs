@@ -15,7 +15,7 @@ public abstract class AbstractScrollContent<TSelf, TParent> : AbstractComponent
 		_parent = parent;
 	}
 
-	public abstract int ContentHeightInPixels { get; }
+	public abstract int ContentHeightInPixels { get; protected set; }
 
 	protected virtual float ScrollPercentageMultiplier => 0.05f;
 
