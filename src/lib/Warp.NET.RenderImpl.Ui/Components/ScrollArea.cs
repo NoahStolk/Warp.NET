@@ -27,7 +27,7 @@ public class ScrollArea : AbstractScrollArea
 		Vector2i<int> scale = ScrollbarBounds.Size;
 
 		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale, scrollOffset + ScrollbarBounds.Center, Depth, Color.White);
-		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale - borderVec, scrollOffset + ScrollbarBounds.Center, Depth + 1, ScrollbarHold ? Color.Gray(0.5f) : ScrollbarHover ? Color.Gray(0.25f) : Color.Black);
+		RenderImplUiBase.Game.RectangleRenderer.Schedule(scale - borderVec, scrollOffset + ScrollbarBounds.Center, Depth + 1, IsDraggingScrollbar ? Color.Gray(0.5f) : IsScrollbarHovering ? Color.Gray(0.25f) : Color.Black);
 
 		const int thumbPadding = 8;
 		Vector2i<int> thumbScale = new(scale.X - thumbPadding, ScrollbarHeight - thumbPadding + 1); // + 1 is necessary for some reason.

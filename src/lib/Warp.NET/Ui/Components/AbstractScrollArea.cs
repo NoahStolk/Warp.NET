@@ -24,8 +24,8 @@ public abstract class AbstractScrollArea : AbstractComponent
 		NestingContext.OnUpdateQueue = RecalculateHeight;
 	}
 
-	public bool ScrollbarHover { get; private set; }
-	public bool ScrollbarHold { get; private set; }
+	public bool IsScrollbarHovering { get; private set; }
+	public bool IsDraggingScrollbar { get; private set; }
 
 	public int ScrollbarStartY { get; private set; }
 	public int ScrollbarHeight { get; private set; }
@@ -55,7 +55,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 
 	private void UpdateScrollOffsetAndScrollbarPosition(Vector2i<int> newScrollOffset)
 	{
-		// Clamp value.
+		// Update and clamp scroll offset.
 		NestingContext.ScrollOffset = Vector2i<int>.Clamp(newScrollOffset, new(0, -_contentHeight + Bounds.Size.Y), default);
 
 		// Update scrollbar position.
@@ -78,16 +78,16 @@ public abstract class AbstractScrollArea : AbstractComponent
 
 	private void HandleScrollbar(Vector2i<int> scrollOffset)
 	{
-		ScrollbarHover = MouseUiContext.Contains(scrollOffset, ScrollbarBounds);
+		IsScrollbarHovering = MouseUiContext.Contains(scrollOffset, ScrollbarBounds);
 
-		if (ScrollbarHover && Input.IsButtonPressed(MouseButton.Left))
+		if (IsScrollbarHovering && Input.IsButtonPressed(MouseButton.Left))
 		{
 			int mousePos = TranslatedMousePosition(scrollOffset.Y);
 			if (mousePos > ScrollbarStartY)
 			{
 				if (mousePos < ScrollbarStartY + ScrollbarHeight)
 				{
-					ScrollbarHold = true;
+					IsDraggingScrollbar = true;
 					_holdStartMouseY = mousePos;
 					_scrollbarStartYOld = ScrollbarStartY;
 				}
@@ -101,25 +101,25 @@ public abstract class AbstractScrollArea : AbstractComponent
 				UpdateScrollOffsetAndScrollbarPosition(new(0, NestingContext.ScrollOffset.Y + _scrollAmountInPixels));
 			}
 		}
-		else if (ScrollbarHold)
+		else if (IsDraggingScrollbar)
 		{
-			UpdateValue();
+			UpdateScrollOffsetFromDrag();
 		}
 
-		if (ScrollbarHold && Input.IsButtonReleased(MouseButton.Left))
+		if (IsDraggingScrollbar && Input.IsButtonReleased(MouseButton.Left))
 		{
-			if (ScrollbarHover)
-				UpdateValue();
+			if (IsScrollbarHovering)
+				UpdateScrollOffsetFromDrag();
 
-			ScrollbarHold = false;
+			IsDraggingScrollbar = false;
 			_scrollbarStartYOld = ScrollbarStartY;
 		}
 
-		void UpdateValue()
+		void UpdateScrollOffsetFromDrag()
 		{
-			int yDiff = TranslatedMousePosition(scrollOffset.Y) - _holdStartMouseY;
+			int mouseDifferenceWithStartDrag = TranslatedMousePosition(scrollOffset.Y) - _holdStartMouseY;
 			float multiplier = _contentHeight / (float)ScrollbarBounds.Size.Y;
-			UpdateScrollOffsetAndScrollbarPosition(new(0, (int)((-_scrollbarStartYOld - yDiff) * multiplier)));
+			UpdateScrollOffsetAndScrollbarPosition(new(0, (int)((-_scrollbarStartYOld - mouseDifferenceWithStartDrag) * multiplier)));
 		}
 
 		int TranslatedMousePosition(int scrollOffsetY)
