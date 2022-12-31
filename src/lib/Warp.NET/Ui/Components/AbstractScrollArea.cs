@@ -51,7 +51,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 		if (!_scheduledScrollTarget.HasValue)
 			return;
 
-		NestingContext.ScrollOffset = _scheduledScrollTarget.Value;
+		UpdateScrollOffsetAndScrollbarPosition(_scheduledScrollTarget.Value);
 		_scheduledScrollTarget = null;
 	}
 
