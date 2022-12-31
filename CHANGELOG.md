@@ -2,6 +2,21 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.12
+
+### Added
+
+- Added `AbstractScrollArea.ScheduleScrollTarget` method to schedule a scroll target to be set after the next invocation of `NestingContext.OnUpdateQueue`.
+
+### Changed
+
+- Made `AbstractScrollArea.RecalculateHeight` private.
+- Made `AbstractScrollArea.UpdateScrollOffsetAndScrollbarPosition` private.
+
+### Removed
+
+- Removed default styles.
+
 ## 0.1.11
 
 ### Added

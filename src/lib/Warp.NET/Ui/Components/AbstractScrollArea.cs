@@ -13,6 +13,8 @@ public abstract class AbstractScrollArea : AbstractComponent
 
 	private int _contentHeight;
 
+	private Vector2i<int>? _scheduledScrollTarget;
+
 	protected AbstractScrollArea(IBounds bounds, int scrollAmountInPixels, int scrollbarWidth)
 		: base(bounds)
 	{
@@ -21,7 +23,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 		ContentBounds = Bounds.CreateNested(0, 0, bounds.Size.X - scrollbarWidth, bounds.Size.Y);
 		ScrollbarBounds = Bounds.CreateNested(bounds.Size.X - scrollbarWidth, 0, scrollbarWidth, bounds.Size.Y);
 
-		NestingContext.OnUpdateQueue = RecalculateHeight;
+		NestingContext.OnUpdateQueue = OnUpdateQueue;
 	}
 
 	public bool IsScrollbarHovering { get; private set; }
@@ -33,7 +35,27 @@ public abstract class AbstractScrollArea : AbstractComponent
 	public IBounds ContentBounds { get; }
 	public IBounds ScrollbarBounds { get; }
 
-	public void RecalculateHeight()
+	/// <summary>
+	/// Schedules a scroll to a specific position. This position will be applied after the next invocation of the <see cref="NestingContext.OnUpdateQueue"/> action on the scroll area's <see cref="NestingContext"/>.
+	/// </summary>
+	/// <param name="scrollTarget">The position to scroll to.</param>
+	public void ScheduleScrollTarget(Vector2i<int> scrollTarget)
+	{
+		_scheduledScrollTarget = scrollTarget;
+	}
+
+	private void OnUpdateQueue()
+	{
+		RecalculateHeight();
+
+		if (!_scheduledScrollTarget.HasValue)
+			return;
+
+		NestingContext.ScrollOffset = _scheduledScrollTarget.Value;
+		_scheduledScrollTarget = null;
+	}
+
+	private void RecalculateHeight()
 	{
 		int min = NestingContext.OrderedComponents.Count == 0 ? 0 : NestingContext.OrderedComponents.Min(b => b.Bounds.Y1);
 		int max = NestingContext.OrderedComponents.Count == 0 ? 0 : NestingContext.OrderedComponents.Max(b => b.Bounds.Y2);
@@ -43,6 +65,17 @@ public abstract class AbstractScrollArea : AbstractComponent
 		UpdateScrollOffsetAndScrollbarPosition(NestingContext.ScrollOffset);
 	}
 
+	private void UpdateScrollOffsetAndScrollbarPosition(Vector2i<int> newScrollOffset)
+	{
+		// Update and clamp scroll offset.
+		NestingContext.ScrollOffset = Vector2i<int>.Clamp(newScrollOffset, new(0, -_contentHeight + Bounds.Size.Y), default);
+
+		// Update scrollbar position.
+		ScrollbarStartY = (int)(NestingContext.ScrollOffset.Y / (float)-_contentHeight * ScrollbarBounds.Size.Y);
+	}
+
+	#region Update loop
+
 	public override void Update(Vector2i<int> scrollOffset)
 	{
 		bool wasActive = MouseUiContext.IsActive;
@@ -51,15 +84,6 @@ public abstract class AbstractScrollArea : AbstractComponent
 
 		HandleScrollWheel(scrollOffset, wasActive);
 		HandleScrollbar(scrollOffset);
-	}
-
-	public void UpdateScrollOffsetAndScrollbarPosition(Vector2i<int> newScrollOffset)
-	{
-		// Update and clamp scroll offset.
-		NestingContext.ScrollOffset = Vector2i<int>.Clamp(newScrollOffset, new(0, -_contentHeight + Bounds.Size.Y), default);
-
-		// Update scrollbar position.
-		ScrollbarStartY = (int)(NestingContext.ScrollOffset.Y / (float)-_contentHeight * ScrollbarBounds.Size.Y);
 	}
 
 	private void HandleScrollWheel(Vector2i<int> scrollOffset, bool wasActive)
@@ -125,4 +149,6 @@ public abstract class AbstractScrollArea : AbstractComponent
 		int TranslatedMousePosition(int scrollOffsetY)
 			=> (int)MouseUiContext.MousePosition.Y - Bounds.Y1 - scrollOffsetY;
 	}
+
+	#endregion Update loop
 }
