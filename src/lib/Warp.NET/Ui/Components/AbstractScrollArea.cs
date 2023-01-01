@@ -1,5 +1,4 @@
 using Silk.NET.GLFW;
-using Warp.NET.Debugging;
 using Warp.NET.Extensions;
 using Warp.NET.Numerics;
 
@@ -60,20 +59,20 @@ public abstract class AbstractScrollArea : AbstractComponent
 				return;
 
 			// If the target is already visible, do nothing.
-			if (IsVisible(_scheduledScrollTargetMinMax.Value))
+			if (IsVisible(_scheduledScrollTargetMinMax.Value.Min, _scheduledScrollTargetMinMax.Value.Max))
 				return;
 
 			// Continuously move up or down until the target is visible.
 			bool moveUp = -NestingContext.ScrollOffset.Y >= _scheduledScrollTargetMinMax.Value.Max;
-			while (!IsVisible(_scheduledScrollTargetMinMax.Value))
+			while (!IsVisible(_scheduledScrollTargetMinMax.Value.Min, _scheduledScrollTargetMinMax.Value.Max))
 				UpdateScrollOffsetAndScrollbarPosition(NestingContext.ScrollOffset + new Vector2i<int>(0, moveUp ? 1 : -1));
 		}
 
-		bool IsVisible((int Min, int Max) value)
+		bool IsVisible(int min, int max)
 		{
 			int viewStart = -NestingContext.ScrollOffset.Y;
-			int viewEnd = -NestingContext.ScrollOffset.Y + ContentBounds.Size.Y;
-			return value.Min >= viewStart && value.Min <= viewEnd && value.Max >= viewStart && value.Max <= viewEnd;
+			int viewEnd = viewStart + ContentBounds.Size.Y;
+			return min >= viewStart && min <= viewEnd && max >= viewStart && max <= viewEnd;
 		}
 	}
 
