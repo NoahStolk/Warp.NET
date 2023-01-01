@@ -1,4 +1,5 @@
 using Silk.NET.GLFW;
+using Warp.NET.Debugging;
 using Warp.NET.Extensions;
 using Warp.NET.Numerics;
 
@@ -13,7 +14,7 @@ public abstract class AbstractScrollArea : AbstractComponent
 
 	private int _contentHeight;
 
-	private Vector2i<int>? _scheduledScrollTarget;
+	private (int Min, int Max)? _scheduledScrollTargetMinMax;
 
 	protected AbstractScrollArea(IBounds bounds, int scrollAmountInPixels, int scrollbarWidth)
 		: base(bounds)
@@ -36,23 +37,44 @@ public abstract class AbstractScrollArea : AbstractComponent
 	public IBounds ScrollbarBounds { get; }
 
 	/// <summary>
-	/// Schedules a scroll to a specific position. This position will be applied after the next invocation of the <see cref="NestingContext.OnUpdateQueue"/> action on the scroll area's <see cref="NestingContext"/>.
+	/// Schedules a scroll to a specific Y position. This position will be applied after the next invocation of the <see cref="NestingContext.OnUpdateQueue"/> action on the scroll area's <see cref="NestingContext"/>.
 	/// </summary>
-	/// <param name="scrollTarget">The position to scroll to.</param>
-	public void ScheduleScrollTarget(Vector2i<int> scrollTarget)
+	/// <param name="min">The min Y position to scroll to.</param>
+	/// <param name="max">The max Y position to scroll to.</param>
+	public void ScheduleScrollTarget(int min, int max)
 	{
-		_scheduledScrollTarget = scrollTarget;
+		_scheduledScrollTargetMinMax = (min, max);
 	}
 
 	private void OnUpdateQueue()
 	{
 		RecalculateHeight();
 
-		if (!_scheduledScrollTarget.HasValue)
-			return;
+		ApplyScheduledScrollTarget();
 
-		UpdateScrollOffsetAndScrollbarPosition(_scheduledScrollTarget.Value);
-		_scheduledScrollTarget = null;
+		_scheduledScrollTargetMinMax = null;
+
+		void ApplyScheduledScrollTarget()
+		{
+			if (!_scheduledScrollTargetMinMax.HasValue)
+				return;
+
+			// If the target is already visible, do nothing.
+			if (IsVisible(_scheduledScrollTargetMinMax.Value))
+				return;
+
+			// Continuously move up or down until the target is visible.
+			bool moveUp = -NestingContext.ScrollOffset.Y >= _scheduledScrollTargetMinMax.Value.Max;
+			while (!IsVisible(_scheduledScrollTargetMinMax.Value))
+				UpdateScrollOffsetAndScrollbarPosition(NestingContext.ScrollOffset + new Vector2i<int>(0, moveUp ? 1 : -1));
+		}
+
+		bool IsVisible((int Min, int Max) value)
+		{
+			int viewStart = -NestingContext.ScrollOffset.Y;
+			int viewEnd = -NestingContext.ScrollOffset.Y + ContentBounds.Size.Y;
+			return value.Min >= viewStart && value.Min <= viewEnd && value.Max >= viewStart && value.Max <= viewEnd;
+		}
 	}
 
 	private void RecalculateHeight()

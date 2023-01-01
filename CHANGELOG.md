@@ -2,6 +2,12 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.14
+
+### Fixed
+
+- Improved `AbstractScrollArea.ScheduleScrollTarget`.
+
 ## 0.1.13
 
 ### Fixed
