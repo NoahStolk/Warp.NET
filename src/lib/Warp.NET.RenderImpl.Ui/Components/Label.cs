@@ -1,5 +1,7 @@
 using Warp.NET.Numerics;
 using Warp.NET.RenderImpl.Ui.Components.Styles;
+using Warp.NET.RenderImpl.Ui.Rendering;
+using Warp.NET.RenderImpl.Ui.Rendering.Scissors;
 using Warp.NET.Text;
 using Warp.NET.Ui;
 using Warp.NET.Ui.Components;
@@ -16,8 +18,13 @@ public class Label : AbstractLabel
 
 	public LabelStyle LabelStyle { get; set; }
 
+	public bool RenderOverflow { get; set; } = true;
+
 	public override void Render(Vector2i<int> scrollOffset)
 	{
+		if (!RenderOverflow)
+			ScissorScheduler.SetScissor(Scissor.Create(Bounds, scrollOffset, ViewportState.Offset, ViewportState.Scale));
+
 		base.Render(scrollOffset);
 
 		if (Text.Length == 0)
@@ -33,5 +40,8 @@ public class Label : AbstractLabel
 		};
 
 		RenderImplUiBase.Game.GetFontRenderer(LabelStyle.FontSize).Schedule(Vector2i<int>.One, scrollOffset + textPosition, Depth, LabelStyle.TextColor, Text, LabelStyle.TextAlign);
+
+		if (!RenderOverflow)
+			ScissorScheduler.UnsetScissor();
 	}
 }

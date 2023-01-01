@@ -30,6 +30,7 @@ public sealed partial class Game : RenderImplUiGameBase
 	public ILayout ActiveLayout { get; set; }
 	public MainLayout MainLayout { get; } = new();
 	public ScrollContentLayout ScrollContentLayout { get; } = new();
+	public LabelLayout LabelLayout { get; } = new();
 
 	protected override void Update()
 	{

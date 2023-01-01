@@ -2,17 +2,23 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.15
+
+### Added
+
+- Added `RenderOverflow` boolean property to `Label` class. Use this to prevent rendering overflowed text. The default value is `true`.
+
 ## 0.1.14
 
-### Fixed
+### Changed
 
-- Improved `AbstractScrollArea.ScheduleScrollTarget`.
+- Improved `AbstractScrollArea.ScheduleScrollTarget`. The target is now only applied when necessary.
 
 ## 0.1.13
 
 ### Fixed
 
-- Fixed `AbstractScrollArea.ScheduleScrollTarget`.
+- Fixed `AbstractScrollArea.ScheduleScrollTarget` not updating state properly.
 
 ## 0.1.12
 
