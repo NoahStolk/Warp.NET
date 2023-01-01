@@ -15,7 +15,7 @@ public class LabelLayout : Layout
 		ButtonStyle buttonStyle = new(Color.Black, Color.White, Color.Gray(0.5f), 2);
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H24);
 
-		Label titleLabel = new(new PixelBounds(960 - 64, 256, 128, 128), "Label Layout", labelStyle);
+		Label titleLabel = new(new PixelBounds(960 - 64, 192, 128, 128), "Label Layout", labelStyle);
 		TextButton backButton = new(new PixelBounds(256, 320, 256, 128), () => Game.Self.ActiveLayout = Game.Self.MainLayout, buttonStyle, textButtonStyle, "Back");
 
 		NestingContext.Add(titleLabel);

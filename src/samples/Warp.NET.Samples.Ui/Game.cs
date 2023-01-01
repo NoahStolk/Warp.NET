@@ -31,6 +31,7 @@ public sealed partial class Game : RenderImplUiGameBase
 	public MainLayout MainLayout { get; } = new();
 	public ScrollContentLayout ScrollContentLayout { get; } = new();
 	public LabelLayout LabelLayout { get; } = new();
+	public ScissorLayout ScissorLayout { get; } = new();
 
 	protected override void Update()
 	{
@@ -57,6 +58,9 @@ public sealed partial class Game : RenderImplUiGameBase
 	{
 		Gl.ClearColor(0, 0, 0, 1);
 		Gl.Clear(ClearBufferMask.ColorBufferBit);
+
+		if (ScissorLayout == ActiveLayout)
+			ScissorLayout.Render();
 
 		RenderImplUiShaders.Ui.Use();
 		Shader.SetMatrix4x4(UiUniforms.Projection, _projectionMatrix);

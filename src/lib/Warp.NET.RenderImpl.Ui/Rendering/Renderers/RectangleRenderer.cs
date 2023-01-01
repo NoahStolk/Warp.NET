@@ -13,7 +13,7 @@ public class RectangleRenderer
 
 	public void Schedule(Vector2i<int> scale, Vector2i<int> center, float depth, Color color)
 	{
-		_collection.Add(new(scale, center, depth, color, ScissorScheduler.CurrentScissor));
+		_collection.Add(new(scale, center, depth, color, ScissorScheduler.GetCalculatedScissor()));
 	}
 
 	public void Render()

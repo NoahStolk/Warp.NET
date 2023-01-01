@@ -23,7 +23,7 @@ public class Label : AbstractLabel
 	public override void Render(Vector2i<int> scrollOffset)
 	{
 		if (!RenderOverflow)
-			ScissorScheduler.SetScissor(Scissor.Create(Bounds, scrollOffset, ViewportState.Offset, ViewportState.Scale));
+			ScissorScheduler.PushScissor(Scissor.Create(Bounds, scrollOffset, ViewportState.Offset, ViewportState.Scale));
 
 		base.Render(scrollOffset);
 
@@ -42,6 +42,6 @@ public class Label : AbstractLabel
 		RenderImplUiBase.Game.GetFontRenderer(LabelStyle.FontSize).Schedule(Vector2i<int>.One, scrollOffset + textPosition, Depth, LabelStyle.TextColor, Text, LabelStyle.TextAlign);
 
 		if (!RenderOverflow)
-			ScissorScheduler.UnsetScissor();
+			ScissorScheduler.PopScissor();
 	}
 }

@@ -38,7 +38,7 @@ public class MonoSpaceFontRenderer
 
 	public void Schedule(Vector2i<int> scale, Vector2i<int> position, float depth, Color color, string text, TextAlign textAlign)
 	{
-		_collection.Add(new(scale, position, depth, color, text, textAlign, ScissorScheduler.CurrentScissor));
+		_collection.Add(new(scale, position, depth, color, text, textAlign, ScissorScheduler.GetCalculatedScissor()));
 	}
 
 	public void Render()
