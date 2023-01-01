@@ -2,11 +2,21 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## TODO
+## 0.1.16
+
+### Changed
+
+- You can now use multiple scissor tests at once.
+- Renamed `SetScissor` to `PushScissor`.
+- Renamed `UnsetScissor` to `PopScissor`.
 
 ### Fixed
 
 - Fixed endless loop that would sometimes occur while applying scheduled scroll target. This only happened when the scroll target was partially visible at the top of the scroll view.
+
+### Removed
+
+- Removed `ScissorScheduler.CurrentScissor` property. Use the `ScissorScheduler.GetCalculatedScissor()` method instead.
 
 ## 0.1.15
 

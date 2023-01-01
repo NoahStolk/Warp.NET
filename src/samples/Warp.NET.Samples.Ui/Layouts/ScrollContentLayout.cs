@@ -20,7 +20,7 @@ public class ScrollContentLayout : Layout
 	{
 		LabelStyle labelStyle = new(Color.Green, TextAlign.Middle, FontSize.H16);
 
-		Label titleLabel = new(new PixelBounds(960 - 128, 256, 256, 128), "Scroll Content Layout", labelStyle);
+		Label titleLabel = new(new PixelBounds(960 - 128, 192, 256, 128), "Scroll Content Layout", labelStyle);
 		TextButton backButton = new(new PixelBounds(256, 320, 256, 128), () => Game.Self.ActiveLayout = Game.Self.MainLayout, _buttonStyle, _textButtonStyle, "Back");
 		NestingContext.Add(titleLabel);
 		NestingContext.Add(backButton);

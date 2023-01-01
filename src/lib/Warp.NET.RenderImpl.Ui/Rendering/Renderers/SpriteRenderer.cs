@@ -46,7 +46,7 @@ public class SpriteRenderer
 
 	public void Schedule(Vector2 scale, Vector2 centerPosition, float depth, Texture texture, Color color)
 	{
-		_collection.Add(new(scale, centerPosition, depth, texture, color, ScissorScheduler.CurrentScissor));
+		_collection.Add(new(scale, centerPosition, depth, texture, color, ScissorScheduler.GetCalculatedScissor()));
 	}
 
 	public void Render()

@@ -15,7 +15,7 @@ public class CircleRenderer
 
 	public void Schedule(Vector2i<int> center, float radius, float depth, Color color)
 	{
-		_collection.Add(new(center, radius, depth, color, ScissorScheduler.CurrentScissor));
+		_collection.Add(new(center, radius, depth, color, ScissorScheduler.GetCalculatedScissor()));
 	}
 
 	public void Render()

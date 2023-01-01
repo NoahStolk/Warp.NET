@@ -19,12 +19,12 @@ public class ScrollArea : AbstractScrollArea
 
 	public override void Render(Vector2i<int> scrollOffset)
 	{
-		ScissorScheduler.SetScissor(Scissor.Create(ContentBounds, scrollOffset, ViewportState.Offset, ViewportState.Scale));
+		ScissorScheduler.PushScissor(Scissor.Create(ContentBounds, scrollOffset, ViewportState.Offset, ViewportState.Scale));
 
 		// Render content.
 		base.Render(scrollOffset);
 
-		ScissorScheduler.UnsetScissor();
+		ScissorScheduler.PopScissor();
 
 		// Render scrollbar.
 		Vector2i<int> borderVec = new(ScrollAreaStyle.BorderSize * 2);

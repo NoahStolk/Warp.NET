@@ -15,12 +15,14 @@ public class MainLayout : Layout
 		ButtonStyle buttonStyle = new(Color.Black, Color.White, Color.Gray(0.5f), 2);
 		TextButtonStyle textButtonStyle = new(Color.White, TextAlign.Middle, FontSize.H24);
 
-		Label titleLabel = new(new PixelBounds(960 - 64, 256, 128, 128), "Main Layout", labelStyle);
+		Label titleLabel = new(new PixelBounds(960 - 64, 192, 128, 128), "Main Layout", labelStyle);
 		TextButton scrollContentButton = new(new PixelBounds(256, 320, 256, 128), () => Game.Self.ActiveLayout = Game.Self.ScrollContentLayout, buttonStyle, textButtonStyle, "ScrollContent");
 		TextButton labelButton = new(new PixelBounds(512, 320, 256, 128), () => Game.Self.ActiveLayout = Game.Self.LabelLayout, buttonStyle, textButtonStyle, "Label");
+		TextButton scissorButton = new(new PixelBounds(768, 320, 256, 128), () => Game.Self.ActiveLayout = Game.Self.ScissorLayout, buttonStyle, textButtonStyle, "Scissor");
 
 		NestingContext.Add(titleLabel);
 		NestingContext.Add(scrollContentButton);
 		NestingContext.Add(labelButton);
+		NestingContext.Add(scissorButton);
 	}
 }
