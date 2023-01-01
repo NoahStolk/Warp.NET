@@ -2,6 +2,12 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## TODO
+
+### Fixed
+
+- Fixed endless loop that would sometimes occur while applying scheduled scroll target. This only happened when the scroll target was partially visible at the top of the scroll view.
+
 ## 0.1.15
 
 ### Added

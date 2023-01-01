@@ -59,20 +59,20 @@ public abstract class AbstractScrollArea : AbstractComponent
 				return;
 
 			// If the target is already visible, do nothing.
-			if (IsVisible(_scheduledScrollTargetMinMax.Value.Min, _scheduledScrollTargetMinMax.Value.Max))
+			if (IsTargetVisible(_scheduledScrollTargetMinMax.Value.Min, _scheduledScrollTargetMinMax.Value.Max))
 				return;
 
 			// Continuously move up or down until the target is visible.
-			bool moveUp = -NestingContext.ScrollOffset.Y >= _scheduledScrollTargetMinMax.Value.Max;
-			while (!IsVisible(_scheduledScrollTargetMinMax.Value.Min, _scheduledScrollTargetMinMax.Value.Max))
+			bool moveUp = -NestingContext.ScrollOffset.Y >= _scheduledScrollTargetMinMax.Value.Min;
+			while (!IsTargetVisible(_scheduledScrollTargetMinMax.Value.Min, _scheduledScrollTargetMinMax.Value.Max))
 				UpdateScrollOffsetAndScrollbarPosition(NestingContext.ScrollOffset + new Vector2i<int>(0, moveUp ? 1 : -1));
 		}
 
-		bool IsVisible(int min, int max)
+		bool IsTargetVisible(int targetMin, int targetMax)
 		{
 			int viewStart = -NestingContext.ScrollOffset.Y;
 			int viewEnd = viewStart + ContentBounds.Size.Y;
-			return min >= viewStart && min <= viewEnd && max >= viewStart && max <= viewEnd;
+			return targetMin >= viewStart && targetMin <= viewEnd && targetMax >= viewStart && targetMax <= viewEnd;
 		}
 	}
 
