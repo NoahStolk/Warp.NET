@@ -12,17 +12,13 @@ public class NestingContext
 	/// </summary>
 	private List<AbstractComponent> _orderedComponents = new();
 
-	private readonly List<AbstractComponent> _toAdd = new();
-	private readonly List<AbstractComponent> _toRemove = new();
+	private readonly HashSet<QueuedComponent> _temporaryProcessingQueue = new();
+	private readonly List<QueuedComponent> _queuedComponents = new();
 
 	public NestingContext(IBounds bounds)
 	{
 		Bounds = bounds;
 	}
-
-	public IReadOnlyList<AbstractComponent> ToAdd => _toAdd;
-
-	public IReadOnlyList<AbstractComponent> ToRemove => _toRemove;
 
 	public IReadOnlyList<AbstractComponent> OrderedComponents => _orderedComponents;
 
@@ -34,37 +30,50 @@ public class NestingContext
 
 	public void Add(AbstractComponent component)
 	{
-		_toAdd.Add(component);
+		_queuedComponents.Add(new(component, true));
 	}
 
 	public void Remove(AbstractComponent component)
 	{
-		_toRemove.Add(component);
+		_queuedComponents.Add(new(component, false));
 	}
 
 	private void UpdateQueue()
 	{
-		if (_toAdd.Count == 0 && _toRemove.Count == 0)
+		if (_queuedComponents.Count == 0)
 			return;
 
-		foreach (AbstractComponent component in _toAdd)
+		for (int i = _queuedComponents.Count - 1; i >= 0; i--)
 		{
-			if (_orderedComponents.Contains(component))
-				throw new InvalidOperationException($"Attempting to add an already existing component: {component.GetDebugString()}");
+			QueuedComponent component = _queuedComponents[i];
 
-			_orderedComponents.Add(component);
+			// Skip this component if we already processed it.
+			// This entry will be processed next time.
+			// This way we can add and remove the same component multiple times during a single update, without breaking the UI.
+			if (_temporaryProcessingQueue.Contains(component))
+				continue;
+
+			if (component.Add)
+			{
+				// Only add the component if it doesn't already exist.
+				// Otherwise we would get corrupted state.
+				if (!_orderedComponents.Contains(component.Component))
+				{
+					_orderedComponents.Add(component.Component);
+					_temporaryProcessingQueue.Add(component);
+				}
+			}
+			else
+			{
+				_orderedComponents.Remove(component.Component);
+				_temporaryProcessingQueue.Add(component);
+			}
+
+			// Always drop this entry, even if we didn't process it because the component already exists.
+			_queuedComponents.Remove(component);
 		}
 
-		foreach (AbstractComponent component in _toRemove)
-		{
-			if (_toAdd.Contains(component))
-				throw new InvalidOperationException($"Attempting to add and remove the same component at the same time: {component.GetDebugString()}");
-
-			_orderedComponents.Remove(component);
-		}
-
-		_toAdd.Clear();
-		_toRemove.Clear();
+		_temporaryProcessingQueue.Clear();
 
 		_orderedComponents = _orderedComponents.OrderBy(c => c.Depth).ToList();
 
@@ -100,5 +109,18 @@ public class NestingContext
 
 		IBounds boundsWithScrollOffset = component.Bounds.Move(ScrollOffset.X, ScrollOffset.Y);
 		return Bounds.IntersectsOrContains(boundsWithScrollOffset);
+	}
+
+	private sealed class QueuedComponent
+	{
+		public QueuedComponent(AbstractComponent component, bool add)
+		{
+			Component = component;
+			Add = add;
+		}
+
+		public AbstractComponent Component { get; }
+
+		public bool Add { get; }
 	}
 }
