@@ -2,6 +2,18 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## TODO
+
+### Changed
+
+- You can now add or remove the same component multiple times during a single update.
+
+### Removed
+
+- Removed `AbstractComponent.GetDebugString` method.
+- Removed `NestingContext.ToAdd` public property.
+- Removed `NestingContext.ToRemove` public property.
+
 ## 0.1.16
 
 ### Changed
@@ -16,7 +28,7 @@ This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Removed
 
-- Removed `ScissorScheduler.CurrentScissor` property. Use the `ScissorScheduler.GetCalculatedScissor()` method instead.
+- Removed `ScissorScheduler.CurrentScissor` property. Use the `ScissorScheduler.GetCalculatedScissor` method instead.
 
 ## 0.1.15
 

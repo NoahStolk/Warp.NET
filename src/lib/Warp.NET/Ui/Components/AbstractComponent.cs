@@ -24,9 +24,4 @@ public abstract class AbstractComponent
 	{
 		NestingContext.Render(scrollOffset);
 	}
-
-	public string GetDebugString()
-	{
-		return $"{GetType().FullName} @ {Bounds}";
-	}
 }
