@@ -1,8 +1,4 @@
-using Warp.NET.Content.Conversion.Binaries;
-using Warp.NET.Content.Conversion.Data;
-using Warp.NET.Content.Conversion.Parsers;
-
-namespace Warp.NET.Content.Conversion.Converters;
+namespace Warp.NET.Content.Conversion.Sounds;
 
 public sealed class SoundContentConverter : IContentConverter<SoundBinary>
 {

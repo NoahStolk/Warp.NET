@@ -1,7 +1,6 @@
 using System.Globalization;
-using Warp.NET.Content.Conversion.Data;
 
-namespace Warp.NET.Content.Conversion.Parsers;
+namespace Warp.NET.Content.Conversion.Models;
 
 public static class ObjParser
 {

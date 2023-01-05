@@ -1,6 +1,4 @@
-using Warp.NET.Content.Conversion.Binaries;
-
-namespace Warp.NET.Content.Conversion.Converters;
+namespace Warp.NET.Content.Conversion.Blobs;
 
 public sealed class BlobContentConverter : IContentConverter<BlobBinary>
 {

@@ -1,6 +1,4 @@
-using Warp.NET.Content.Conversion.Parsers.Exceptions;
-
-namespace Warp.NET.Content.Conversion.Data;
+namespace Warp.NET.Content.Conversion.Models;
 
 /// <summary>
 /// Represents data parsed from a model format, such as a .obj file.

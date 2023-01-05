@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace Warp.NET.Content.Conversion.Parsers.Exceptions;
+namespace Warp.NET.Content.Conversion.Sounds;
 
 [Serializable]
 public class WaveParseException : Exception

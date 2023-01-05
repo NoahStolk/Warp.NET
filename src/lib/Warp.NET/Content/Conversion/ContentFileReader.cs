@@ -1,5 +1,9 @@
-using Warp.NET.Content.Conversion.Binaries;
-using Warp.NET.Content.Conversion.Binaries.Data;
+using Warp.NET.Content.Conversion.Blobs;
+using Warp.NET.Content.Conversion.Charsets;
+using Warp.NET.Content.Conversion.Models;
+using Warp.NET.Content.Conversion.Shaders;
+using Warp.NET.Content.Conversion.Sounds;
+using Warp.NET.Content.Conversion.Textures;
 
 namespace Warp.NET.Content.Conversion;
 
@@ -86,22 +90,22 @@ public static class ContentFileReader
 		return new(modelBinary.Meshes.ToDictionary(m => m.MaterialName, m => GetMesh(modelBinary, m)));
 	}
 
-	private static Mesh GetMesh(ModelBinary modelBinary, MeshBinaryData meshBinaryData)
+	private static Mesh GetMesh(ModelBinary modelBinary, MeshData meshData)
 	{
-		Vertex[] outVertices = new Vertex[meshBinaryData.Faces.Count];
-		uint[] outFaces = new uint[meshBinaryData.Faces.Count];
-		for (int j = 0; j < meshBinaryData.Faces.Count; j++)
+		Vertex[] outVertices = new Vertex[meshData.Faces.Count];
+		uint[] outFaces = new uint[meshData.Faces.Count];
+		for (int j = 0; j < meshData.Faces.Count; j++)
 		{
-			ushort t = meshBinaryData.Faces[j].Texture;
+			ushort t = meshData.Faces[j].Texture;
 
 			outVertices[j] = new(
-			modelBinary.Positions[meshBinaryData.Faces[j].Position - 1],
+			modelBinary.Positions[meshData.Faces[j].Position - 1],
 			modelBinary.Textures.Count > t - 1 && t > 0 ? modelBinary.Textures[t - 1] : default, // TODO: Separate face type?
-			modelBinary.Normals[meshBinaryData.Faces[j].Normal - 1]);
+			modelBinary.Normals[meshData.Faces[j].Normal - 1]);
 			outFaces[j] = (ushort)j;
 		}
 
-		return new(outVertices, outFaces, TriangleRenderMode.Triangles);
+		return new(outVertices, outFaces);
 	}
 
 	private static void SetShaderSource(IDictionary<string, ShaderSourceCollection> shaderSources, BinaryReader br, string shaderName)

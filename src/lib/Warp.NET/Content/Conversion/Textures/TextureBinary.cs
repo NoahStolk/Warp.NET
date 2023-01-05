@@ -1,6 +1,6 @@
 using Warp.NET.Extensions;
 
-namespace Warp.NET.Content.Conversion.Binaries;
+namespace Warp.NET.Content.Conversion.Textures;
 
 public record TextureBinary(ushort Width, ushort Height, byte[] ColorData) : IBinary<TextureBinary>
 {

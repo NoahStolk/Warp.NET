@@ -1,6 +1,4 @@
-using Warp.NET.Content.Conversion.Binaries;
-
-namespace Warp.NET.Content.Conversion.Converters;
+namespace Warp.NET.Content.Conversion.Shaders;
 
 public sealed class ShaderContentConverter : IContentConverter<ShaderBinary>
 {

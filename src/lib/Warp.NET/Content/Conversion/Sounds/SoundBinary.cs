@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Conversion.Binaries;
+namespace Warp.NET.Content.Conversion.Sounds;
 
 public record SoundBinary(short Channels, int SampleRate, short BitsPerSample, byte[] Data) : IBinary<SoundBinary>
 {

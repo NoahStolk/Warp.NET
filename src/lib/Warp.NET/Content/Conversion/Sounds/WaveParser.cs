@@ -1,7 +1,4 @@
-using Warp.NET.Content.Conversion.Data;
-using Warp.NET.Content.Conversion.Parsers.Exceptions;
-
-namespace Warp.NET.Content.Conversion.Parsers;
+namespace Warp.NET.Content.Conversion.Sounds;
 
 public static class WaveParser
 {

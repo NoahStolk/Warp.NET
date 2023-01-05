@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Conversion.Binaries;
+namespace Warp.NET.Content.Conversion.Blobs;
 
 public record BlobBinary(byte[] Data) : IBinary<BlobBinary>
 {

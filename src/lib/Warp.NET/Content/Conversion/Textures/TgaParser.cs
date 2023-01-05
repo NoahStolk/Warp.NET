@@ -1,8 +1,6 @@
-using Warp.NET.Content.Conversion.Data;
-using Warp.NET.Content.Conversion.Parsers.Exceptions;
 using Warp.NET.Utils;
 
-namespace Warp.NET.Content.Conversion.Parsers;
+namespace Warp.NET.Content.Conversion.Textures;
 
 public static class TgaParser
 {

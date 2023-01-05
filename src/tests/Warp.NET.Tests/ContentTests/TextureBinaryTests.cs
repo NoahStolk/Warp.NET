@@ -1,5 +1,4 @@
-using Warp.NET.Content.Conversion.Binaries;
-using Warp.NET.Content.Conversion.Converters;
+using Warp.NET.Content.Conversion.Textures;
 using Warp.NET.Tests.Utils;
 
 namespace Warp.NET.Tests.ContentTests;

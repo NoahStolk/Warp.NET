@@ -1,9 +1,8 @@
-using Warp.NET.Content.Conversion.Binaries.Data;
 using Warp.NET.Extensions;
 
-namespace Warp.NET.Content.Conversion.Binaries;
+namespace Warp.NET.Content.Conversion.Models;
 
-public record ModelBinary(IReadOnlyList<Vector3> Positions, IReadOnlyList<Vector2> Textures, IReadOnlyList<Vector3> Normals, IReadOnlyList<MeshBinaryData> Meshes) : IBinary<ModelBinary>
+public record ModelBinary(IReadOnlyList<Vector3> Positions, IReadOnlyList<Vector2> Textures, IReadOnlyList<Vector3> Normals, IReadOnlyList<MeshData> Meshes) : IBinary<ModelBinary>
 {
 	public ContentType ContentType => ContentType.Model;
 
@@ -25,7 +24,7 @@ public record ModelBinary(IReadOnlyList<Vector3> Positions, IReadOnlyList<Vector
 			bw.WriteAsHalfPrecision(normal);
 
 		bw.Write((ushort)Meshes.Count);
-		foreach (MeshBinaryData mesh in Meshes)
+		foreach (MeshData mesh in Meshes)
 		{
 			bw.Write(mesh.MaterialName);
 
@@ -55,7 +54,7 @@ public record ModelBinary(IReadOnlyList<Vector3> Positions, IReadOnlyList<Vector
 		for (int i = 0; i < normals.Length; i++)
 			normals[i] = br.ReadVector3AsHalfPrecision();
 
-		MeshBinaryData[] meshes = new MeshBinaryData[br.ReadUInt16()];
+		MeshData[] meshes = new MeshData[br.ReadUInt16()];
 		for (int i = 0; i < meshes.Length; i++)
 		{
 			string useMaterial = br.ReadString();

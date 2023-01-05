@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Conversion.Binaries;
+namespace Warp.NET.Content.Conversion.Charsets;
 
 public record CharsetBinary(byte[] Characters) : IBinary<CharsetBinary>
 {

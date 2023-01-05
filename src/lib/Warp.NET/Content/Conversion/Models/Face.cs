@@ -1,4 +1,4 @@
-namespace Warp.NET.Content;
+namespace Warp.NET.Content.Conversion.Models;
 
 public readonly record struct Face(ushort Position, ushort Texture, ushort Normal)
 {

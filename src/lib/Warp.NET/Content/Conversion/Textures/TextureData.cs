@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Conversion.Data;
+namespace Warp.NET.Content.Conversion.Textures;
 
 /// <summary>
 /// Represents data parsed from a texture format, such as a .tga file.
