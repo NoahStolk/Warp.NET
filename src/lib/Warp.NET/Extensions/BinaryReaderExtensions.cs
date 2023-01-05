@@ -52,6 +52,9 @@ public static class BinaryReaderExtensions
 	public static Vector3i<byte> ReadVector3Byte(this BinaryReader br)
 		=> new(br.ReadByte(), br.ReadByte(), br.ReadByte());
 
+	public static Plane ReadPlane(this BinaryReader br)
+		=> new(br.ReadVector3(), br.ReadSingle());
+
 	public static List<T> ReadLengthPrefixedList<T>(this BinaryReader br, Func<BinaryReader, T> reader)
 	{
 		int length = br.ReadInt32();

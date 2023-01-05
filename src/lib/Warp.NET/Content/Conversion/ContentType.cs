@@ -8,4 +8,5 @@ public enum ContentType : byte
 	Model = 0x03,
 	Charset = 0x04,
 	Blob = 0x05,
+	Map = 0x06,
 }
