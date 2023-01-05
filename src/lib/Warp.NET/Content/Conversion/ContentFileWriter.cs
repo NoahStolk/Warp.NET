@@ -1,5 +1,9 @@
-using Warp.NET.Content.Conversion.Binaries;
-using Warp.NET.Content.Conversion.Converters;
+using Warp.NET.Content.Conversion.Blobs;
+using Warp.NET.Content.Conversion.Charsets;
+using Warp.NET.Content.Conversion.Models;
+using Warp.NET.Content.Conversion.Shaders;
+using Warp.NET.Content.Conversion.Sounds;
+using Warp.NET.Content.Conversion.Textures;
 using Warp.NET.Utils;
 
 namespace Warp.NET.Content.Conversion;
