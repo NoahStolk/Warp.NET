@@ -2,6 +2,13 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## TODO
+
+### Removed
+
+- Removed `TriangleRenderMode`.
+- Removed `ShaderSource`.
+
 ## 0.1.16
 
 ### Changed
