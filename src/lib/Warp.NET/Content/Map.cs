@@ -1,14 +1,17 @@
+using Warp.NET.Content.Conversion.Maps;
+
 namespace Warp.NET.Content;
 
 public class Map
 {
-	public Map(List<(Mesh Mesh, Texture Texture)> geometry)
+	public Map(List<Entity> entities)
 	{
-		if (geometry.Count == 0)
-			throw new InvalidOperationException("Map must have geometry.");
+		if (entities.Count == 0)
+			throw new InvalidOperationException("Map must have at least one entity.");
 
-		Meshes = geometry;
+		Entities = entities;
 	}
 
-	public List<(Mesh Mesh, Texture Texture)> Meshes { get; }
+	// TODO: Don't re-use Entity type.
+	public List<Entity> Entities { get; }
 }

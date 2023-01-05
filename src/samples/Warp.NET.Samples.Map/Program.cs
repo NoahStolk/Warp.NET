@@ -14,6 +14,7 @@ const string? contentRootDirectory = null;
 
 DecompiledContentFile decompiledContentFile = Bootstrapper.GetDecompiledContent(contentRootDirectory, "c");
 Charsets.Initialize(decompiledContentFile.Charsets);
+Maps.Initialize(decompiledContentFile.Maps);
 Shaders.Initialize(decompiledContentFile.Shaders);
 Textures.Initialize(decompiledContentFile.Textures);
 

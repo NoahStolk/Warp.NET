@@ -72,7 +72,7 @@ public static class ContentFileReader
 			shaders[shaderSource.Key] = new(shaderSource.Value.VertexCode, shaderSource.Value.GeometryCode, shaderSource.Value.FragmentCode);
 		}
 
-		return new(blobs, charsets, models, shaders, sounds, textures);
+		return new(blobs, charsets, maps, models, shaders, sounds, textures);
 	}
 
 	private static Blob GetBlob(BinaryReader br)
@@ -90,9 +90,7 @@ public static class ContentFileReader
 	private static Map GetMap(BinaryReader br)
 	{
 		MapBinary mapBinary = MapBinary.FromStream(br);
-
-		// TODO: Convert brushes to polygons.
-		return new(new());
+		return new(mapBinary.Entities);
 	}
 
 	private static Model GetModel(BinaryReader br)

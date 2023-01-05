@@ -1,5 +1,6 @@
 using Warp.NET.Content.Conversion.Blobs;
 using Warp.NET.Content.Conversion.Charsets;
+using Warp.NET.Content.Conversion.Maps;
 using Warp.NET.Content.Conversion.Models;
 using Warp.NET.Content.Conversion.Shaders;
 using Warp.NET.Content.Conversion.Sounds;
@@ -26,6 +27,9 @@ public static class ContentFileWriter
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".txt"))
 			Write<CharsetContentConverter, CharsetBinary>(path, tocEntries, dataWriter);
+
+		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".map"))
+			Write<MapContentConverter, MapBinary>(path, tocEntries, dataWriter);
 
 		foreach (string path in contentPaths.Where(p => Path.GetExtension(p) == ".obj"))
 			Write<ModelContentConverter, ModelBinary>(path, tocEntries, dataWriter);
