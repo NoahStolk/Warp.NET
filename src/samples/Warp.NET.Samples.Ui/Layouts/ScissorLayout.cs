@@ -2,7 +2,6 @@ using Warp.NET.Numerics;
 using Warp.NET.RenderImpl.Ui.Components;
 using Warp.NET.RenderImpl.Ui.Components.Styles;
 using Warp.NET.RenderImpl.Ui.Rendering;
-using Warp.NET.RenderImpl.Ui.Rendering.Renderers;
 using Warp.NET.RenderImpl.Ui.Rendering.Scissors;
 using Warp.NET.RenderImpl.Ui.Rendering.Text;
 using Warp.NET.Text;
