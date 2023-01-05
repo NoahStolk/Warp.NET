@@ -39,7 +39,7 @@ public sealed partial class Game : GameBase
 					indices.Add((uint)(i + 2));
 				}
 
-				Mesh mesh = new(vertices.ToArray(), indices.ToArray(), TriangleRenderMode.Triangles);
+				Mesh mesh = new(vertices.ToArray(), indices.ToArray());
 
 				_meshObjects.Add(new(mesh, polygon.Texture));
 			}

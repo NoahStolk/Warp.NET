@@ -1,8 +1,8 @@
 using Warp.NET.Extensions;
 
-namespace Warp.NET.Content.Conversion.Binaries;
+namespace Warp.NET.Content.Conversion.Maps;
 
-public record MapBinary(List<MapBinary.Entity> Entities) : IBinary<MapBinary>
+public record MapBinary(List<Entity> Entities) : IBinary<MapBinary>
 {
 	public ContentType ContentType => ContentType.Map;
 
@@ -85,52 +85,5 @@ public record MapBinary(List<MapBinary.Entity> Entities) : IBinary<MapBinary>
 		}
 
 		return new(entities);
-	}
-
-	public class Entity
-	{
-		public Entity(Dictionary<string, string> properties, List<Brush> brushes)
-		{
-			Properties = properties;
-			Brushes = brushes;
-		}
-
-		public Dictionary<string, string> Properties { get; }
-		public List<Brush> Brushes { get; }
-	}
-
-	public class Brush
-	{
-		public Brush(List<Face> faces)
-		{
-			if (faces.Count < 4)
-				throw new ArgumentException("There must be at least four faces defined in a brush.", nameof(faces));
-
-			Faces = faces;
-		}
-
-		public List<Face> Faces { get; }
-	}
-
-	public class Face
-	{
-		public Face(Vector3 p1, Vector3 p2, Vector3 p3, Plane textureAxisU, Plane textureAxisV, string textureName, Vector2 textureScale)
-		{
-			P1 = p1;
-			P2 = p2;
-			P3 = p3;
-			TextureAxisU = textureAxisU;
-			TextureAxisV = textureAxisV;
-			TextureName = textureName;
-			TextureScale = textureScale;
-		}
-
-		public Vector3 P1 { get; }
-		public Vector3 P2 { get; }
-		public Vector3 P3 { get; }
-		public Plane TextureAxisU { get; }
-		public Plane TextureAxisV { get; }
-		public string TextureName { get; }
-		public Vector2 TextureScale { get; }
 	}
 }

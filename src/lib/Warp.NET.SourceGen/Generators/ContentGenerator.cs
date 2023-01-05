@@ -49,6 +49,7 @@ public class ContentGenerator : ISourceGenerator
 		string? contentRootDirectory = Path.GetDirectoryName(context.AdditionalFiles.FirstOrDefault(at => Path.GetFileName(at.Path) == "Content")?.Path);
 		CreateFile(context, gameNamespace, "Blobs", $"{Constants.RootNamespace}.Content.Blob", GetFiles(contentRootDirectory, "Blobs", "*.bin"));
 		CreateFile(context, gameNamespace, "Charsets", $"{Constants.RootNamespace}.Content.Charset", GetFiles(contentRootDirectory, "Charsets", "*.txt"));
+		CreateFile(context, gameNamespace, "Maps", $"{Constants.RootNamespace}.Content.Map", GetFiles(contentRootDirectory, "Maps", "*.map"));
 		CreateFile(context, gameNamespace, "Models", $"{Constants.RootNamespace}.Content.Model", GetFiles(contentRootDirectory, "Models", "*.obj"));
 		CreateFile(context, gameNamespace, "Shaders", $"{Constants.RootNamespace}.Content.Shader", GetFiles(contentRootDirectory, "Shaders", "*.vert"));
 		CreateFile(context, gameNamespace, "Sounds", $"{Constants.RootNamespace}.Content.Sound", GetFiles(contentRootDirectory, "Sounds", "*.wav"));
