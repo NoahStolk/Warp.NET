@@ -1,7 +1,6 @@
 using Silk.NET.OpenGL;
 using System.Numerics;
 using Warp.NET.Content;
-using Texture = Warp.NET.Content.Texture;
 
 namespace Warp.NET.Samples.Map.Rendering;
 

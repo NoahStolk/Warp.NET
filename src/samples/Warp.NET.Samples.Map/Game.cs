@@ -1,7 +1,6 @@
 using Silk.NET.OpenGL;
-using System.Numerics;
 using Warp.NET.Content;
-using Warp.NET.Samples.Map.MapBuilder;
+using Warp.NET.Content.Conversion.Maps.GeometryCalculator;
 using Warp.NET.Samples.Map.Rendering;
 
 namespace Warp.NET.Samples.Map;
@@ -18,32 +17,10 @@ public sealed partial class Game : GameBase
 		Gl.Enable(EnableCap.Blend);
 		Gl.Enable(EnableCap.CullFace);
 
-		List<Brush> brushes = MapBuilder.Map.Load("""C:\Users\NOAH\source\repos\Warp.NET\src\samples\Warp.NET.Samples.Map\Content\Maps\Test3.map""");
-		foreach (Brush brush in brushes)
+		List<(Mesh Mesh, Texture Texture)> meshes = MapGeometryCalculator.ToMap(Maps.Test3, TextureDictionary.Textures);
+		foreach ((Mesh mesh, Texture texture) in meshes)
 		{
-			foreach (Polygon polygon in brush.Polygons)
-			{
-				List<Vertex> vertices = new();
-				List<uint> indices = new();
-
-				for (int i = 0; i < polygon.Vertices.Count; i++)
-				{
-					Vector3 position = polygon.Vertices[i];
-					Vector2 texCoord = polygon.TextureScales.Count > i ? polygon.TextureScales[i] : Vector2.Zero;
-					vertices.Add(new(position, texCoord, Vector3.One));
-				}
-
-				for (int i = 0; i < polygon.Vertices.Count - 2; i++)
-				{
-					indices.Add(0);
-					indices.Add((uint)(i + 2));
-					indices.Add((uint)(i + 1));
-				}
-
-				Mesh mesh = new(vertices.ToArray(), indices.ToArray());
-
-				_meshObjects.Add(new(mesh, polygon.Texture));
-			}
+			_meshObjects.Add(new(mesh, texture));
 		}
 	}
 
