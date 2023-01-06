@@ -18,8 +18,6 @@ Maps.Initialize(decompiledContentFile.Maps);
 Shaders.Initialize(decompiledContentFile.Shaders);
 Textures.Initialize(decompiledContentFile.Textures);
 
-TextureDictionary.SetTextures(decompiledContentFile.Textures);
-
 ShaderUniformInitializer.Initialize();
 
 Game game = Bootstrapper.CreateGame<Game>();

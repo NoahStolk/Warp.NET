@@ -14,6 +14,7 @@ public class ContentGenerator : ISourceGenerator
 	private const string _contentProperties = $"%{nameof(_contentProperties)}%";
 	private const string _contentType = $"%{nameof(_contentType)}%";
 
+	// TODO: Somehow prevent name collisions with content properties. Currently, a content property named "Initialize" or "InternalContentDictionary" would cause a name collision.
 	private const string _template = $$"""
 		using System;
 		using System.Collections.Generic;
@@ -26,11 +27,15 @@ public class ContentGenerator : ISourceGenerator
 			public static void Initialize(IReadOnlyDictionary<string, {{_contentType}}> content)
 			{
 				{{_contentFieldInitializers}}
+
+				InternalContentDictionary = content;
 			}
 
 			{{_contentFields}}
 
 			{{_contentProperties}}
+
+			public static IReadOnlyDictionary<string, {{_contentType}}> InternalContentDictionary { get; private set; } = new Dictionary<string, {{_contentType}}>();
 		}
 		""";
 

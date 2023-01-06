@@ -15,7 +15,7 @@ public static class MapParser
 			if (currentEntity == null)
 			{
 				if (line.StartsWith('{'))
-					currentEntity = new(new(), new());
+					currentEntity = new();
 			}
 			else if (currentFaces == null)
 			{

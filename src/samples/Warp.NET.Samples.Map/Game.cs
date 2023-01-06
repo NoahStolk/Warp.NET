@@ -21,11 +21,14 @@ public sealed partial class Game : GameBase
 	{
 		_camera.Add();
 
-		List<(Mesh Mesh, Texture Texture)> meshes = MapGeometryCalculator.ToMap(Maps.Test3, TextureDictionary.Textures);
+		LoadLevel(Maps.Test3);
+	}
+
+	private void LoadLevel(Content.Map map)
+	{
+		List<(Mesh Mesh, Texture Texture)> meshes = MapGeometryCalculator.ToMap(map, Textures.InternalContentDictionary);
 		foreach ((Mesh mesh, Texture texture) in meshes)
-		{
 			_worldMeshes.Add(new(mesh, texture));
-		}
 	}
 
 	protected override void Render()
