@@ -1,5 +1,6 @@
 using Warp.NET.Content.Conversion.Blobs;
 using Warp.NET.Content.Conversion.Charsets;
+using Warp.NET.Content.Conversion.Maps;
 using Warp.NET.Content.Conversion.Models;
 using Warp.NET.Content.Conversion.Shaders;
 using Warp.NET.Content.Conversion.Sounds;
@@ -33,6 +34,7 @@ public static class ContentFileReader
 
 		Dictionary<string, Blob> blobs = new();
 		Dictionary<string, Charset> charsets = new();
+		Dictionary<string, Map> maps = new();
 		Dictionary<string, Model> models = new();
 		Dictionary<string, Shader> shaders = new();
 		Dictionary<string, Sound> sounds = new();
@@ -48,6 +50,7 @@ public static class ContentFileReader
 			{
 				case ContentType.Blob: blobs[tocEntry.Name] = GetBlob(br); break;
 				case ContentType.Charset: charsets[tocEntry.Name] = GetCharset(br); break;
+				case ContentType.Map: maps[tocEntry.Name] = GetMap(br); break;
 				case ContentType.Model: models[tocEntry.Name] = GetModel(br); break;
 				case ContentType.Shader: SetShaderSource(shaderSourceCollections, br, tocEntry.Name); break;
 				case ContentType.Sound: sounds[tocEntry.Name] = GetSound(br); break;
@@ -69,7 +72,7 @@ public static class ContentFileReader
 			shaders[shaderSource.Key] = new(shaderSource.Value.VertexCode, shaderSource.Value.GeometryCode, shaderSource.Value.FragmentCode);
 		}
 
-		return new(blobs, charsets, models, shaders, sounds, textures);
+		return new(blobs, charsets, maps, models, shaders, sounds, textures);
 	}
 
 	private static Blob GetBlob(BinaryReader br)
@@ -84,28 +87,34 @@ public static class ContentFileReader
 		return new(charsetBinary.Characters);
 	}
 
+	private static Map GetMap(BinaryReader br)
+	{
+		MapBinary mapBinary = MapBinary.FromStream(br);
+		return new(mapBinary.Entities);
+	}
+
 	private static Model GetModel(BinaryReader br)
 	{
 		ModelBinary modelBinary = ModelBinary.FromStream(br);
 		return new(modelBinary.Meshes.ToDictionary(m => m.MaterialName, m => GetMesh(modelBinary, m)));
-	}
 
-	private static Mesh GetMesh(ModelBinary modelBinary, MeshData meshData)
-	{
-		Vertex[] outVertices = new Vertex[meshData.Faces.Count];
-		uint[] outFaces = new uint[meshData.Faces.Count];
-		for (int j = 0; j < meshData.Faces.Count; j++)
+		static Mesh GetMesh(ModelBinary modelBinary, MeshData meshData)
 		{
-			ushort t = meshData.Faces[j].Texture;
+			Vertex[] outVertices = new Vertex[meshData.Faces.Count];
+			uint[] outFaces = new uint[meshData.Faces.Count];
+			for (int j = 0; j < meshData.Faces.Count; j++)
+			{
+				ushort t = meshData.Faces[j].Texture;
 
-			outVertices[j] = new(
-			modelBinary.Positions[meshData.Faces[j].Position - 1],
-			modelBinary.Textures.Count > t - 1 && t > 0 ? modelBinary.Textures[t - 1] : default, // TODO: Separate face type?
-			modelBinary.Normals[meshData.Faces[j].Normal - 1]);
-			outFaces[j] = (ushort)j;
+				outVertices[j] = new(
+				modelBinary.Positions[meshData.Faces[j].Position - 1],
+				modelBinary.Textures.Count > t - 1 && t > 0 ? modelBinary.Textures[t - 1] : default, // TODO: Separate face type?
+				modelBinary.Normals[meshData.Faces[j].Normal - 1]);
+				outFaces[j] = (ushort)j;
+			}
+
+			return new(outVertices, outFaces);
 		}
-
-		return new(outVertices, outFaces);
 	}
 
 	private static void SetShaderSource(IDictionary<string, ShaderSourceCollection> shaderSources, BinaryReader br, string shaderName)

@@ -38,14 +38,15 @@ The libraries are distributed as NuGet packages. Note that the engine is in deve
 
 Warp.NET automatically builds content files from a local path. These types of content are currently supported:
 
-| **Name** | **Extension(s)**    | **Specification**                                 |
-|----------|---------------------|---------------------------------------------------|
-| Blob     | .bin                | Raw binary                                        |
-| Charset  | .txt                | Text file containing the charset on a single line |
-| Model    | .obj                | https://en.wikipedia.org/wiki/Wavefront_.obj_file |
-| Shader   | .vert, .geom, .frag | GLSL code                                         |
-| Sound    | .wav                | http://soundfile.sapp.org/doc/WaveFormat/         |
-| Texture  | .tga                | https://en.wikipedia.org/wiki/Truevision_TGA      |
+| **Name**           | **Extension(s)**    | **Specification**                                               |
+|--------------------|---------------------|-----------------------------------------------------------------|
+| Blob               | .bin                | Raw binary                                                      |
+| Charset            | .txt                | Text file containing the charset on a single line               |
+| Map (Valve format) | .map                | https://book.leveldesignbook.com/appendix/resources/formats/map |
+| Model              | .obj                | https://en.wikipedia.org/wiki/Wavefront_.obj_file               |
+| Shader             | .vert, .geom, .frag | GLSL code                                                       |
+| Sound              | .wav                | http://soundfile.sapp.org/doc/WaveFormat/                       |
+| Texture            | .tga                | https://en.wikipedia.org/wiki/Truevision_TGA                    |
 
 All these files are converted to one large binary file using the `Bootstrapper` class. The `Bootstrapper` class will only build this content file when the original assets are present in the file system. It is common practice to always build the content file when running in Debug mode for a good development experience. When distributing a game, one can copy the file from the Debug output to the Release output.
 

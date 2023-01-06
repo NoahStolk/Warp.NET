@@ -108,6 +108,12 @@ public static class BinaryWriterExtensions
 		binaryWriter.Write(vector.Z);
 	}
 
+	public static void Write(this BinaryWriter binaryWriter, Plane plane)
+	{
+		binaryWriter.Write(plane.Normal);
+		binaryWriter.Write(plane.D);
+	}
+
 	public static void WriteLengthPrefixedList<T>(this BinaryWriter bw, List<T> list, Action<BinaryWriter, T> writer)
 	{
 		bw.Write(list.Count);
