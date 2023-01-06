@@ -2,15 +2,15 @@ using Silk.NET.OpenGL;
 using System.Numerics;
 using Warp.NET.Content;
 
-namespace Warp.NET.Samples.Map.Rendering;
+namespace Warp.NET.Samples.Map;
 
-public class MeshObject
+public class WorldMesh
 {
 	private readonly uint _vao;
 	private readonly Mesh _mesh;
 	private readonly Texture _texture;
 
-	public unsafe MeshObject(Mesh mesh, Texture texture)
+	public unsafe WorldMesh(Mesh mesh, Texture texture)
 	{
 		_vao = CreateVao(mesh);
 
@@ -30,10 +30,6 @@ public class MeshObject
 
 			Gl.EnableVertexAttribArray(1);
 			Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(3 * sizeof(float)));
-
-			// TODO: We don't do anything with normals here.
-			Gl.EnableVertexAttribArray(2);
-			Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, (uint)sizeof(Vertex), (void*)(5 * sizeof(float)));
 
 			Gl.BindVertexArray(0);
 

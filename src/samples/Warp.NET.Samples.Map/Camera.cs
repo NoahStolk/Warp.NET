@@ -1,17 +1,16 @@
 using Silk.NET.GLFW;
 using System.Numerics;
 using Warp.NET.Extensions;
+using Warp.NET.GameObjects;
 using Warp.NET.InterpolationStates;
 using Warp.NET.Numerics;
 using Warp.NET.Utils;
 
 namespace Warp.NET.Samples.Map;
 
-public class Camera
+[GenerateGameObject]
+public partial class Camera : GameObject
 {
-	private readonly QuaternionState _rotationState = new(Quaternion.Identity);
-	private readonly Vector3State _positionState = new(default);
-
 	private readonly Vector2i<int> _centerWindow = new(InitialWindowState.Width / 2, InitialWindowState.Height / 2);
 
 	private Vector3 _axisAlignedSpeed;
@@ -21,19 +20,22 @@ public class Camera
 	public Matrix4x4 Projection { get; private set; }
 	public Matrix4x4 ViewMatrix { get; private set; }
 
-	public void Update()
+	// Must be properties for now.
+	private QuaternionState RotationState { get; } = new(Quaternion.Identity);
+	private Vector3State PositionState { get; } = new(default);
+
+	public override void Update()
 	{
-		_positionState.PrepareUpdate();
-		_rotationState.PrepareUpdate();
+		base.Update();
 
 		HandleKeys();
 		HandleMouse();
 
 		const float moveSpeed = 125;
 
-		Matrix4x4 rotationMatrix = Matrix4x4.CreateFromQuaternion(_rotationState.Physics);
+		Matrix4x4 rotationMatrix = Matrix4x4.CreateFromQuaternion(RotationState.Physics);
 		Vector3 transformed = RotateVector(_axisAlignedSpeed, rotationMatrix) + new Vector3(0, _axisAlignedSpeed.Y, 0);
-		_positionState.Physics += transformed * moveSpeed * Game.Self.Dt;
+		PositionState.Physics += transformed * moveSpeed * Game.Self.Dt;
 
 		static Vector3 RotateVector(Vector3 vector, Matrix4x4 rotationMatrix)
 		{
@@ -41,6 +43,22 @@ public class Camera
 			Vector3 forward = -Vector3.Cross(Vector3.UnitY, right);
 			return right * vector.X + forward * vector.Z;
 		}
+	}
+
+	public override void PrepareRender()
+	{
+		base.PrepareRender();
+
+		Vector3 upDirection = Vector3.Transform(Vector3.UnitY, RotationState.Render);
+		Vector3 lookDirection = Vector3.Transform(Vector3.UnitZ, RotationState.Render);
+		ViewMatrix = Matrix4x4.CreateLookAt(PositionState.Render, PositionState.Render + lookDirection, upDirection);
+
+		float aspectRatio = CurrentWindowState.Width / (float)CurrentWindowState.Height;
+
+		const int fieldOfView = 2;
+		const float nearPlaneDistance = 0.05f;
+		const float farPlaneDistance = 10000f;
+		Projection = Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI / 4 * fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance);
 	}
 
 	private void HandleKeys()
@@ -102,25 +120,8 @@ public class Camera
 		_pitch -= lookSpeed * delta.Y * 0.0001f;
 
 		_pitch = Math.Clamp(_pitch, MathUtils.ToRadians(-89.9f), MathUtils.ToRadians(89.9f));
-		_rotationState.Physics = Quaternion.CreateFromYawPitchRoll(_yaw, -_pitch, 0);
+		RotationState.Physics = Quaternion.CreateFromYawPitchRoll(_yaw, -_pitch, 0);
 
 		Graphics.Glfw.SetCursorPos(Window, _centerWindow.X, _centerWindow.Y);
-	}
-
-	public void PreRender()
-	{
-		_positionState.PrepareRender();
-		_rotationState.PrepareRender();
-
-		Vector3 upDirection = Vector3.Transform(Vector3.UnitY, _rotationState.Render);
-		Vector3 lookDirection = Vector3.Transform(Vector3.UnitZ, _rotationState.Render);
-		ViewMatrix = Matrix4x4.CreateLookAt(_positionState.Render, _positionState.Render + lookDirection, upDirection);
-
-		float aspectRatio = CurrentWindowState.Width / (float)CurrentWindowState.Height;
-
-		const int fieldOfView = 2;
-		const float nearPlaneDistance = 0.05f;
-		const float farPlaneDistance = 10000f;
-		Projection = Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI / 4 * fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance);
 	}
 }

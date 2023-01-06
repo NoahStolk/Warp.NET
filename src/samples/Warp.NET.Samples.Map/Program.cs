@@ -2,7 +2,7 @@
 using Warp.NET.Content.Conversion;
 using Warp.NET.Samples.Map;
 
-CreateWindow(new("3D sample: Map", 1024, 768, false));
+CreateWindow(new("3D sample: Map", 1920, 1080, false));
 
 Graphics.OnChangeWindowSize = OnChangeWindowSize;
 
@@ -23,6 +23,7 @@ TextureDictionary.SetTextures(decompiledContentFile.Textures);
 ShaderUniformInitializer.Initialize();
 
 Game game = Bootstrapper.CreateGame<Game>();
+game.Initialize();
 game.Run();
 
 static void OnChangeWindowSize(int width, int height)

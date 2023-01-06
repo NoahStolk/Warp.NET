@@ -1,5 +1,3 @@
-using Warp.NET.Content;
-
 namespace Warp.NET.Samples.Map;
 
 public static class TextureDictionary
