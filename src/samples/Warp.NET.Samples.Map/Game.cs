@@ -16,8 +16,9 @@ public sealed partial class Game : GameBase
 	{
 		Gl.Enable(EnableCap.DepthTest);
 		Gl.Enable(EnableCap.Blend);
+		Gl.Enable(EnableCap.CullFace);
 
-		List<Brush> brushes = MapBuilder.Map.Load("""C:\Users\NOAH\source\repos\Warp.NET\src\samples\Warp.NET.Samples.Map\Content\Maps\Test2.map""");
+		List<Brush> brushes = MapBuilder.Map.Load("""C:\Users\NOAH\source\repos\Warp.NET\src\samples\Warp.NET.Samples.Map\Content\Maps\Test3.map""");
 		foreach (Brush brush in brushes)
 		{
 			foreach (Polygon polygon in brush.Polygons)
@@ -35,8 +36,8 @@ public sealed partial class Game : GameBase
 				for (int i = 0; i < polygon.Vertices.Count - 2; i++)
 				{
 					indices.Add(0);
-					indices.Add((uint)(i + 1));
 					indices.Add((uint)(i + 2));
+					indices.Add((uint)(i + 1));
 				}
 
 				Mesh mesh = new(vertices.ToArray(), indices.ToArray());
