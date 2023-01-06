@@ -2,7 +2,14 @@
 
 This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## TODO
+## 0.1.17
+
+### Added
+
+- Added `Map` content type.
+- Added `InternalContentDictionary` property to generated content types.
+- Added `BinaryReader` extension method to read `Plane` values.
+- Added `BinaryWriter` extension method to write `Plane` values.
 
 ### Removed
 
