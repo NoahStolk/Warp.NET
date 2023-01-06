@@ -64,9 +64,9 @@ public static class MapParser
 					string[] textureUv = afterTextureName[(separator + 1)..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
 					currentFaces.Add(new(
-						p1: new(float.Parse(p1[0]), float.Parse(p1[1]), float.Parse(p1[2])),
-						p2: new(float.Parse(p2[0]), float.Parse(p2[1]), float.Parse(p2[2])),
-						p3: new(float.Parse(p3[0]), float.Parse(p3[1]), float.Parse(p3[2])),
+						p1: new(float.Parse(p1[0]), float.Parse(p1[2]), float.Parse(p1[1])),
+						p2: new(float.Parse(p2[0]), float.Parse(p2[2]), float.Parse(p2[1])),
+						p3: new(float.Parse(p3[0]), float.Parse(p3[2]), float.Parse(p3[1])),
 						textureAxisU: new(float.Parse(textureAxisU[0]), float.Parse(textureAxisU[2]), float.Parse(textureAxisU[1]), float.Parse(textureAxisU[3])),
 						textureAxisV: new(float.Parse(textureAxisV[0]), float.Parse(textureAxisV[2]), float.Parse(textureAxisV[1]), float.Parse(textureAxisV[3])),
 						textureName: textureName,
