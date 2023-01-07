@@ -2,12 +2,12 @@ namespace Warp.NET.Content.Conversion.Maps.GeometryCalculator;
 
 public static class MapGeometryCalculator
 {
-	public static List<(Mesh Mesh, Texture Texture)> ToMap(Map map, IReadOnlyDictionary<string, Texture> textures)
+	public static List<(Mesh Mesh, Texture Texture)> ToMap(Map map, IReadOnlyDictionary<string, Texture> textures, Texture fallbackTexture, Vector3 worldScale)
 	{
 		Dictionary<Brush, List<Polygon>> geometry = new();
 
 		foreach (Brush brush in map.Entities.SelectMany(e => e.Brushes))
-			geometry.Add(brush, ToPolygons(brush, textures));
+			geometry.Add(brush, ToPolygons(brush, textures, fallbackTexture));
 
 		SortVerticesCw(geometry);
 		CalculateTextureCoordinates(geometry);
@@ -41,7 +41,17 @@ public static class MapGeometryCalculator
 			}
 		}
 
-		return meshes;
+		if (worldScale == Vector3.One)
+			return meshes;
+
+		List<(Mesh Mesh, Texture Texture)> scaledMeshes = new();
+		foreach ((Mesh mesh, Texture texture) in meshes)
+		{
+			Mesh scaledMesh = new(mesh.Vertices.Select(v => v with { Position = v.Position * worldScale }).ToArray(), mesh.Indices);
+			scaledMeshes.Add((scaledMesh, texture));
+		}
+
+		return scaledMeshes;
 	}
 
 	private static void Inverse(Dictionary<Brush, List<Polygon>> brushes)
@@ -80,7 +90,7 @@ public static class MapGeometryCalculator
 		}
 	}
 
-	private static List<Polygon> ToPolygons(Brush brush, IReadOnlyDictionary<string, Texture> textures)
+	private static List<Polygon> ToPolygons(Brush brush, IReadOnlyDictionary<string, Texture> textures, Texture fallbackTexture)
 	{
 		Face[] faces = brush.Faces.ToArray();
 
@@ -99,7 +109,7 @@ public static class MapGeometryCalculator
 
 		for (int i = 0; i < faces.Length; i++)
 		{
-			polygons.Add(new(planes[i], faces[i], textures));
+			polygons.Add(new(planes[i], faces[i], textures, fallbackTexture));
 
 			if (i == faces.Length - 3)
 			{
