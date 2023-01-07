@@ -1,6 +1,13 @@
 # Changelog
 
-This library uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+These libraries use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 0.1.18
+
+### Added
+
+- Added ability to control fallback texture when building geometry from Map file.
+- Added ability to control world scale when building geometry from Map file.
 
 ## 0.1.17
 
