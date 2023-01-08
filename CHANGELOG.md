@@ -2,6 +2,12 @@
 
 These libraries use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.19
+
+### Fixed
+
+- Implemented proper .map file parser. Properties are now parsed correctly.
+
 ## 0.1.18
 
 ### Added

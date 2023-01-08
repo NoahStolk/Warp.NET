@@ -2,12 +2,6 @@ namespace Warp.NET.Content.Conversion.Maps;
 
 public class Entity
 {
-	public Entity()
-	{
-		Properties = new();
-		Brushes = new();
-	}
-
 	public Entity(Dictionary<string, string> properties, List<Brush> brushes)
 	{
 		Properties = properties;

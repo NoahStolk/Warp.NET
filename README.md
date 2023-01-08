@@ -16,10 +16,6 @@ Warp.NET is a simplistic game engine using .NET 7 and OpenGL, aimed at 2D and 3D
 - Relies on [dotnet/Silk.NET](https://github.com/dotnet/Silk.NET) for OpenGL, OpenAL, and GLFW bindings
 - No other external dependencies
 
-## Planned features
-
-- Level editors
-
 ## Purpose
 
 The purpose of the engine is to create a simple interface to OpenGL and OpenAL, while also providing the basics every game needs, such as creating a window, a reliable game loop, building and loading content, etc. Warp.NET does not make a difference between 2D and 3D games (neither does OpenGL).
