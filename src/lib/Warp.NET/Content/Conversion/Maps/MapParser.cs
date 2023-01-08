@@ -1,3 +1,5 @@
+using Warp.NET.Extensions;
+
 namespace Warp.NET.Content.Conversion.Maps;
 
 public static class MapParser
@@ -5,76 +7,182 @@ public static class MapParser
 	public static MapData Parse(byte[] fileContents)
 	{
 		List<Entity> entities = new();
-		Entity? currentEntity = null;
-		List<Face>? currentFaces = null;
 
+		// Reading the file line by line seems OK according to the specifications.
 		string text = Encoding.UTF8.GetString(fileContents);
-		string[] lines = text.Split('\n');
-		foreach (string line in lines)
+		using StringReader stringReader = new(text);
+
+		while (true)
 		{
-			if (currentEntity == null)
+			string? line = stringReader.ReadLine();
+			if (line == null)
+				return new(entities);
+
+			if (line.StartsWith("{"))
+				entities.Add(ReadEntity(stringReader));
+		}
+	}
+
+	private static Entity ReadEntity(TextReader textReader)
+	{
+		Dictionary<string, string> properties = new();
+		List<Brush> brushes = new();
+
+		while (true)
+		{
+			string? line = textReader.ReadLine();
+			if (line == null)
+				throw new MapParseException("Unexpected end of file while reading entity data.");
+
+			if (line.StartsWith("{"))
 			{
-				if (line.StartsWith('{'))
-					currentEntity = new();
+				brushes.Add(ReadBrush(textReader));
 			}
-			else if (currentFaces == null)
+			else if (line.StartsWith("\""))
 			{
-				if (line.StartsWith('"'))
-				{
-					string[] properties = line.Replace("\"", string.Empty).Split(' ');
-					currentEntity.Properties.Add(properties[0], properties[1]);
-				}
-				else if (line.StartsWith('{'))
-				{
-					currentFaces = new();
-				}
-				else if (line.StartsWith('}'))
-				{
-					entities.Add(currentEntity);
-					currentEntity = null; // ?
-				}
+				string[] keyValuePairParts = line.Split("\"", StringSplitOptions.RemoveEmptyEntries);
+				if (keyValuePairParts.Length != 3)
+					throw new MapParseException($"Invalid key-value pair: {line}");
+
+				properties.Add(keyValuePairParts[0], keyValuePairParts[2]);
+			}
+			else if (line.StartsWith("}"))
+			{
+				return new(properties, brushes);
+			}
+		}
+	}
+
+	private static Brush ReadBrush(TextReader textReader)
+	{
+		List<Face> faces = new();
+
+		while (true)
+		{
+			int c = textReader.Peek();
+			if (c == -1)
+				throw new MapParseException("Unexpected end of file while reading brush data.");
+
+			if (c == '(')
+			{
+				faces.Add(ReadFace(textReader));
 			}
 			else
 			{
-				if (line.StartsWith('}'))
+				textReader.Read();
+
+				if (c == '}')
+					return new(faces);
+			}
+		}
+	}
+
+	private static Face ReadFace(TextReader textReader)
+	{
+		Vector3 p1 = ReadPoint(textReader);
+		Vector3 p2 = ReadPoint(textReader);
+		Vector3 p3 = ReadPoint(textReader);
+		string textureName = ReadTextureName(textReader);
+		Plane textureAxisU = ReadPlane(textReader);
+		Plane textureAxisV = ReadPlane(textReader);
+
+		// Skip space.
+		textReader.Read();
+
+		// Skip texture rotation.
+		textReader.ReadUntil(' ');
+
+		Vector2 textureScale = ReadTextureScale(textReader);
+
+		return new(p1, p2, p3, textureName, textureAxisU, textureAxisV, textureScale);
+
+		static Vector3 ReadPoint(TextReader textReader)
+		{
+			string stringData;
+
+			try
+			{
+				stringData = textReader.ReadBetween('(', ')');
+			}
+			catch (EndOfStreamException)
+			{
+				throw new MapParseException("Unexpected end of file while reading face plane.");
+			}
+
+			string[] parts = stringData.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+			if (parts.Length != 3)
+				throw new MapParseException($"Invalid face point: {stringData}");
+
+			// Note: y and z are swapped in the map format.
+			if (!float.TryParse(parts[0], out float x))
+				throw new MapParseException($"Invalid face point: {stringData}");
+			if (!float.TryParse(parts[1], out float z))
+				throw new MapParseException($"Invalid face point: {stringData}");
+			if (!float.TryParse(parts[2], out float y))
+				throw new MapParseException($"Invalid face point: {stringData}");
+
+			return new(x, y, z);
+		}
+
+		static string ReadTextureName(TextReader textReader)
+		{
+			StringBuilder builder = new();
+			while (true)
+			{
+				int c = textReader.Peek(); // Use Peek() to not advance the stream. We stop reading the texture name when we see the starting [ character of the texture UV data.
+				switch (c)
 				{
-					currentEntity.Brushes.Add(new(currentFaces));
-					currentFaces = null; // ?
-				}
-				else
-				{
-					// TODO: Find a better way to parse this.
-					string[] points = line.Replace("( ", string.Empty).Split(')', StringSplitOptions.RemoveEmptyEntries)[..3];
-
-					string[] p1 = points[0].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-					string[] p2 = points[1].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-					string[] p3 = points[2].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-					string[] afterPoints = line[(line.LastIndexOf(')') + 1)..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-					string textureName = afterPoints[0].Trim();
-
-					string afterTextureName = line[(line.LastIndexOf(textureName, StringComparison.Ordinal) + textureName.Length)..];
-
-					int separator = afterTextureName.LastIndexOf(']');
-					string[] textureAxes = afterTextureName[..separator].Split("] [");
-
-					string[] textureAxisU = textureAxes[0].Replace("[", string.Empty).Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-					string[] textureAxisV = textureAxes[1].Replace("]", string.Empty).Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-					string[] textureUv = afterTextureName[(separator + 1)..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-					currentFaces.Add(new(
-						p1: new(float.Parse(p1[0]), float.Parse(p1[2]), float.Parse(p1[1])),
-						p2: new(float.Parse(p2[0]), float.Parse(p2[2]), float.Parse(p2[1])),
-						p3: new(float.Parse(p3[0]), float.Parse(p3[2]), float.Parse(p3[1])),
-						textureAxisU: new(float.Parse(textureAxisU[0]), float.Parse(textureAxisU[2]), float.Parse(textureAxisU[1]), float.Parse(textureAxisU[3])),
-						textureAxisV: new(float.Parse(textureAxisV[0]), float.Parse(textureAxisV[2]), float.Parse(textureAxisV[1]), float.Parse(textureAxisV[3])),
-						textureName: textureName,
-						textureScale: new(float.Parse(textureUv[1]), float.Parse(textureUv[2]))));
+					case -1: throw new MapParseException("Unexpected end of file while reading texture name.");
+					case '[': return builder.ToString().Trim(); // Trim spaces around the texture name.
+					default: builder.Append((char)textReader.Read()); break;
 				}
 			}
 		}
 
-		return new(entities);
+		static Plane ReadPlane(TextReader textReader)
+		{
+			string stringData;
+
+			try
+			{
+				stringData = textReader.ReadBetween('[', ']');
+			}
+			catch (EndOfStreamException)
+			{
+				throw new MapParseException("Unexpected end of file while reading face plane.");
+			}
+
+			string[] parts = stringData.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+			if (parts.Length != 4)
+				throw new MapParseException($"Invalid face plane: {stringData}");
+
+			// Note: y and z are swapped in the map format.
+			if (!float.TryParse(parts[0], out float x))
+				throw new MapParseException($"Invalid face plane: {stringData}");
+			if (!float.TryParse(parts[1], out float z))
+				throw new MapParseException($"Invalid face plane: {stringData}");
+			if (!float.TryParse(parts[2], out float y))
+				throw new MapParseException($"Invalid face plane: {stringData}");
+			if (!float.TryParse(parts[3], out float d))
+				throw new MapParseException($"Invalid face plane: {stringData}");
+
+			return new(x, y, z, d);
+		}
+
+		static Vector2 ReadTextureScale(TextReader textReader)
+		{
+			string stringData = textReader.ReadUntilNewline();
+
+			string[] parts = stringData.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+			if (parts.Length != 2)
+				throw new MapParseException($"Invalid texture scale: {stringData}");
+
+			if (!float.TryParse(parts[0], out float x))
+				throw new MapParseException($"Invalid texture scale: {stringData}");
+			if (!float.TryParse(parts[1], out float y))
+				throw new MapParseException($"Invalid texture scale: {stringData}");
+
+			return new(x, y);
+		}
 	}
 }
