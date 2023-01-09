@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup Label="Dependencies">
-    <PackageReference Include="Silk.NET.GLFW" Version="2.16.0" />
-    <PackageReference Include="Silk.NET.OpenAL" Version="2.16.0" />
-    <PackageReference Include="Silk.NET.OpenGL" Version="2.16.0" />
+    <PackageReference Include="Silk.NET.GLFW" />
+    <PackageReference Include="Silk.NET.OpenAL" />
+    <PackageReference Include="Silk.NET.OpenGL" />
   </ItemGroup>
 
 </Project>
