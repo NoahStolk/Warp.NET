@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Charsets;
 
-public sealed class CharsetContentConverter : IContentConverter<CharsetBinary>
+internal sealed class CharsetContentConverter : IContentConverter<CharsetBinary>
 {
 	public static CharsetBinary Construct(string inputPath)
 	{

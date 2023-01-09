@@ -2,7 +2,7 @@ using Warp.NET.Extensions;
 
 namespace Warp.NET.Content.Conversion.Maps;
 
-public record MapBinary(List<Entity> Entities) : IBinary<MapBinary>
+internal record MapBinary(List<Entity> Entities) : IBinary<MapBinary>
 {
 	public ContentType ContentType => ContentType.Map;
 

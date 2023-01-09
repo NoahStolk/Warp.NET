@@ -2,6 +2,16 @@
 
 These libraries use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.20
+
+### Changed
+
+- All types in the `Content.Conversion` namespace have been made internal.
+- The types `Polygon` and `GeometryMath` have been made internal.
+- There are now separate (public) types for `Entity`, `Brush`, and `Face`.
+- The method `Warp.NET.Content.Conversion.Maps.GeometryCalculator.MapGeometryCalculator.ToMap` has been moved and renamed to `Warp.NET.Content.GeometryCalculator.MapGeometry.BuildGeometry`.
+- The `DecompiledContentFile` type has been moved to the `Warp.NET.Content` namespace. 
+
 ## 0.1.19
 
 ### Fixed

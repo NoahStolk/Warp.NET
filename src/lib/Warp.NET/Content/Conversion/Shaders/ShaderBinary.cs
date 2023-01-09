@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Shaders;
 
-public record ShaderBinary(ShaderContentType ShaderContentType, byte[] Code) : IBinary<ShaderBinary>
+internal record ShaderBinary(ShaderContentType ShaderContentType, byte[] Code) : IBinary<ShaderBinary>
 {
 	public ContentType ContentType => ContentType.Shader;
 

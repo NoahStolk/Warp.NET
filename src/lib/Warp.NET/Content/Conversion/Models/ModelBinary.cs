@@ -2,7 +2,7 @@ using Warp.NET.Extensions;
 
 namespace Warp.NET.Content.Conversion.Models;
 
-public record ModelBinary(IReadOnlyList<Vector3> Positions, IReadOnlyList<Vector2> Textures, IReadOnlyList<Vector3> Normals, IReadOnlyList<MeshData> Meshes) : IBinary<ModelBinary>
+internal record ModelBinary(IReadOnlyList<Vector3> Positions, IReadOnlyList<Vector2> Textures, IReadOnlyList<Vector3> Normals, IReadOnlyList<MeshData> Meshes) : IBinary<ModelBinary>
 {
 	public ContentType ContentType => ContentType.Model;
 

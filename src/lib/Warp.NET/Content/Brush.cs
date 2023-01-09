@@ -1,6 +1,6 @@
-namespace Warp.NET.Content.Conversion.Maps;
+namespace Warp.NET.Content;
 
-internal class Brush
+public class Brush
 {
 	public Brush(List<Face> faces)
 	{

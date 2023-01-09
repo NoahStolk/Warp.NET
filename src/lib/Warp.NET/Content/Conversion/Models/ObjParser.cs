@@ -2,7 +2,7 @@ using System.Globalization;
 
 namespace Warp.NET.Content.Conversion.Models;
 
-public static class ObjParser
+internal static class ObjParser
 {
 	public static ModelData Parse(byte[] fileContents)
 	{

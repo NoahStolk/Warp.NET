@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion;
 
-public interface IContentConverter<out TBinary>
+internal interface IContentConverter<out TBinary>
 	where TBinary : IBinary<TBinary>
 {
 	/// <summary>

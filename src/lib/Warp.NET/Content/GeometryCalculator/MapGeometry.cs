@@ -1,8 +1,8 @@
-namespace Warp.NET.Content.Conversion.Maps.GeometryCalculator;
+namespace Warp.NET.Content.GeometryCalculator;
 
-public static class MapGeometryCalculator
+public static class MapGeometry
 {
-	public static List<(Mesh Mesh, Texture Texture)> ToMap(Map map, IReadOnlyDictionary<string, Texture> textures, Texture fallbackTexture, Vector3 worldScale)
+	public static List<(Mesh Mesh, Texture Texture)> BuildGeometry(Map map, IReadOnlyDictionary<string, Texture> textures, Texture fallbackTexture, Vector3 worldScale)
 	{
 		Dictionary<Brush, List<Polygon>> geometry = new();
 

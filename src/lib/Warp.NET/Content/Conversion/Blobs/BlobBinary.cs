@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Blobs;
 
-public record BlobBinary(byte[] Data) : IBinary<BlobBinary>
+internal record BlobBinary(byte[] Data) : IBinary<BlobBinary>
 {
 	public ContentType ContentType => ContentType.Blob;
 

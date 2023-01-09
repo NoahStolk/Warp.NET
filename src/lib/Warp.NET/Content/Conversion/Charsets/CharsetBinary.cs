@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Charsets;
 
-public record CharsetBinary(byte[] Characters) : IBinary<CharsetBinary>
+internal record CharsetBinary(byte[] Characters) : IBinary<CharsetBinary>
 {
 	public ContentType ContentType => ContentType.Charset;
 

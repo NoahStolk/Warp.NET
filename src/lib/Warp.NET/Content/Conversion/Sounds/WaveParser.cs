@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Sounds;
 
-public static class WaveParser
+internal static class WaveParser
 {
 	private const string _riffHeader = "RIFF";
 	private const string _formatHeader = "WAVE";

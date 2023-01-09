@@ -1,19 +1,21 @@
-namespace Warp.NET.Content.Conversion.Maps.GeometryCalculator;
+namespace Warp.NET.Content.GeometryCalculator;
 
-public class Polygon
+internal class Polygon
 {
 	public Polygon(Plane plane, Face face, IReadOnlyDictionary<string, Texture> textures, Texture fallbackTexture)
 	{
-		Face = face;
-		TextureScales = new();
-		Vertices = new();
 		Plane = plane;
+		Face = face;
 		Texture = textures.TryGetValue(face.TextureName, out Texture? texture) ? texture : fallbackTexture;
+
+		Vertices = new();
+		TextureScales = new();
 	}
 
-	public List<Vector3> Vertices { get; }
-	public List<Vector2> TextureScales { get; }
 	public Plane Plane { get; }
 	public Face Face { get; }
 	public Texture Texture { get; }
+
+	public List<Vector3> Vertices { get; }
+	public List<Vector2> TextureScales { get; }
 }

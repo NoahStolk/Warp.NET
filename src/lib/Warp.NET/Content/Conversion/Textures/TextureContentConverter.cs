@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Textures;
 
-public sealed class TextureContentConverter : IContentConverter<TextureBinary>
+internal sealed class TextureContentConverter : IContentConverter<TextureBinary>
 {
 	public static TextureBinary Construct(string inputPath)
 	{

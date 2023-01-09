@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Models;
 
-public sealed class ModelContentConverter : IContentConverter<ModelBinary>
+internal sealed class ModelContentConverter : IContentConverter<ModelBinary>
 {
 	public static ModelBinary Construct(string inputPath)
 	{

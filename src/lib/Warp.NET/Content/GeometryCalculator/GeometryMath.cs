@@ -1,6 +1,6 @@
-namespace Warp.NET.Content.Conversion.Maps.GeometryCalculator;
+namespace Warp.NET.Content.GeometryCalculator;
 
-public static class GeometryMath
+internal static class GeometryMath
 {
 	private const double _epsilon = 1e-3;
 
