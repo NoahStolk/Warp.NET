@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion;
 
-public interface IBinary<out TSelf>
+internal interface IBinary<out TSelf>
 	where TSelf : IBinary<TSelf>
 {
 	ContentType ContentType { get; }

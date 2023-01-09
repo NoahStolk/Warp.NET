@@ -2,7 +2,7 @@ using Warp.NET.Extensions;
 
 namespace Warp.NET.Content.Conversion.Maps;
 
-public static class MapParser
+internal static class MapParser
 {
 	public static MapData Parse(byte[] fileContents)
 	{

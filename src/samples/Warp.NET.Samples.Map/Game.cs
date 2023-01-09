@@ -1,7 +1,7 @@
 using Silk.NET.OpenGL;
 using System.Numerics;
 using Warp.NET.Content;
-using Warp.NET.Content.Conversion.Maps.GeometryCalculator;
+using Warp.NET.Content.GeometryCalculator;
 
 namespace Warp.NET.Samples.Map;
 
@@ -28,7 +28,7 @@ public sealed partial class Game : GameBase
 	private void LoadLevel(Content.Map map)
 	{
 		Texture fallbackTexture = new(2, 2, new byte[] { 255, 0, 0, 255, 0, 0, 255, 255, 255, 0, 0, 255, 0, 0, 255, 255 });
-		List<(Mesh Mesh, Texture Texture)> meshes = MapGeometryCalculator.ToMap(map, Textures.InternalContentDictionary, fallbackTexture, Vector3.One);
+		List<(Mesh Mesh, Texture Texture)> meshes = MapGeometry.BuildGeometry(map, Textures.InternalContentDictionary, fallbackTexture, Vector3.One);
 		foreach ((Mesh mesh, Texture texture) in meshes)
 			_worldMeshes.Add(new(mesh, texture));
 	}

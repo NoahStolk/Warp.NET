@@ -3,7 +3,7 @@ namespace Warp.NET.Content.Conversion;
 /// <summary>
 /// Represents an entry in the table of contents (TOC) buffer in the content file.
 /// </summary>
-public class TocEntry
+internal class TocEntry
 {
 	public TocEntry(ContentType contentType, string name, uint length)
 	{

@@ -1,5 +1,3 @@
-using Warp.NET.Content.Conversion.Maps;
-
 namespace Warp.NET.Content;
 
 public class Map
@@ -12,6 +10,5 @@ public class Map
 		Entities = entities;
 	}
 
-	// TODO: Don't re-use Entity type.
 	public List<Entity> Entities { get; }
 }

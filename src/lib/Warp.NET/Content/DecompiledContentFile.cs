@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Conversion;
+namespace Warp.NET.Content;
 
 public record DecompiledContentFile(
 	IReadOnlyDictionary<string, Blob> Blobs,

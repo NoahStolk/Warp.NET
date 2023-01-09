@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Maps;
 
-public sealed class MapContentConverter : IContentConverter<MapBinary>
+internal sealed class MapContentConverter : IContentConverter<MapBinary>
 {
 	public static MapBinary Construct(string inputPath)
 	{

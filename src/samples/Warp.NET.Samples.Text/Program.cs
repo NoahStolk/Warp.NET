@@ -1,5 +1,5 @@
 using Warp.NET;
-using Warp.NET.Content.Conversion;
+using Warp.NET.Content;
 using Warp.NET.Samples.Text;
 
 CreateWindow(new("2D sample: Text", 1024, 768, false));

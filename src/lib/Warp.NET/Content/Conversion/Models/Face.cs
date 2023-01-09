@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Models;
 
-public readonly record struct Face(ushort Position, ushort Texture, ushort Normal)
+internal readonly record struct Face(ushort Position, ushort Texture, ushort Normal)
 {
 	public override string ToString()
 		=> $"{Position}/{Texture}/{Normal}";

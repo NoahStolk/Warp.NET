@@ -2,7 +2,7 @@ using Warp.NET.Extensions;
 
 namespace Warp.NET.Content.Conversion.Textures;
 
-public record TextureBinary(ushort Width, ushort Height, byte[] ColorData) : IBinary<TextureBinary>
+internal record TextureBinary(ushort Width, ushort Height, byte[] ColorData) : IBinary<TextureBinary>
 {
 	public ContentType ContentType => ContentType.Texture;
 

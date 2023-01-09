@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion;
 
-public enum TextureContentType : byte
+internal enum TextureContentType : byte
 {
 	/// <summary>
 	/// Texture where every pixel is stored in 1 bit and therefore only supports 2 colors (white and transparent) -- typically used for fonts.

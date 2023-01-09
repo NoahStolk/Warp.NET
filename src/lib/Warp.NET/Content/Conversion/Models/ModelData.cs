@@ -3,7 +3,7 @@ namespace Warp.NET.Content.Conversion.Models;
 /// <summary>
 /// Represents data parsed from a model format, such as a .obj file.
 /// </summary>
-public record ModelData
+internal record ModelData
 {
 	public ModelData(IReadOnlyList<Vector3> positions, IReadOnlyList<Vector2> textures, IReadOnlyList<Vector3> normals, IReadOnlyList<MeshData> meshes)
 	{

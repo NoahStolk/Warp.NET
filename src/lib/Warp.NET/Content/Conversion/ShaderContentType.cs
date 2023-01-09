@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion;
 
-public enum ShaderContentType : byte
+internal enum ShaderContentType : byte
 {
 	Vertex = 0x00,
 	Geometry = 0x01,

@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Maps;
 
-public record MapData
+internal record MapData
 {
 	public MapData(List<Entity> entities)
 	{

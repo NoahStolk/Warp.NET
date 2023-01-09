@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Shaders;
 
-public sealed class ShaderContentConverter : IContentConverter<ShaderBinary>
+internal sealed class ShaderContentConverter : IContentConverter<ShaderBinary>
 {
 	public static ShaderBinary Construct(string inputPath)
 	{

@@ -12,7 +12,7 @@ namespace Warp.NET.Content.Conversion;
 /// <summary>
 /// Turns all content source files into binary and writes everything to a single content file.
 /// </summary>
-public static class ContentFileWriter
+internal static class ContentFileWriter
 {
 	public static void GenerateContentFile(string inputContentRootDirectory, string outputContentFilePath)
 	{

@@ -1,6 +1,6 @@
 namespace Warp.NET.Content.Conversion.Sounds;
 
-public sealed class SoundContentConverter : IContentConverter<SoundBinary>
+internal sealed class SoundContentConverter : IContentConverter<SoundBinary>
 {
 	public static SoundBinary Construct(string inputPath)
 	{

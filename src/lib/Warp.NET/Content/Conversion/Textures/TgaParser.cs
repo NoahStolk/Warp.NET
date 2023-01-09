@@ -2,7 +2,7 @@ using Warp.NET.Utils;
 
 namespace Warp.NET.Content.Conversion.Textures;
 
-public static class TgaParser
+internal static class TgaParser
 {
 	public static TextureData Parse(byte[] fileContents)
 	{
