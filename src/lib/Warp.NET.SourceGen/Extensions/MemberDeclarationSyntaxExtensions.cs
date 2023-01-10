@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Warp.NET.SourceGen.Extensions;
 
-public static class MemberDeclarationSyntaxExtensions
+internal static class MemberDeclarationSyntaxExtensions
 {
 	public static AttributeSyntax? GetAttributeFromMember(this MemberDeclarationSyntax member, string fullAttributeName)
 	{

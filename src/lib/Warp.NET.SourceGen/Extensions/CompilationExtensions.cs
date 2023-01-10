@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Warp.NET.SourceGen.Extensions;
 
-public static class CompilationExtensions
+internal static class CompilationExtensions
 {
 	public static List<T> GetTypeDataFromName<T>(this Compilation compilation, IEnumerable<TypeDeclarationSyntax> types, Func<string, T> ctor, CancellationToken cancellationToken)
 	{

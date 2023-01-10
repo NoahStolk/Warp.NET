@@ -2,6 +2,14 @@
 
 These libraries use [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- The .map file parser has been improved.
+- The types `BitUtils`, `FileNameUtils`, `FormatUtils` and `IntegerArrayCompressor` have been made internal.
+- All utility and extension types in the `Warp.NET.SourceGen` namespace have been made internal.
+
 ## 0.1.20
 
 ### Changed

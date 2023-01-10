@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Warp.NET.SourceGen.Extensions;
 
-public static class GeneratorSyntaxContextExtensions
+internal static class GeneratorSyntaxContextExtensions
 {
 	public static TTypeDeclarationSyntax? GetTypeWithAttribute<TTypeDeclarationSyntax>(this GeneratorSyntaxContext context, string attributeFullTypeName)
 		where TTypeDeclarationSyntax : TypeDeclarationSyntax

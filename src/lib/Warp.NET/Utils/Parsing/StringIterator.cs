@@ -1,4 +1,4 @@
-namespace Warp.NET.Content.Conversion.Maps;
+namespace Warp.NET.Utils.Parsing;
 
 [DebuggerDisplay("{_index}, {_str[_index]}")]
 internal class StringIterator
@@ -44,14 +44,14 @@ internal class StringIterator
 	/// Reads from the string until the characters in <paramref name="end"/> are found.
 	/// The end characters are not included in the result.
 	/// </summary>
-	/// <exception cref="InvalidOperationException">Thrown when the end of the string was reached before finding the characters in <paramref name="end"/>.</exception>
+	/// <exception cref="UnexpectedEndOfStringException">Thrown when the end of the string was reached before finding the characters in <paramref name="end"/>.</exception>
 	public string ReadUntil(ReadOnlySpan<char> end, bool advancePastEnd)
 	{
 		int startIndex = _index;
 		while (!IsNext(end))
 		{
 			if (!Advance())
-				throw new InvalidOperationException($"End of string before reaching end string: {end}");
+				throw new UnexpectedEndOfStringException($"End of string before reaching end string: {end}");
 		}
 
 		string str = _str.Substring(startIndex, _index - startIndex);
@@ -67,13 +67,13 @@ internal class StringIterator
 	/// Then advances the iterator past the end.
 	/// The start and end characters are not included in the result.
 	/// </summary>
-	/// <exception cref="InvalidOperationException">Thrown when the end of the string was reached before finding the characters in <paramref name="start"/> or <paramref name="end"/>.</exception>
+	/// <exception cref="UnexpectedEndOfStringException">Thrown when the end of the string was reached before finding the characters in <paramref name="start"/> or <paramref name="end"/>.</exception>
 	public string ReadBetween(ReadOnlySpan<char> start, ReadOnlySpan<char> end, bool advancePastEnd)
 	{
 		while (!IsNext(start))
 		{
 			if (!Advance())
-				throw new InvalidOperationException($"End of string before reaching start string: {start}");
+				throw new UnexpectedEndOfStringException($"End of string before reaching start string: {start}");
 		}
 
 		_index += start.Length;
@@ -83,7 +83,7 @@ internal class StringIterator
 		while (!IsNext(end))
 		{
 			if (!Advance())
-				throw new InvalidOperationException($"End of string before reaching end string: {end}");
+				throw new UnexpectedEndOfStringException($"End of string before reaching end string: {end}");
 		}
 
 		string str = _str.Substring(startIndex, _index - startIndex);

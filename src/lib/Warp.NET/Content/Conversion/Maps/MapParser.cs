@@ -1,23 +1,32 @@
+using Warp.NET.Utils.Parsing;
+
 namespace Warp.NET.Content.Conversion.Maps;
 
 internal static class MapParser
 {
 	public static MapData Parse(byte[] fileContents)
 	{
-		List<Entity> entities = new();
-
-		StringIterator stringIterator = new(Encoding.UTF8.GetString(fileContents));
-
-		do
+		try
 		{
-			if (stringIterator.IsNext("//"))
-				stringIterator.ReadUntil("\n", false);
-			else if (stringIterator.IsNext("{"))
-				entities.Add(ReadEntity(stringIterator));
-		}
-		while (stringIterator.Advance());
+			List<Entity> entities = new();
 
-		return new(entities);
+			StringIterator stringIterator = new(Encoding.UTF8.GetString(fileContents));
+
+			do
+			{
+				if (stringIterator.IsNext("//"))
+					stringIterator.ReadUntil("\n", false);
+				else if (stringIterator.IsNext("{"))
+					entities.Add(ReadEntity(stringIterator));
+			}
+			while (stringIterator.Advance());
+
+			return new(entities);
+		}
+		catch (UnexpectedEndOfStringException ex)
+		{
+			throw new MapParseException("Unexpected end of file. Map could not be parsed. Only the Valve format (map version 220) is supported.", ex);
+		}
 	}
 
 	private static Entity ReadEntity(StringIterator stringIterator)
@@ -30,24 +39,18 @@ internal static class MapParser
 		do
 		{
 			if (stringIterator.IsNext("{"))
-			{
 				brushes.Add(ReadBrush(stringIterator));
-			}
 			else if (stringIterator.IsNext("\""))
-			{
 				properties.Add(stringIterator.ReadBetween("\"", "\"", true), stringIterator.ReadBetween("\"", "\"", true));
-			}
 			else if (stringIterator.IsNext("//"))
-			{
 				stringIterator.ReadUntil("\n", false);
-			}
 			else if (stringIterator.IsNext("}"))
-			{
-				stringIterator.Advance();
 				break;
-			}
 		}
 		while (stringIterator.Advance());
+
+		if (properties.TryGetValue("classname", out string? className) && className == "worldspawn" && (!properties.TryGetValue("mapversion", out string? mapVersion) || mapVersion != "220"))
+			throw new MapParseException($"Entity 'worldspawn' must have a 'mapversion' of 220. Other formats are not supported. Map version was '{mapVersion}'.");
 
 		return new(properties, brushes);
 	}

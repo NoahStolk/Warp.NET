@@ -1,6 +1,6 @@
 namespace Warp.NET.Utils;
 
-public static class BitUtils
+internal static class BitUtils
 {
 	public static bool IsBitSet(byte b, int index)
 	{

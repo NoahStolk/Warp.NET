@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Warp.NET.SourceGen.Extensions;
 
-public static class SyntaxNodeExtensions
+internal static class SyntaxNodeExtensions
 {
 	public static string? GetFullTypeName(this SyntaxNode syntaxNode, Compilation compilation)
 	{
