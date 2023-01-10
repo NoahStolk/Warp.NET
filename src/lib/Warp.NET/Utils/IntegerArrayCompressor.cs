@@ -1,6 +1,6 @@
 namespace Warp.NET.Utils;
 
-public static class IntegerArrayCompressor
+internal static class IntegerArrayCompressor
 {
 	/// <summary>
 	/// <para>

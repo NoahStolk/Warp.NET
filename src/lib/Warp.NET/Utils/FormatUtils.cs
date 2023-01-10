@@ -1,6 +1,6 @@
 namespace Warp.NET.Utils;
 
-public static class FormatUtils
+internal static class FormatUtils
 {
 	public static string FormatAxis(string axisName, float axisValue, int digits)
 		=> $"{axisName}:{axisValue.ToString($"{(float.IsNegative(axisValue) ? string.Empty : "+")}0.{new string('0', digits)}")}";

@@ -2,7 +2,7 @@ using Warp.NET.SourceGen.Generators.Data;
 
 namespace Warp.NET.SourceGen.Utils;
 
-public static class GlslUtils
+internal static class GlslUtils
 {
 	public static ShaderUniform? GetFromGlslLine(string line)
 	{

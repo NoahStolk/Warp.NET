@@ -2,7 +2,7 @@ using Warp.NET.SourceGen.Utils;
 
 namespace Warp.NET.SourceGen.Extensions;
 
-public static class StringExtensions
+internal static class StringExtensions
 {
 	public static string FirstCharToLowerCase(this string str)
 	{
