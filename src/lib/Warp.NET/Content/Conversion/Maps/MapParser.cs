@@ -1,5 +1,3 @@
-using Warp.NET.Extensions;
-
 namespace Warp.NET.Content.Conversion.Maps;
 
 internal static class MapParser
@@ -8,181 +6,126 @@ internal static class MapParser
 	{
 		List<Entity> entities = new();
 
-		// Reading the file line by line seems OK according to the specifications.
-		string text = Encoding.UTF8.GetString(fileContents);
-		using StringReader stringReader = new(text);
+		StringIterator stringIterator = new(Encoding.UTF8.GetString(fileContents));
 
-		while (true)
+		do
 		{
-			string? line = stringReader.ReadLine();
-			if (line == null)
-				return new(entities);
-
-			if (line.StartsWith("{"))
-				entities.Add(ReadEntity(stringReader));
+			if (stringIterator.IsNext("//"))
+				stringIterator.ReadUntil("\n", false);
+			else if (stringIterator.IsNext("{"))
+				entities.Add(ReadEntity(stringIterator));
 		}
+		while (stringIterator.Advance());
+
+		return new(entities);
 	}
 
-	private static Entity ReadEntity(TextReader textReader)
+	private static Entity ReadEntity(StringIterator stringIterator)
 	{
+		stringIterator.Advance();
+
 		Dictionary<string, string> properties = new();
 		List<Brush> brushes = new();
 
-		while (true)
+		do
 		{
-			string? line = textReader.ReadLine();
-			if (line == null)
-				throw new MapParseException("Unexpected end of file while reading entity data.");
-
-			if (line.StartsWith("{"))
+			if (stringIterator.IsNext("{"))
 			{
-				brushes.Add(ReadBrush(textReader));
+				brushes.Add(ReadBrush(stringIterator));
 			}
-			else if (line.StartsWith("\""))
+			else if (stringIterator.IsNext("\""))
 			{
-				string[] keyValuePairParts = line.Split("\"", StringSplitOptions.RemoveEmptyEntries);
-				if (keyValuePairParts.Length != 3)
-					throw new MapParseException($"Invalid key-value pair: {line}");
-
-				properties.Add(keyValuePairParts[0], keyValuePairParts[2]);
+				properties.Add(stringIterator.ReadBetween("\"", "\"", true), stringIterator.ReadBetween("\"", "\"", true));
 			}
-			else if (line.StartsWith("}"))
+			else if (stringIterator.IsNext("//"))
 			{
-				return new(properties, brushes);
+				stringIterator.ReadUntil("\n", false);
+			}
+			else if (stringIterator.IsNext("}"))
+			{
+				stringIterator.Advance();
+				break;
 			}
 		}
+		while (stringIterator.Advance());
+
+		return new(properties, brushes);
 	}
 
-	private static Brush ReadBrush(TextReader textReader)
+	private static Brush ReadBrush(StringIterator stringIterator)
 	{
 		List<Face> faces = new();
 
-		while (true)
+		do
 		{
-			int c = textReader.Peek();
-			if (c == -1)
-				throw new MapParseException("Unexpected end of file while reading brush data.");
-
-			if (c == '(')
-			{
-				faces.Add(ReadFace(textReader));
-			}
-			else
-			{
-				textReader.Read();
-
-				if (c == '}')
-					return new(faces);
-			}
+			if (stringIterator.IsNext("("))
+				faces.Add(ReadFace(stringIterator));
+			else if (stringIterator.IsNext("}"))
+				break;
 		}
+		while (stringIterator.Advance());
+
+		return new(faces);
 	}
 
-	private static Face ReadFace(TextReader textReader)
+	private static Face ReadFace(StringIterator stringIterator)
 	{
-		Vector3 p1 = ReadPoint(textReader);
-		Vector3 p2 = ReadPoint(textReader);
-		Vector3 p3 = ReadPoint(textReader);
-		string textureName = ReadTextureName(textReader);
-		Plane textureAxisU = ReadPlane(textReader);
-		Plane textureAxisV = ReadPlane(textReader);
+		Vector3 p1 = ReadPoint(stringIterator);
+		Vector3 p2 = ReadPoint(stringIterator);
+		Vector3 p3 = ReadPoint(stringIterator);
+		string textureName = stringIterator.ReadBetween(" ", " ", true);
+		Plane textureAxisU = ReadPlane(stringIterator);
+		Plane textureAxisV = ReadPlane(stringIterator);
 
-		// Skip space.
-		textReader.Read();
+		stringIterator.ReadBetween(" ", " ", false); // Skip texture rotation.
+		string textureScaleXStr = stringIterator.ReadBetween(" ", " ", false);
+		string textureScaleYStr = stringIterator.ReadBetween(" ", "\n", false);
 
-		// Skip texture rotation.
-		textReader.ReadUntil(' ');
+		if (!float.TryParse(textureScaleXStr, out float textureScaleX))
+			throw new MapParseException($"Invalid texture scale X: {textureScaleXStr}");
+		if (!float.TryParse(textureScaleYStr, out float textureScaleY))
+			throw new MapParseException($"Invalid texture scale Y: {textureScaleYStr}");
 
-		Vector2 textureScale = ReadTextureScale(textReader);
+		return new(p1, p2, p3, textureName, textureAxisU, textureAxisV, new(textureScaleX, textureScaleY));
+	}
 
-		return new(p1, p2, p3, textureName, textureAxisU, textureAxisV, textureScale);
+	private static Vector3 ReadPoint(StringIterator stringIterator)
+	{
+		string stringData = stringIterator.ReadBetween("(", ")", true);
 
-		static Vector3 ReadPoint(TextReader textReader)
-		{
-			string stringData;
+		string[] parts = stringData.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+		if (parts.Length != 3)
+			throw new MapParseException($"Invalid face point: {stringData}");
 
-			try
-			{
-				stringData = textReader.ReadBetween('(', ')');
-			}
-			catch (EndOfStreamException)
-			{
-				throw new MapParseException("Unexpected end of file while reading face plane.");
-			}
+		// Note: y and z are swapped in the map format.
+		if (!float.TryParse(parts[0], out float x))
+			throw new MapParseException($"Invalid face point: {stringData}");
+		if (!float.TryParse(parts[1], out float z))
+			throw new MapParseException($"Invalid face point: {stringData}");
+		if (!float.TryParse(parts[2], out float y))
+			throw new MapParseException($"Invalid face point: {stringData}");
 
-			string[] parts = stringData.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-			if (parts.Length != 3)
-				throw new MapParseException($"Invalid face point: {stringData}");
+		return new(x, y, z);
+	}
 
-			// Note: y and z are swapped in the map format.
-			if (!float.TryParse(parts[0], out float x))
-				throw new MapParseException($"Invalid face point: {stringData}");
-			if (!float.TryParse(parts[1], out float z))
-				throw new MapParseException($"Invalid face point: {stringData}");
-			if (!float.TryParse(parts[2], out float y))
-				throw new MapParseException($"Invalid face point: {stringData}");
+	private static Plane ReadPlane(StringIterator stringIterator)
+	{
+		string stringData = stringIterator.ReadBetween("[", "]", true);
 
-			return new(x, y, z);
-		}
+		string[] parts = stringData.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+		if (parts.Length != 4)
+			throw new MapParseException($"Invalid face plane: {stringData}");
 
-		static string ReadTextureName(TextReader textReader)
-		{
-			StringBuilder builder = new();
-			while (true)
-			{
-				int c = textReader.Peek(); // Use Peek() to not advance the stream. We stop reading the texture name when we see the starting [ character of the texture UV data.
-				switch (c)
-				{
-					case -1: throw new MapParseException("Unexpected end of file while reading texture name.");
-					case '[': return builder.ToString().Trim(); // Trim spaces around the texture name.
-					default: builder.Append((char)textReader.Read()); break;
-				}
-			}
-		}
+		// Note: y and z are swapped in the map format.
+		if (!float.TryParse(parts[0], out float x))
+			throw new MapParseException($"Invalid face plane: {stringData}");
+		if (!float.TryParse(parts[1], out float z))
+			throw new MapParseException($"Invalid face plane: {stringData}");
+		if (!float.TryParse(parts[2], out float y))
+			throw new MapParseException($"Invalid face plane: {stringData}");
+		if (!float.TryParse(parts[3], out float d))
+			throw new MapParseException($"Invalid face plane: {stringData}");
 
-		static Plane ReadPlane(TextReader textReader)
-		{
-			string stringData;
-
-			try
-			{
-				stringData = textReader.ReadBetween('[', ']');
-			}
-			catch (EndOfStreamException)
-			{
-				throw new MapParseException("Unexpected end of file while reading face plane.");
-			}
-
-			string[] parts = stringData.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-			if (parts.Length != 4)
-				throw new MapParseException($"Invalid face plane: {stringData}");
-
-			// Note: y and z are swapped in the map format.
-			if (!float.TryParse(parts[0], out float x))
-				throw new MapParseException($"Invalid face plane: {stringData}");
-			if (!float.TryParse(parts[1], out float z))
-				throw new MapParseException($"Invalid face plane: {stringData}");
-			if (!float.TryParse(parts[2], out float y))
-				throw new MapParseException($"Invalid face plane: {stringData}");
-			if (!float.TryParse(parts[3], out float d))
-				throw new MapParseException($"Invalid face plane: {stringData}");
-
-			return new(x, y, z, d);
-		}
-
-		static Vector2 ReadTextureScale(TextReader textReader)
-		{
-			string stringData = textReader.ReadUntilNewline();
-
-			string[] parts = stringData.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-			if (parts.Length != 2)
-				throw new MapParseException($"Invalid texture scale: {stringData}");
-
-			if (!float.TryParse(parts[0], out float x))
-				throw new MapParseException($"Invalid texture scale: {stringData}");
-			if (!float.TryParse(parts[1], out float y))
-				throw new MapParseException($"Invalid texture scale: {stringData}");
-
-			return new(x, y);
-		}
+		return new(x, y, z, d);
 	}
 }
