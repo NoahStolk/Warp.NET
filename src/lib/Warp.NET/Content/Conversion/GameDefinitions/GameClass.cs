@@ -4,7 +4,7 @@ namespace Warp.NET.Content.Conversion.GameDefinitions;
 
 internal record GameClass(
 	ClassType Type,
-	List<string> BaseClassNames,
+	IReadOnlyList<string> BaseClassNames,
 	string Name,
 	IReadOnlyList<ChoicesProperty> ChoicesProperties,
 	IReadOnlyList<FlagsProperty> FlagsProperties,
