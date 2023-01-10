@@ -9,4 +9,5 @@ internal enum ContentType : byte
 	Charset = 0x04,
 	Blob = 0x05,
 	Map = 0x06,
+	GameDefinition = 0x07,
 }
